@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainColor"
+    tools:context=".ui.record.RecordFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_top"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/mainColor"
+        tools:context=".ui.record.RecordFragment"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ll_memo1"
+        app:layout_constraintVertical_weight="0.3">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_countdown"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/movieColor2"
+            tools:context=".ui.record.RecordFragment"
+            app:layout_constraintEnd_toStartOf="@+id/text_2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_weight="0.7">
+
+            <TextView
+                android:id="@+id/tx_timer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="00:00:00"
+                android:textAlignment="center"
+                android:textColor="@color/movieColor3"
+                android:textSize="28sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/text_2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/movieColor5"
+            android:gravity="center"
+            android:text="-0s"
+            android:textAlignment="center"
+            android:textColor="@color/movieColor3"
+            android:textSize="28sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cl_countdown"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_weight="0.3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ll_memo1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/movieColor4"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/cl_top"
+        app:layout_constraintBottom_toTopOf="@+id/dummy"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_weight="0.5">
+
+        <ImageView
+            android:id="@+id/iv_recordCircle"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:background="@drawable/record_sample2"
+            android:layout_margin="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.1"/>
+
+        <ImageView
+            android:id="@+id/iv_play"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/baseline_time_pause"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_pause"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_pause"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/baseline_time_play"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_stop"
+            app:layout_constraintStart_toEndOf="@+id/iv_play" />
+
+        <ImageView
+            android:id="@+id/iv_stop"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/baseline_time_stop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_pause" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/dummy"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/movieColor1"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/ll_memo1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_weight="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/basic_border"
+            android:padding="12dp"
+            android:layout_margin="12dp"
+            android:gravity="center"
+            android:text="@string/memo"
+            android:textColor="@color/movieColor3" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/basic_border"
+            android:padding="12dp"
+            android:layout_margin="12dp"
+            android:gravity="center"
+            android:text="@string/memo"
+            android:textColor="@color/movieColor3" />
+
+    </LinearLayout>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

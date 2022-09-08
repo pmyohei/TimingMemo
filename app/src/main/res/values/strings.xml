@@ -1,0 +1,15 @@
+<resources>
+
+    <!--  navigation  -->
+    <string name="app_name">TimingMemo</string>
+    <string name="title_memo">Memo</string>
+    <string name="title_record">Record</string>
+    <string name="title_history">History</string>
+
+    <!--  Button  -->
+    <string name="memo">Memo</string>
+    <string name="category">Category</string>
+
+
+
+</resources>

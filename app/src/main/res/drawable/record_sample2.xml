@@ -1,0 +1,23 @@
+<vector android:height="48dp" android:viewportHeight="500"
+    android:viewportWidth="500" android:width="48dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#000000" android:fillType="nonZero"
+        android:pathData="M260.71,100.71C349.03,100.71 420.71,172.39 420.71,260.71C420.71,349.03 349.03,420.71 260.71,420.71C172.39,420.71 100.71,349.03 100.71,260.71C100.71,172.39 172.39,100.71 260.71,100.71z"
+        android:strokeColor="#E3785D" android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" android:strokeWidth="0"/>
+    <path android:fillColor="#00000000" android:fillType="nonZero"
+        android:pathData="M260.41,116.41C339.9,116.41 404.41,180.92 404.41,260.41C404.41,339.9 339.9,404.41 260.41,404.41C180.92,404.41 116.41,339.9 116.41,260.41C116.41,180.92 180.92,116.41 260.41,116.41z"
+        android:strokeColor="#FFFFFF" android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" android:strokeWidth="4.8"/>
+    <path android:fillColor="#00000000" android:fillType="nonZero"
+        android:pathData="M261.4,134.54C332.06,134.54 389.4,191.88 389.4,262.54C389.4,333.2 332.06,390.54 261.4,390.54C190.74,390.54 133.4,333.2 133.4,262.54C133.4,191.88 190.74,134.54 261.4,134.54z"
+        android:strokeColor="#FFFFFF" android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" android:strokeWidth="4.8"/>
+    <path android:fillColor="#F9FFD9" android:fillType="nonZero"
+        android:pathData="M260.41,212.41C286.91,212.41 308.41,233.91 308.41,260.41C308.41,286.91 286.91,308.41 260.41,308.41C233.91,308.41 212.41,286.91 212.41,260.41C212.41,233.91 233.91,212.41 260.41,212.41z"
+        android:strokeColor="#F9FFD9" android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" android:strokeWidth="1.6"/>
+    <path android:fillColor="#00000000" android:fillType="nonZero"
+        android:pathData="M306.03,260.62L420.39,260.62L420.39,260.62L306.03,260.62z"
+        android:strokeColor="#FFFFFF" android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" android:strokeWidth="3"/>
+</vector>
