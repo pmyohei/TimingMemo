@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="mainColor">#74b49b</color>
-<!--    <color name="mainColor">#55ABA8</color>-->
-    <color name="subColor">#f4f9f4</color>
+<!--    <color name="mainColor">#74b49b</color>-->
+    <color name="mainColor">#55ABA8</color>
+<!--    <color name="subColor">#f4f9f4</color>-->
+    <color name="subColor">#F9FFD9</color>
     <color name="timeColor">#FD5E53</color>
     <color name="delayColor">#17223B</color>
 
@@ -19,7 +20,16 @@
     <color name="monotoneColor3">#bac8c6</color>
     <color name="monotoneColor4">#ffffff</color>
 
-
+    <!--  映画色  -->
+    <color name="memoColor1">#494544</color>
+    <color name="memoColor2">#c41a30</color>
+    <color name="memoColor3">#55ABA8</color>
+    <color name="memoColor4">#FFAC84</color>
+    <color name="memoColor5">#F9FFD9</color>
+    <color name="memoColor6">#FCE45C</color>
+    <color name="memoColor7">#000000</color>
+    <color name="memoColor8">#ffffff</color>
+    <color name="memoColor9">#FD5E53</color>
 
 
 

@@ -2,6 +2,8 @@ package com.example.timingmemo;
 
 import android.os.Bundle;
 
+import com.example.timingmemo.db.AppDatabaseManager;
+import com.example.timingmemo.db.async.AsyncCreateMemo;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.ActionBar;
@@ -40,8 +42,14 @@ public class MainActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-
-
+        //DB保存処理
+        AsyncCreateMemo db = new AsyncCreateMemo(this, new AsyncCreateMemo.OnFinishListener() {
+            @Override
+            public void onFinish(int pid) {
+            }
+        });
+        //非同期処理開始
+        db.execute();
     }
 
 }

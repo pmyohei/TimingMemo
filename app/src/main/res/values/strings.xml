@@ -10,6 +10,14 @@
     <string name="memo">Memo</string>
     <string name="category">Category</string>
 
+    <!--  Dialog  -->
+    <string name="waiting">processing</string>
+    <string name="updating">Updating</string>
+
+    <!--  Category  -->
+    <string name="no_category">No Category</string>
+
+
 
 
 </resources>
