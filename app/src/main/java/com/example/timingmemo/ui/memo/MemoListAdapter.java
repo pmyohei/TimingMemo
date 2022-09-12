@@ -1,5 +1,6 @@
 package com.example.timingmemo.ui.memo;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.MemoLi
 
     // メモリスト（あるカテゴリのメモ）
     private ArrayList<UserMemoTable> mMemos;
+    // メモクリックリスナー
+    private MemoListAdapter.MemoClickListener mMemoClickListener;
 
     /*
      * 1ページ内のメモ
@@ -39,9 +42,21 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.MemoLi
          * ビューの設定
          */
         public void setView( int position ){
+
+            UserMemoTable memo = mMemos.get( position );
+
             // メモ名を設定
-            String memoName = mMemos.get( position ).getName();
+            String memoName = memo.getName();
             tv_memoName.setText( memoName );
+
+            // メモクリックリスナー
+            tv_memoName.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View view) {
+                         mMemoClickListener.onMemoClick(memo);
+                     }
+                 }
+            );
         }
     }
 
@@ -82,7 +97,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.MemoLi
      */
     @Override
     public void onBindViewHolder(@NonNull MemoListViewHolder viewHolder, final int i) {
-        //ビューの設定
+        // ビューの設定
         viewHolder.setView( i );
     }
 
@@ -95,4 +110,19 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.MemoLi
         return mMemos.size();
     }
 
+    /*
+     * メモクリックリスナーの設定
+     */
+    public void setOnMemoClickListener( MemoListAdapter.MemoClickListener listener ) {
+        mMemoClickListener = listener;
+    }
+
+
+    /*
+     * 処理結果通知用のインターフェース
+     */
+    public interface MemoClickListener {
+        // メモクリックリスナー
+        void onMemoClick(UserMemoTable userMemo );
+    }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainColor"
-    tools:context=".ui.memo.MemoListActivity">
+    tools:context=".ui.memo.MemoRegistrationActivity">
 
     <!--  ツールバー  -->
     <androidx.appcompat.widget.Toolbar
@@ -19,34 +19,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/toolbar_memo_list">
+        app:menu="@menu/toolbar_memo_registration">
 
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- インジケータ -->
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_category"
+    <Spinner
+        android:id="@+id/sp_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:tabGravity="center"
-        app:tabIndicatorColor="@color/subColor"
-        app:tabIndicatorFullWidth="false"
-        app:tabMode="scrollable"
-        app:tabRippleColor="@null"
-        app:tabTextAppearance="@style/TabLayoutText"
+        android:layout_margin="12dp"
+        android:entries="@array/list"
+        android:spinnerMode="dialog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_memoList" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_memoList"/>
 
-    <!-- 各種デザイン情報の入力ページ -->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vp2_memoList"
+    <EditText
+        android:id="@+id/et_memoName"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:hint="Memo Name"
+        android:maxLength="6"
+        app:layout_constraintTop_toBottomOf="@+id/sp_category"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tab_category"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

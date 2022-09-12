@@ -4,19 +4,16 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.example.timingmemo.db.AppDatabase;
 import com.example.timingmemo.db.AppDatabaseManager;
-import com.example.timingmemo.db.UserCategoryTable;
-import com.example.timingmemo.db.UserCategoryTableDao;
 import com.example.timingmemo.db.UserMemoTable;
 import com.example.timingmemo.db.UserMemoTableDao;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class AsyncCreateMemo extends AsyncShowProgress {
+public class AsyncUpdateMemo extends AsyncShowProgress {
 
     private final AppDatabase mDB;
     private final UserMemoTable mUserMemo;
@@ -25,7 +22,7 @@ public class AsyncCreateMemo extends AsyncShowProgress {
     /*
      * コンストラクタ
      */
-    public AsyncCreateMemo(Context context, UserMemoTable memo, OnFinishListener listener) {
+    public AsyncUpdateMemo(Context context, UserMemoTable memo, OnFinishListener listener) {
         super(context);
 
         mDB = AppDatabaseManager.getInstance(context);
@@ -47,7 +44,7 @@ public class AsyncCreateMemo extends AsyncShowProgress {
         public void run() {
 
             //メイン処理
-            insertDB();
+            updateDB();
 
             //後処理
             handler.post(new Runnable() {
@@ -59,14 +56,26 @@ public class AsyncCreateMemo extends AsyncShowProgress {
         }
 
         /*
-         * DBへ保存
+         * DBへ更新
          */
         @SuppressLint("ResourceType")
-        private void insertDB(){
+        private void updateDB(){
 
-            // メモの新規登録
+            // 更新対象と更新後情報
+            int pid = mUserMemo.getPid();
+            String memoName = mUserMemo.getName();
+            int categoryPid = mUserMemo.getCategoryPid();
+
+            // メモの更新
             UserMemoTableDao memoDao = mDB.daoUserMemoTable();
-            memoDao.insert( mUserMemo );
+
+            // 更新対象のメモをテーブルから取得し、データを更新
+            UserMemoTable targetMemo = memoDao.getUserMemo( pid );
+            targetMemo.setCategoryPid( categoryPid );
+            targetMemo.setName( memoName );
+
+            // 更新
+            memoDao.update( targetMemo );
         }
     }
 

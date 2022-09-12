@@ -16,6 +16,9 @@ public interface UserCategoryTableDao {
     @Insert
     void insert(UserCategoryTable taskTable);
 
+    @Query("DELETE FROM userCategoryTable")
+    void deleteAll();
+
     @Delete
     void delete(UserCategoryTable taskTable);
 }

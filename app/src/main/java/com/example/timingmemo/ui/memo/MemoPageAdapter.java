@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.timingmemo.R;
@@ -19,6 +20,8 @@ public class MemoPageAdapter extends RecyclerView.Adapter<MemoPageAdapter.MemoPa
 
     // カテゴリ別メモリスト
     private ArrayList<ArrayList<UserMemoTable>> mMemosByCategory;
+    // メモクリックリスナー
+    private MemoListAdapter.MemoClickListener mMemoClickListener;
 
     /*
      * 1ページのビュー
@@ -41,7 +44,12 @@ public class MemoPageAdapter extends RecyclerView.Adapter<MemoPageAdapter.MemoPa
             // 1ページあたりのメモをリスト表示
             ArrayList<UserMemoTable> memos = mMemosByCategory.get(position);
             MemoListAdapter memoListAdapter = new MemoListAdapter( memos );
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager( rv_memoList.getContext() );
+
+            memoListAdapter.setOnMemoClickListener( mMemoClickListener );
+
             rv_memoList.setAdapter( memoListAdapter );
+            rv_memoList.setLayoutManager( linearLayoutManager );
         }
     }
 
@@ -93,6 +101,13 @@ public class MemoPageAdapter extends RecyclerView.Adapter<MemoPageAdapter.MemoPa
     public int getItemCount() {
         //表示データ数を返す
         return mMemosByCategory.size();
+    }
+
+    /*
+     * メモクリックリスナーの設定（橋渡し用）
+     */
+    public void setOnMemoClickListener( MemoListAdapter.MemoClickListener listener ) {
+        mMemoClickListener = listener;
     }
 
 }
