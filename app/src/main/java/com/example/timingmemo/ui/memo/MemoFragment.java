@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.timingmemo.CategoryListActivity;
-import com.example.timingmemo.MemoListActivity;
 import com.example.timingmemo.R;
 
 public class MemoFragment extends Fragment {

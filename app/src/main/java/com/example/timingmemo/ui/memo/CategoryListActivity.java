@@ -1,15 +1,18 @@
-package com.example.timingmemo;
+package com.example.timingmemo.ui.memo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class MemoListActivity extends AppCompatActivity {
+import com.example.timingmemo.R;
+
+public class CategoryListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_memo_list);
+        setContentView(R.layout.activity_category_list);
+
 
 
     }

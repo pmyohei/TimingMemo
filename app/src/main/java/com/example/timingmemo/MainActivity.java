@@ -2,6 +2,9 @@ package com.example.timingmemo;
 
 import android.os.Bundle;
 
+import com.example.timingmemo.db.AppDatabaseManager;
+import com.example.timingmemo.db.async.AsyncCreateMemo;
+import com.example.timingmemo.db.async.AsyncTmpCreateDataMemo;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.ActionBar;
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         // アクションバーを非表示
@@ -40,8 +43,14 @@ public class MainActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-
-
+        //DB保存処理
+        AsyncTmpCreateDataMemo db = new AsyncTmpCreateDataMemo(this, new AsyncTmpCreateDataMemo.OnFinishListener() {
+            @Override
+            public void onFinish(int pid) {
+            }
+        });
+        //非同期処理開始
+        db.execute();
     }
 
 }

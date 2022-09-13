@@ -10,6 +10,27 @@
     <string name="memo">Memo</string>
     <string name="category">Category</string>
 
+    <!--  Dialog  -->
+    <string name="waiting">processing</string>
+    <string name="updating">Updating</string>
 
+    <!--  Category  -->
+    <string name="no_category">No Category</string>
+
+    <!--  menu  -->
+    <string name="menu_new">new</string>
+    <string name="menu_save">save</string>
+    <string name="menu_remove">remove</string>
+
+    <!--  toast  -->
+    <string name="toast_error">エラーが発生しました。本画面を閉じてください。</string>
+    <string name="toast_memo_name_empty">メモ名未入力</string>
+
+    <string-array name="list">
+        <item>A型</item>
+        <item>B型</item>
+        <item>O型</item>
+        <item>AB型</item>
+    </string-array>
 
 </resources>

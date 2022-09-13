@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.TimingMemo" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.TimingMemo" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/subColor</item>
         <item name="colorPrimaryVariant">@color/subColor</item>
@@ -13,4 +13,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/mainColor</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="TabLayoutText" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+
 </resources>
