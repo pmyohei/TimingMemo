@@ -1,16 +1,315 @@
 package com.example.timingmemo.ui.memo;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.timingmemo.R;
+import com.example.timingmemo.common.AppCommonData;
+import com.example.timingmemo.db.UserCategoryTable;
+import com.example.timingmemo.db.async.AsyncCreateCategory;
+import com.example.timingmemo.db.async.AsyncRemoveCategory;
+import com.example.timingmemo.db.async.AsyncUpdateCategory;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class CategoryRegistrationActivity extends AppCompatActivity {
+
+    //--------------------------------
+    // 画面遷移 - キー文字列
+    //--------------------------------
+    public static final int RESULT_CATEGORY_NEW = 200;
+    public static final int RESULT_CATEGORY_UPDATE = 201;
+    public static final int RESULT_CATEGORY_REMOVE = 202;
+    public static final String KEY_UPDATED_POSITION = "updated_position";   // 更新通知対象のposition(カテゴリリストindex)
+
+    //--------------------------------
+    // フィールド変数
+    //--------------------------------
+    private boolean mIsNewCategoryRegistration;                 // 新規カテゴリ登録の場合、true
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_registration);
+
+        // 新規カテゴリ or カテゴリ更新 の情報を保持
+        Intent intent = getIntent();
+        mIsNewCategoryRegistration = intent.getBooleanExtra(CategoryListActivity.KEY_NEW_CATEGORY_REGISTRATION, true);
+
+        // ツールバーの設定
+        setToolbar();
+        // 画面レイアウトの設定
+        setRegistrationLayout();
     }
+
+    /*
+     * ツールバーの設定
+     */
+    private void setToolbar() {
+
+        // ツールバー設定
+        Toolbar toolbar = findViewById(R.id.toolbar_categoryList);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        // 戻るボタンの表示
+        ActionBar actionBar = getSupportActionBar();
+        Objects.requireNonNull(actionBar).setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    /*
+     * 本画面のレイアウト設定
+     *   新規カテゴリの登録 or 既存カテゴリの更新
+     */
+    private void setRegistrationLayout() {
+
+        // 更新の場合は、選択されたカテゴリ名を設定
+        if ( !mIsNewCategoryRegistration ) {
+            Intent intent = getIntent();
+            String name = intent.getStringExtra(CategoryListActivity.KEY_CATEGORY_NAME);
+
+            EditText et_categoryName = findViewById(R.id.et_categoryName);
+            et_categoryName.setText(name);
+        }
+    }
+
+    /*
+     * カテゴリ情報保存処理
+     */
+    private void saveCategory() {
+
+        // カテゴリ名を取得
+        EditText et_categoryName = findViewById(R.id.et_categoryName);
+        String categoryName = et_categoryName.getText().toString();
+        if (categoryName.isEmpty()) {
+            // カテゴリ名未入力ならメッセージを表示
+            Toast.makeText(this, R.string.toast_category_name_empty, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 新規カテゴリ or カテゴリの更新
+        if (mIsNewCategoryRegistration) {
+            // 新規保存
+            saveNewCategory(categoryName);
+
+        } else {
+            // カテゴリPidを画面遷移元から取得
+            Intent intent = getIntent();
+            int categoryPid = intent.getIntExtra(CategoryListActivity.KEY_CATEGORY_PID, -1);
+            // 更新
+            saveUpdateCategory(categoryPid, categoryName);
+        }
+    }
+
+    /*
+     * ＤＢ保存処理 - 新規カテゴリ
+     */
+    private void saveNewCategory(String categoryName) {
+
+        // 登録対象カテゴリ
+        UserCategoryTable category = new UserCategoryTable();
+        category.setName(categoryName);
+
+        // DB保存処理
+        AsyncCreateCategory db = new AsyncCreateCategory(this, category, new AsyncCreateCategory.OnFinishListener() {
+            @Override
+            public void onFinish(UserCategoryTable newCategory) {
+                // 新規カテゴリをリストへ追加
+                addCategoryCommonList(newCategory);
+
+                // 画面遷移元へのデータを設定し、終了
+                setFinishIntent( RESULT_CATEGORY_NEW );
+                finish();
+            }
+        });
+        // 非同期処理開始
+        db.execute();
+    }
+
+    /*
+     * ＤＢ保存処理 - カテゴリ更新
+     */
+    private void saveUpdateCategory(int categoryPid, String categoryName) {
+
+        // 更新対象カテゴリ
+        UserCategoryTable category = new UserCategoryTable();
+        category.setPid(categoryPid);
+        category.setName(categoryName);
+
+        // DB保存処理
+        AsyncUpdateCategory db = new AsyncUpdateCategory(this, category, new AsyncUpdateCategory.OnFinishListener() {
+            @Override
+            public void onFinish(UserCategoryTable updatedCategory) {
+                // 共通データのリストのカテゴリを更新
+                updateCategoryCommonList( updatedCategory );
+
+                // 画面遷移元へのデータを設定し、終了
+                setFinishIntent( RESULT_CATEGORY_UPDATE );
+                finish();
+            }
+        });
+        // 非同期処理開始
+        db.execute();
+    }
+
+    /*
+     * ＤＢ保存処理 - カテゴリ削除
+     */
+    private void saveRemoveCategory() {
+
+        Intent intent = getIntent();
+        int categoryPid = intent.getIntExtra(CategoryListActivity.KEY_CATEGORY_PID, -1);
+        if (categoryPid == -1) {
+            // ガード
+            Toast.makeText(this, R.string.toast_error, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // DB保存処理
+        AsyncRemoveCategory db = new AsyncRemoveCategory(this, categoryPid, new AsyncRemoveCategory.OnFinishListener() {
+            @Override
+            public void onFinish(int pid) {
+                // 共通データのリストのカテゴリを削除
+                removeCategoryCommonList();
+
+                // 画面遷移元へのデータを設定し、終了
+                setFinishIntent( RESULT_CATEGORY_REMOVE );
+                finish();
+            }
+        });
+        // 非同期処理開始
+        db.execute();
+    }
+
+    /*
+     * 共通データのカテゴリリストにカテゴリを追加
+     */
+    private void addCategoryCommonList(UserCategoryTable category ) {
+        // 共通データのリストにカテゴリを追加
+        AppCommonData commonData = (AppCommonData) getApplication();
+        ArrayList<UserCategoryTable> categories = commonData.getUserCategories();
+        categories.add( category );
+    }
+
+    /*
+     * 共通データのカテゴリリストのカテゴリを更新
+     */
+    private void updateCategoryCommonList(UserCategoryTable category ) {
+
+        // 更新対象カテゴリのindex
+        Intent intent = getIntent();
+        int position = intent.getIntExtra(CategoryListActivity.KEY_CATEGORY_LIST_POSITION, -1);
+        if( position == -1 ){
+            // フェールセーフ
+            return;
+        }
+
+        // 共通データのリストのカテゴリを更新
+        AppCommonData commonData = (AppCommonData) getApplication();
+        ArrayList<UserCategoryTable> categories = commonData.getUserCategories();
+        UserCategoryTable targetCategory = categories.get( position );
+        targetCategory.setName( category.getName() );
+    }
+
+    /*
+     * 共通データのカテゴリリストのカテゴリを削除
+     */
+    private void removeCategoryCommonList() {
+
+        // 更新対象カテゴリのindex
+        Intent intent = getIntent();
+        int position = intent.getIntExtra(CategoryListActivity.KEY_CATEGORY_LIST_POSITION, -1);
+        if( position == -1 ){
+            // フェールセーフ
+            return;
+        }
+
+        // 共通データのリストからカテゴリを削除
+        AppCommonData commonData = (AppCommonData) getApplication();
+        ArrayList<UserCategoryTable> categories = commonData.getUserCategories();
+        categories.remove( position );
+    }
+
+    /*
+     * 画面終了のindentデータを設定
+     *   更新通知対象のリスト位置を設定
+     */
+    private void setFinishIntent( int resultCode ) {
+
+        // 遷移元からの位置情報をそのまま返す
+        Intent intent = getIntent();
+        int position = intent.getIntExtra(CategoryListActivity.KEY_CATEGORY_LIST_POSITION, -1);
+        intent.putExtra( KEY_UPDATED_POSITION, position );
+
+        // resultコード設定
+        setResult(resultCode, intent );
+    }
+
+
+    /*
+     * ツールバーオプションメニュー生成
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // 表示メニュー
+        int menuId;
+        if( mIsNewCategoryRegistration ){
+            menuId = R.menu.toolbar_memo_registration;
+        } else {
+            menuId = R.menu.toolbar_memo_update;
+        }
+
+        // メニューを割り当て
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(menuId, menu);
+
+        return true;
+    }
+
+    /*
+     * ツールバー 戻るボタン押下処理
+     */
+    @Override
+    public boolean onSupportNavigateUp() {
+        //アクティビティ終了
+        finish();
+
+        return super.onSupportNavigateUp();
+    }
+
+    /*
+     * ツールバーアクション選択
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                saveCategory();
+                return true;
+
+            case R.id.action_remove:
+                saveRemoveCategory();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+
 }

@@ -17,6 +17,9 @@ public interface UserMemoTableDao {
     @Query("SELECT * FROM userMemoTable WHERE pid=(:pid)")
     UserMemoTable getUserMemo( int pid );
 
+    @Query("SELECT * FROM userMemoTable WHERE categoryPid=(:categoryPid)")
+    List<UserMemoTable> getUserMemosBelongCategory( int categoryPid );
+
     @Update
     void update(UserMemoTable userMemo);
 

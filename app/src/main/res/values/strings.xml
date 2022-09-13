@@ -6,6 +6,10 @@
     <string name="title_record">Record</string>
     <string name="title_history">History</string>
 
+    <!--  EditText  -->
+    <string name="hint_memo_name">Memo Name</string>
+    <string name="hint_category_name">Category Name</string>
+
     <!--  Button  -->
     <string name="memo">Memo</string>
     <string name="category">Category</string>
@@ -25,6 +29,7 @@
     <!--  toast  -->
     <string name="toast_error">エラーが発生しました。本画面を閉じてください。</string>
     <string name="toast_memo_name_empty">メモ名未入力</string>
+    <string name="toast_category_name_empty">カテゴリ名未入力</string>
 
     <string-array name="list">
         <item>A型</item>

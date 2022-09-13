@@ -14,12 +14,24 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!--  TabLayout スタイル  -->
     <style name="TabLayoutText" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <!--  EditText スタイル  -->
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="colorControlNormal">@color/subColor</item>
+        <item name="colorControlActivated">@color/subColor</item>
+        <item name="android:textCursorDrawable">@color/subColor</item>
+        <item name="android:textColor">@color/subColor</item>
+        <item name="android:textColorHint">@color/subColor</item>
+        <item name="android:textColorHighlight">@color/subColor</item>
     </style>
 
+    <!--  ツールバー戻るボタン色変更スタイル  -->
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/subColor</item>
+    </style>
 
 </resources>

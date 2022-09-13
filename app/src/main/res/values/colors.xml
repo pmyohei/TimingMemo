@@ -21,14 +21,20 @@
     <color name="monotoneColor4">#ffffff</color>
 
     <!--  映画色  -->
+    <color name="mColor1">#2E94B9</color>
+    <color name="mColor2">#FFFDC0</color>
+    <color name="mColor3">#F0B775</color>
+    <color name="mColor4">#D25565</color>
+
+    <!--  メモ色  -->
     <color name="memoColor1">#494544</color>
     <color name="memoColor2">#c41a30</color>
     <color name="memoColor3">#55ABA8</color>
     <color name="memoColor4">#FFAC84</color>
-    <color name="memoColor5">#F9FFD9</color>
+    <color name="memoColor5">#FFFDC0</color>
     <color name="memoColor6">#FCE45C</color>
     <color name="memoColor7">#000000</color>
-    <color name="memoColor8">#ffffff</color>
+    <color name="memoColor8">#F0B775</color>
     <color name="memoColor9">#FD5E53</color>
 
 

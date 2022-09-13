@@ -87,7 +87,7 @@ public class MemoRegistrationActivity extends AppCompatActivity {
 
         // 選択肢のアダプタを設定
         Spinner sp_category = findViewById(R.id.sp_category);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryList);
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.item_category_spinner, categoryList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_category.setAdapter(adapter);
 

@@ -16,10 +16,11 @@
         android:background="@android:color/transparent"
         android:elevation="0dp"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        app:theme="@style/ToolbarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/toolbar_memo_list">
+        app:menu="@menu/toolbar_list">
 
     </androidx.appcompat.widget.Toolbar>
 

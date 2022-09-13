@@ -16,6 +16,7 @@
         android:background="@android:color/transparent"
         android:elevation="0dp"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        app:theme="@style/ToolbarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,12 +36,14 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar_memoList"/>
 
     <EditText
+        style="@style/EditTextStyle"
         android:id="@+id/et_memoName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:hint="Memo Name"
+        android:hint="@string/hint_memo_name"
         android:maxLength="6"
+        app:theme="@style/EditTextStyle"
         app:layout_constraintTop_toBottomOf="@+id/sp_category"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

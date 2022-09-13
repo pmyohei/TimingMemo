@@ -11,7 +11,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -288,7 +287,7 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
     public boolean onCreateOptionsMenu(Menu menu) {
         //初期メニュー
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_memo_list, menu);
+        inflater.inflate(R.menu.toolbar_list, menu);
 
         return true;
     }
