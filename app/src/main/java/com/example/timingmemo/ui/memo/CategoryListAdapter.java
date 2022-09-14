@@ -1,5 +1,6 @@
 package com.example.timingmemo.ui.memo;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,8 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             tv_categoryName.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View view) {
-                         mCategoryClickListener.onCategoryClick( category, position);
+                         Log.i("削除アニメ", "onClick = " + category.getName() + " " + category.getPid());
+                         mCategoryClickListener.onCategoryClick( category );
                      }
                  }
             );
@@ -73,7 +75,14 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
      */
     @Override
     public int getItemViewType(int position) {
-        return position;
+        //positionをそのまま返すとアイテム削除時にちらつくため、pidで管理
+        return mCategories.get(position).getPid();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        //positionをそのまま返すとアイテム削除時にちらつくため、pidで管理
+        return mCategories.get(position).getPid();
     }
 
     /*
@@ -116,12 +125,11 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         mCategoryClickListener = listener;
     }
 
-
     /*
      * 処理結果通知用のインターフェース
      */
     public interface CategoryClickListener {
         // メモクリックリスナー
-        void onCategoryClick(UserCategoryTable userCategory, int position );
+        void onCategoryClick( UserCategoryTable userCategory );
     }
 }

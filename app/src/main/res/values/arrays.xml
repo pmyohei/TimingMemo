@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  メモ色の選択候補リスト  -->
+    <array name="memoSelectionColor">
+        <item>@color/memoColor1</item>
+        <item>@color/memoColor2</item>
+        <item>@color/memoColor3</item>
+        <item>@color/memoColor4</item>
+        <item>@color/memoColor5</item>
+        <item>@color/memoColor6</item>
+        <item>@color/memoColor7</item>
+        <item>@color/memoColor8</item>
+        <item>@color/memoColor9</item>
+    </array>
+
+</resources>

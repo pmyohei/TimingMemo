@@ -231,9 +231,12 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
      */
     private void setToolbar() {
 
+        // ツールバータイトル
+        String title = getString( R.string.toolbar_title_memo_list );
+
         // ツールバー設定
         Toolbar toolbar = findViewById(R.id.toolbar_memoList);
-        toolbar.setTitle("");
+        toolbar.setTitle( title );
         setSupportActionBar(toolbar);
 
         // 戻るボタンの表示

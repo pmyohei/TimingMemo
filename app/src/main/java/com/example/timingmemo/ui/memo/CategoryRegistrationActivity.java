@@ -4,8 +4,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -58,9 +61,12 @@ public class CategoryRegistrationActivity extends AppCompatActivity {
      */
     private void setToolbar() {
 
+        // ツールバータイトル
+        String title = getString( R.string.toolbar_title_category_registration );
+
         // ツールバー設定
         Toolbar toolbar = findViewById(R.id.toolbar_categoryList);
-        toolbar.setTitle("");
+        toolbar.setTitle( title );
         setSupportActionBar(toolbar);
 
         // 戻るボタンの表示
@@ -127,10 +133,10 @@ public class CategoryRegistrationActivity extends AppCompatActivity {
             @Override
             public void onFinish(UserCategoryTable newCategory) {
                 // 新規カテゴリをリストへ追加
-                addCategoryCommonList(newCategory);
+                int position = addCategoryCommonList(newCategory);
 
                 // 画面遷移元へのデータを設定し、終了
-                setFinishIntent( RESULT_CATEGORY_NEW );
+                setFinishIntent( RESULT_CATEGORY_NEW, position );
                 finish();
             }
         });
@@ -153,10 +159,10 @@ public class CategoryRegistrationActivity extends AppCompatActivity {
             @Override
             public void onFinish(UserCategoryTable updatedCategory) {
                 // 共通データのリストのカテゴリを更新
-                updateCategoryCommonList( updatedCategory );
+                int position = updateCategoryCommonList( updatedCategory );
 
                 // 画面遷移元へのデータを設定し、終了
-                setFinishIntent( RESULT_CATEGORY_UPDATE );
+                setFinishIntent( RESULT_CATEGORY_UPDATE, position );
                 finish();
             }
         });
@@ -177,15 +183,17 @@ public class CategoryRegistrationActivity extends AppCompatActivity {
             return;
         }
 
+        Log.i("削除アニメ", "削除直前 categoryPid=" + categoryPid);
+
         // DB保存処理
         AsyncRemoveCategory db = new AsyncRemoveCategory(this, categoryPid, new AsyncRemoveCategory.OnFinishListener() {
             @Override
             public void onFinish(int pid) {
                 // 共通データのリストのカテゴリを削除
-                removeCategoryCommonList();
+                int position = removeCategoryCommonList( pid );
 
                 // 画面遷移元へのデータを設定し、終了
-                setFinishIntent( RESULT_CATEGORY_REMOVE );
+                setFinishIntent( RESULT_CATEGORY_REMOVE, position );
                 finish();
             }
         });
@@ -196,67 +204,111 @@ public class CategoryRegistrationActivity extends AppCompatActivity {
     /*
      * 共通データのカテゴリリストにカテゴリを追加
      */
-    private void addCategoryCommonList(UserCategoryTable category ) {
+    private int addCategoryCommonList(UserCategoryTable category ) {
         // 共通データのリストにカテゴリを追加
         AppCommonData commonData = (AppCommonData) getApplication();
         ArrayList<UserCategoryTable> categories = commonData.getUserCategories();
         categories.add( category );
+
+        // 追加カテゴリのindexを返す
+        return (categories.size() - 1);
     }
 
     /*
      * 共通データのカテゴリリストのカテゴリを更新
      */
-    private void updateCategoryCommonList(UserCategoryTable category ) {
-
-        // 更新対象カテゴリのindex
-        Intent intent = getIntent();
-        int position = intent.getIntExtra(CategoryListActivity.KEY_CATEGORY_LIST_POSITION, -1);
-        if( position == -1 ){
-            // フェールセーフ
-            return;
-        }
+    private int updateCategoryCommonList( UserCategoryTable category ) {
 
         // 共通データのリストのカテゴリを更新
         AppCommonData commonData = (AppCommonData) getApplication();
         ArrayList<UserCategoryTable> categories = commonData.getUserCategories();
+
+        // 更新対象カテゴリのリスト内の位置を取得
+        int targetPid = category.getPid();
+        int position = getCategoryIndexInList( categories, targetPid );
+
+        // 更新
         UserCategoryTable targetCategory = categories.get( position );
         targetCategory.setName( category.getName() );
+
+        return position;
     }
 
     /*
      * 共通データのカテゴリリストのカテゴリを削除
      */
-    private void removeCategoryCommonList() {
-
-        // 更新対象カテゴリのindex
-        Intent intent = getIntent();
-        int position = intent.getIntExtra(CategoryListActivity.KEY_CATEGORY_LIST_POSITION, -1);
-        if( position == -1 ){
-            // フェールセーフ
-            return;
-        }
-
-        // 共通データのリストからカテゴリを削除
+    private int removeCategoryCommonList( int removedPid ) {
+        // 共通データのリスト
         AppCommonData commonData = (AppCommonData) getApplication();
         ArrayList<UserCategoryTable> categories = commonData.getUserCategories();
+
+        Log.i("削除アニメ", "removedPid=" + removedPid);
+
+        // 更新対象カテゴリのリスト内の位置を取得し、リストから削除
+        int position = getCategoryIndexInList( categories, removedPid );
         categories.remove( position );
+
+        return position;
+    }
+
+    /*
+     * 共通データのカテゴリリストのカテゴリを削除
+     */
+    private int getCategoryIndexInList( ArrayList<UserCategoryTable> categories, int pid ) {
+
+        int i = 0;
+        for( UserCategoryTable categoryInList: categories ){
+            int pidInList = categoryInList.getPid();
+            if( pidInList == pid ){
+                return i;
+            }
+
+            i++;
+        }
+
+        return -1;
+    }
+
+    /*
+     * 削除確認ダイアログの表示
+     */
+    private void confirmRemove() {
+
+        // 各種文言
+        String title = getString(R.string.dialog_title_confirm_remove);
+        String content = getString(R.string.dialog_content_category_confirm_remove);
+        String positive = getString(R.string.dialog_positive_confirm_remove);
+        String negative = getString( android.R.string.cancel );
+
+        // 確認ダイアログを表示
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle( title )
+                .setMessage( content )
+                .setPositiveButton( positive, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 削除処理へ
+                        saveRemoveCategory();
+                    }
+                })
+                .setNegativeButton(negative, null)
+                .show();
+
     }
 
     /*
      * 画面終了のindentデータを設定
      *   更新通知対象のリスト位置を設定
      */
-    private void setFinishIntent( int resultCode ) {
+    private void setFinishIntent( int resultCode, int position ) {
 
-        // 遷移元からの位置情報をそのまま返す
+        // 変更されたカテゴリのリスト内における位置を設定
         Intent intent = getIntent();
-        int position = intent.getIntExtra(CategoryListActivity.KEY_CATEGORY_LIST_POSITION, -1);
         intent.putExtra( KEY_UPDATED_POSITION, position );
 
         // resultコード設定
         setResult(resultCode, intent );
     }
-
 
     /*
      * ツールバーオプションメニュー生成
@@ -302,7 +354,8 @@ public class CategoryRegistrationActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_remove:
-                saveRemoveCategory();
+                // 削除確認処理
+                confirmRemove();
                 return true;
 
             default:
@@ -310,6 +363,4 @@ public class CategoryRegistrationActivity extends AppCompatActivity {
 
         }
     }
-
-
 }

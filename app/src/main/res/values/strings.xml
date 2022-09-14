@@ -6,17 +6,28 @@
     <string name="title_record">Record</string>
     <string name="title_history">History</string>
 
-    <!--  EditText  -->
-    <string name="hint_memo_name">Memo Name</string>
-    <string name="hint_category_name">Category Name</string>
+    <!--  Toolbar Title  -->
+    <string name="toolbar_title_memo_list">Memo List</string>
+    <string name="toolbar_title_memo_registration">Memo</string>
+    <string name="toolbar_title_category_list">Category List</string>
+    <string name="toolbar_title_category_registration">Category</string>
 
-    <!--  Button  -->
+    <!--  memo  -->
     <string name="memo">Memo</string>
+    <string name="hint_memo_name">Memo Name</string>
+    <string name="title_color">Color</string>
+
+    <!--  category  -->
     <string name="category">Category</string>
+    <string name="hint_category_name">Category Name</string>
 
     <!--  Dialog  -->
     <string name="waiting">processing</string>
     <string name="updating">Updating</string>
+    <string name="dialog_title_confirm_remove">削除確認</string>
+    <string name="dialog_content_memo_confirm_remove">メモを削除しますか？</string>
+    <string name="dialog_content_category_confirm_remove">カテゴリを削除しますか？\nこのカテゴリ内のメモは削除されず、「カテゴリなし」になります。</string>
+    <string name="dialog_positive_confirm_remove">削除</string>
 
     <!--  Category  -->
     <string name="no_category">No Category</string>
@@ -30,12 +41,5 @@
     <string name="toast_error">エラーが発生しました。本画面を閉じてください。</string>
     <string name="toast_memo_name_empty">メモ名未入力</string>
     <string name="toast_category_name_empty">カテゴリ名未入力</string>
-
-    <string-array name="list">
-        <item>A型</item>
-        <item>B型</item>
-        <item>O型</item>
-        <item>AB型</item>
-    </string-array>
 
 </resources>

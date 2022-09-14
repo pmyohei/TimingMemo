@@ -9,7 +9,7 @@
 
     <!--  ツールバー  -->
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_memoList"
+        android:id="@+id/toolbar_memoRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
@@ -24,28 +24,106 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/tv_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="12dp"
+        android:gravity="start"
+        android:text="@string/category"
+        android:textColor="@color/subColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_memoRegister" />
+
     <Spinner
         android:id="@+id/sp_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:entries="@array/list"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="4dp"
         android:spinnerMode="dialog"
+        android:backgroundTint="@color/subColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_memoList"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_category"/>
 
     <EditText
         style="@style/EditTextStyle"
         android:id="@+id/et_memoName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="4dp"
         android:hint="@string/hint_memo_name"
-        android:maxLength="6"
         app:theme="@style/EditTextStyle"
         app:layout_constraintTop_toBottomOf="@+id/sp_category"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="@string/title_color"
+        android:textColor="@color/subColor"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/et_memoName"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:paddingTop="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!--    ユーザーが選択した色    -->
+        <View
+            android:id="@+id/v_selectedColor"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="32dp"
+            android:background="@color/memoColor1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!--    区切り線    -->
+        <View
+            android:id="@+id/v_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@color/mainColor"
+            app:layout_constraintTop_toBottomOf="@+id/v_selectedColor"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!--  色候補リスト  -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_colors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:layout_marginTop="20dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/v_border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

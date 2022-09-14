@@ -109,8 +109,7 @@ public class AsyncRemoveCategory extends AsyncShowProgress {
      */
     void onPostExecute() {
         super.onPostExecute();
-
-        mOnFinishListener.onFinish( 0 );
+        mOnFinishListener.onFinish( mUserCategoryPid );
     }
 
     /*
@@ -119,7 +118,4 @@ public class AsyncRemoveCategory extends AsyncShowProgress {
     public interface OnFinishListener {
         void onFinish( int pid );
     }
-
-
-
 }

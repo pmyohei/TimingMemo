@@ -4,9 +4,12 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,7 +37,6 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
     public static final String KEY_NEW_CATEGORY_REGISTRATION = "new_category_registration";
     public static final String KEY_CATEGORY_PID = "category_pid";
     public static final String KEY_CATEGORY_NAME = "category_name";
-    public static final String KEY_CATEGORY_LIST_POSITION = "category_list_index";
 
     //--------------------------------
     // フィールド変数
@@ -69,9 +71,12 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
      */
     private void setToolbar() {
 
+        // ツールバータイトル
+        String title = getString( R.string.toolbar_title_category_list );
+
         // ツールバー設定
         Toolbar toolbar = findViewById(R.id.toolbar_categoryList);
-        toolbar.setTitle("");
+        toolbar.setTitle( title );
         setSupportActionBar(toolbar);
 
         // 戻るボタンの表示
@@ -189,6 +194,17 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
 
         // カテゴリクリックリスナーの設定
         categoryListAdapter.setOnCategoryClickListener(this);
+
+        // アイテムアニメーションの設定
+//        rv_categoryList.setItemAnimator( new DefaultItemAnimator(){
+//            @Override
+//            public boolean animateRemove( RecyclerView.ViewHolder holder ){
+//                // 必ずコールが必要
+//                dispatchRemoveFinished( holder );
+//                return false;
+//            }
+//        });
+
     }
 
     /*
@@ -196,15 +212,9 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
      */
     private void transitionNewCategory() {
 
-        // 新規追加された場合のリストindex位置
-        int position = mUserCategories.size();
-
-        Log.i("positionテスト", "遷移=" + position);
-
         // 画面遷移
         Intent intent = new Intent(this, CategoryRegistrationActivity.class);
         intent.putExtra( KEY_NEW_CATEGORY_REGISTRATION, true );
-        intent.putExtra(KEY_CATEGORY_LIST_POSITION, position );
 
         mCategoryRegistrationLancher.launch( intent );
     }
@@ -212,16 +222,13 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
     /*
      * 画面遷移 - カテゴリ更新画面
      */
-    private void transitionUpdateCategory( UserCategoryTable category, int position ) {
-
-        Log.i("positionテスト", "遷移=" + position);
+    private void transitionUpdateCategory( UserCategoryTable category ) {
 
         // 画面遷移
         Intent intent = new Intent(this, CategoryRegistrationActivity.class);
         intent.putExtra( KEY_NEW_CATEGORY_REGISTRATION, false );
         intent.putExtra( KEY_CATEGORY_PID, category.getPid() );
         intent.putExtra( KEY_CATEGORY_NAME, category.getName() );
-        intent.putExtra(KEY_CATEGORY_LIST_POSITION, position );
 
         mCategoryRegistrationLancher.launch( intent );
     }
@@ -270,8 +277,8 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
      * 本メソッドは、各カテゴリクリック時処理として実装
      */
     @Override
-    public void onCategoryClick(UserCategoryTable userCategory, int position ) {
+    public void onCategoryClick(UserCategoryTable userCategory ) {
         // カテゴリ更新画面へ遷移
-        transitionUpdateCategory( userCategory, position );
+        transitionUpdateCategory( userCategory );
     }
 }

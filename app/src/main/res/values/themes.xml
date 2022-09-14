@@ -11,8 +11,20 @@
         <item name="colorOnSecondary">@color/delayColor</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/mainColor</item>
+
         <!-- Customize your theme here. -->
+        <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
     </style>
+
+    <!-- 画面遷移アニメーションの詳細設定 -->
+    <style name="Animation" parent="android:Animation" />
+    <style name="Animation.Activity" parent="android:Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_transition_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_transition_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_transition_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_transition_out</item>
+    </style>
+
 
     <!--  TabLayout スタイル  -->
     <style name="TabLayoutText" parent="TextAppearance.Design.Tab">
@@ -25,13 +37,17 @@
         <item name="colorControlActivated">@color/subColor</item>
         <item name="android:textCursorDrawable">@color/subColor</item>
         <item name="android:textColor">@color/subColor</item>
-        <item name="android:textColorHint">@color/subColor</item>
+        <item name="android:textColorHint">@color/subLittleColor</item>
         <item name="android:textColorHighlight">@color/subColor</item>
     </style>
 
-    <!--  ツールバー戻るボタン色変更スタイル  -->
+    <!--  ツールバー スタイル  -->
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!--    戻るボタン（←）の色変更    -->
         <item name="colorControlNormal">@color/subColor</item>
+        <!--    titleの色変更    -->
+        <item name="android:textColorPrimary">@color/subColor</item>
+        <item name="android:textColorSecondary">@color/subColor</item>
     </style>
 
 </resources>

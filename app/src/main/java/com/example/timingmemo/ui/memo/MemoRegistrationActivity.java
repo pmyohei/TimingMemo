@@ -3,12 +3,19 @@ package com.example.timingmemo.ui.memo;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -20,7 +27,6 @@ import com.example.timingmemo.db.UserCategoryTable;
 import com.example.timingmemo.db.UserMemoTable;
 import com.example.timingmemo.db.async.AsyncCreateMemo;
 import com.example.timingmemo.db.async.AsyncRemoveMemo;
-import com.example.timingmemo.db.async.AsyncTmpCreateDataMemo;
 import com.example.timingmemo.db.async.AsyncUpdateMemo;
 
 import java.util.ArrayList;
@@ -65,9 +71,12 @@ public class MemoRegistrationActivity extends AppCompatActivity {
      */
     private void setToolbar() {
 
+        // ツールバータイトル
+        String title = getString( R.string.toolbar_title_memo_registration );
+
         // ツールバー設定
-        Toolbar toolbar = findViewById(R.id.toolbar_memoList);
-        toolbar.setTitle("");
+        Toolbar toolbar = findViewById(R.id.toolbar_memoRegister);
+        toolbar.setTitle( title );
         setSupportActionBar(toolbar);
 
         // 戻るボタンの表示
@@ -88,7 +97,7 @@ public class MemoRegistrationActivity extends AppCompatActivity {
         // 選択肢のアダプタを設定
         Spinner sp_category = findViewById(R.id.sp_category);
         ArrayAdapter adapter = new ArrayAdapter(this, R.layout.item_category_spinner, categoryList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.item_category_spinner_dropdown);
         sp_category.setAdapter(adapter);
 
         // 選択中だったカテゴリページをデフォルト選択肢として設定
@@ -103,10 +112,12 @@ public class MemoRegistrationActivity extends AppCompatActivity {
 
     /*
      * 本画面のレイアウト設定
-     *   新規メモの登録 or 既存メモの更新
      */
     private void setRegistrationLayout() {
 
+        //-----------------
+        // メモ名
+        //-----------------
         // 更新の場合は、対象のメモ名を設定
         if (!mIsNewMemoRegistration) {
             Intent intent = getIntent();
@@ -115,6 +126,32 @@ public class MemoRegistrationActivity extends AppCompatActivity {
             EditText et_memoName = findViewById(R.id.et_memoName);
             et_memoName.setText(memoName);
         }
+
+        //-----------------
+        // 色選択リスト
+        //-----------------
+        // 色リストを取得し、アダプタを生成
+        TypedArray colors = getResources().obtainTypedArray(R.array.memoSelectionColor);
+        MemoSelectionColorAdapter adapter = new MemoSelectionColorAdapter( colors );
+        // スクロール方向を用意
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation( LinearLayoutManager.HORIZONTAL );
+
+        RecyclerView rv_colors = findViewById(R.id.rv_colors);
+        rv_colors.setAdapter( adapter );
+        rv_colors.setLayoutManager( linearLayoutManager );
+
+        Log.i("色選択", "length=" + colors.length());
+
+        // 色クリックリスナーの設定
+        adapter.setOnColorClickListener(new MemoSelectionColorAdapter.ColorClickListener() {
+            @Override
+            public void onColorClick(int color) {
+                // 選択色を設定
+                View v_color = findViewById( R.id.v_selectedColor);
+                v_color.setBackgroundColor( color );
+            }
+        });
     }
 
     /*
@@ -135,7 +172,7 @@ public class MemoRegistrationActivity extends AppCompatActivity {
         }
 
         // 新規メモ or メモの更新
-        if ( mIsNewMemoRegistration ) {
+        if (mIsNewMemoRegistration) {
             saveNewMemo(categoryPid, memoName);
         } else {
             saveUpdateMemo(categoryPid, memoName);
@@ -253,6 +290,33 @@ public class MemoRegistrationActivity extends AppCompatActivity {
     }
 
     /*
+     * 削除確認ダイアログの表示
+     */
+    private void confirmRemove() {
+
+        // 各種文言
+        String title = getString(R.string.dialog_title_confirm_remove);
+        String content = getString(R.string.dialog_content_memo_confirm_remove);
+        String positive = getString(R.string.dialog_positive_confirm_remove);
+        String negative = getString( android.R.string.cancel );
+
+        // 確認ダイアログを表示
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle( title )
+                .setMessage( content )
+                .setPositiveButton( positive, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 削除処理へ
+                        saveRemoveMemo();
+                    }
+                })
+                .setNegativeButton(negative, null)
+                .show();
+
+    }
+
+    /*
      * 画面終了のindentデータを設定
      *   更新の必要なカテゴリページindexを設定する
      */
@@ -320,7 +384,7 @@ public class MemoRegistrationActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_remove:
-                saveRemoveMemo();
+                confirmRemove();
                 return true;
 
             default:
