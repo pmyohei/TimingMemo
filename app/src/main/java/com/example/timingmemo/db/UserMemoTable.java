@@ -22,6 +22,9 @@ public class UserMemoTable {
     @ColumnInfo(name = "name")
     private String name;
 
+    // メモ色
+    @ColumnInfo(name = "color")
+    private int color;
 
     //----------------------------
     // 定数
@@ -58,5 +61,12 @@ public class UserMemoTable {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getColor() {
+        return color;
+    }
+    public void setColor(int color) {
+        this.color = color;
     }
 }

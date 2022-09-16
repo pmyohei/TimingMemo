@@ -36,6 +36,7 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
     public static final String KEY_SELECTED_PAGE_INDEX = "selected_page_index";
     public static final String KEY_MEMO_PID = "memo_pid";
     public static final String KEY_MEMO_NAME = "memo_name";
+    public static final String KEY_MEMO_COLOR = "memo_color";
 
     //--------------------------------
     // フィールド変数
@@ -277,6 +278,7 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
         intent.putExtra( KEY_SELECTED_PAGE_INDEX, selectedCategoryPage );
         intent.putExtra( KEY_MEMO_PID, memo.getPid() );
         intent.putExtra( KEY_MEMO_NAME, memo.getName() );
+        intent.putExtra( KEY_MEMO_COLOR, memo.getColor() );
 
         mMemoRegistrationLancher.launch( intent );
     }

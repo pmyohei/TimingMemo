@@ -1,8 +1,10 @@
-package com.example.timingmemo;
+package com.example.timingmemo.ui.history;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.timingmemo.R;
 
 public class RecordDetailsActivity extends AppCompatActivity {
 

@@ -10,6 +10,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -118,13 +119,18 @@ public class MemoRegistrationActivity extends AppCompatActivity {
         //-----------------
         // メモ名
         //-----------------
-        // 更新の場合は、対象のメモ名を設定
+        // 更新の場合は、対象のメモ情報を設定
         if (!mIsNewMemoRegistration) {
+            // 更新対象のメモ情報を取得
             Intent intent = getIntent();
             String memoName = intent.getStringExtra(MemoListActivity.KEY_MEMO_NAME);
+            int memoColor = intent.getIntExtra(MemoListActivity.KEY_MEMO_COLOR, 0x000000);
 
+            // メモ情報をレイアウトに反映
             EditText et_memoName = findViewById(R.id.et_memoName);
             et_memoName.setText(memoName);
+            View v_selectedColor = findViewById(R.id.v_selectedColor);
+            v_selectedColor.setBackgroundColor( memoColor );
         }
 
         //-----------------
@@ -140,8 +146,6 @@ public class MemoRegistrationActivity extends AppCompatActivity {
         RecyclerView rv_colors = findViewById(R.id.rv_colors);
         rv_colors.setAdapter( adapter );
         rv_colors.setLayoutManager( linearLayoutManager );
-
-        Log.i("色選択", "length=" + colors.length());
 
         // 色クリックリスナーの設定
         adapter.setOnColorClickListener(new MemoSelectionColorAdapter.ColorClickListener() {
@@ -171,23 +175,29 @@ public class MemoRegistrationActivity extends AppCompatActivity {
             return;
         }
 
+        // メモ色の取得
+        View v_selectedColor = findViewById( R.id.v_selectedColor );
+        ColorDrawable colorDrawable = (ColorDrawable)v_selectedColor.getBackground();
+        int color = colorDrawable.getColor();
+
         // 新規メモ or メモの更新
         if (mIsNewMemoRegistration) {
-            saveNewMemo(categoryPid, memoName);
+            saveNewMemo(categoryPid, memoName, color);
         } else {
-            saveUpdateMemo(categoryPid, memoName);
+            saveUpdateMemo(categoryPid, memoName, color);
         }
     }
 
     /*
      * ＤＢ保存処理 - 新規メモ
      */
-    private void saveNewMemo(int categoryPid, String memoName) {
+    private void saveNewMemo(int categoryPid, String memoName, int color) {
 
         // 登録対象メモ
         UserMemoTable memo = new UserMemoTable();
         memo.setCategoryPid(categoryPid);
         memo.setName(memoName);
+        memo.setColor(color);
 
         // DB保存処理
         AsyncCreateMemo db = new AsyncCreateMemo(this, memo, new AsyncCreateMemo.OnFinishListener() {
@@ -206,7 +216,7 @@ public class MemoRegistrationActivity extends AppCompatActivity {
     /*
      * ＤＢ保存処理 - メモ更新
      */
-    private void saveUpdateMemo(int categoryPid, String memoName) {
+    private void saveUpdateMemo(int categoryPid, String memoName, int color) {
 
         Intent intent = getIntent();
         int memoPid = intent.getIntExtra(MemoListActivity.KEY_MEMO_PID, -1);
@@ -221,6 +231,7 @@ public class MemoRegistrationActivity extends AppCompatActivity {
         memo.setPid(memoPid);
         memo.setCategoryPid(categoryPid);
         memo.setName(memoName);
+        memo.setColor(color);
 
         // DB保存処理
         AsyncUpdateMemo db = new AsyncUpdateMemo(this, memo, new AsyncUpdateMemo.OnFinishListener() {
