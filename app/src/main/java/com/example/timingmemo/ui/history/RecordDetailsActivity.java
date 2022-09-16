@@ -6,6 +6,9 @@ import android.os.Bundle;
 
 import com.example.timingmemo.R;
 
+/*
+ * 記録詳細画面
+ */
 public class RecordDetailsActivity extends AppCompatActivity {
 
     @Override
