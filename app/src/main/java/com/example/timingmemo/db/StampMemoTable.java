@@ -17,6 +17,9 @@ import androidx.room.PrimaryKey;
 )
 public class StampMemoTable {
 
+    //----------------------------
+    // カラム定義
+    //----------------------------
     // プライマリーID
     @PrimaryKey(autoGenerate = true)
     private int pid;
@@ -41,11 +44,15 @@ public class StampMemoTable {
     @ColumnInfo(name = "stampingSystemTime")
     private String stampingSystemTime;
 
-    // 遅延時間（s）
+    // 遅延時間（mm:ss）
     @ColumnInfo(name = "delayTime")
-    private int delayTime;
+    private String delayTime;
 
 
+
+    //----------------------------
+    // getter/setter
+    //----------------------------
     public int getPid() {
         return pid;
     }
@@ -88,10 +95,10 @@ public class StampMemoTable {
         this.stampingSystemTime = stampingSystemTime;
     }
 
-    public int getDelayTime() {
+    public String getDelayTime() {
         return delayTime;
     }
-    public void setDelayTime(int delayTime) {
+    public void setDelayTime(String delayTime) {
         this.delayTime = delayTime;
     }
 }

@@ -15,7 +15,7 @@
         android:theme="@style/Theme.TimingMemo"
         tools:targetApi="31">
         <activity
-            android:name=".RecordedMemoUpdateActivity"
+            android:name=".ui.history.StampMemoUpdateActivity"
             android:exported="false" />
         <activity
             android:name=".ui.memo.CategoryRegistrationActivity"

@@ -319,9 +319,9 @@ public class CategoryRegistrationActivity extends AppCompatActivity {
         // 表示メニュー
         int menuId;
         if( mIsNewCategoryRegistration ){
-            menuId = R.menu.toolbar_memo_registration;
+            menuId = R.menu.toolbar_save;
         } else {
-            menuId = R.menu.toolbar_memo_update;
+            menuId = R.menu.toolbar_save_remove;
         }
 
         // メニューを割り当て

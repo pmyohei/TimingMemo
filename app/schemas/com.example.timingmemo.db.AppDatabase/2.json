@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "ecebb3a9cba6c2123f36ae93286d77fc",
+    "identityHash": "d18b5d4cea5ad23a53f5b166da5bcd3d",
     "entities": [
       {
         "tableName": "UserMemoTable",
@@ -114,7 +114,7 @@
       },
       {
         "tableName": "StampMemoTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `recordPid` INTEGER NOT NULL, `memoName` TEXT, `memoColor` INTEGER NOT NULL, `stampingPlayTime` TEXT, `stampingSystemTime` TEXT, `delayTime` INTEGER NOT NULL, FOREIGN KEY(`recordPid`) REFERENCES `RecordTable`(`pid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `recordPid` INTEGER NOT NULL, `memoName` TEXT, `memoColor` INTEGER NOT NULL, `stampingPlayTime` TEXT, `stampingSystemTime` TEXT, `delayTime` TEXT, FOREIGN KEY(`recordPid`) REFERENCES `RecordTable`(`pid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "pid",
@@ -155,8 +155,8 @@
           {
             "fieldPath": "delayTime",
             "columnName": "delayTime",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -194,7 +194,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ecebb3a9cba6c2123f36ae93286d77fc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd18b5d4cea5ad23a53f5b166da5bcd3d')"
     ]
   }
 }

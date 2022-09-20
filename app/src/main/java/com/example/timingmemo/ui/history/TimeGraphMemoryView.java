@@ -15,22 +15,22 @@ import com.example.timingmemo.R;
 /*
  * 記録済みの目盛りグラフ
  */
-public class RecordGraghMemoryView extends View {
+public class TimeGraphMemoryView extends View {
 
     private Paint mGraghMemoryPaint;
     private Path mGraghMemoryPath;
     private float mMemoryLength1Min;
 
 
-    public RecordGraghMemoryView(Context context) {
+    public TimeGraphMemoryView(Context context) {
         this(context, null);
     }
 
-    public RecordGraghMemoryView(Context context, AttributeSet attrs) {
+    public TimeGraphMemoryView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public RecordGraghMemoryView(Context context, AttributeSet attrs, int defStyle) {
+    public TimeGraphMemoryView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mMemoryLength1Min = getResources().getDimension( R.dimen.memory_1min_length );
 
@@ -55,9 +55,14 @@ public class RecordGraghMemoryView extends View {
      *
      */
     private void setGraghMemoryPaint(){
+
+        // 目盛り色
+        int memoryColor = getResources().getColor( R.color.mainColor );
+
+        // Paint設定
         mGraghMemoryPaint = new Paint();
         mGraghMemoryPaint.setStyle( Paint.Style.STROKE );
-        mGraghMemoryPaint.setColor( Color.BLACK );
+        mGraghMemoryPaint.setColor( memoryColor );
         mGraghMemoryPaint.setStrokeWidth( 4 );
     }
 

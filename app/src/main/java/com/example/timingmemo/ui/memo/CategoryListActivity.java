@@ -4,12 +4,9 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -240,7 +237,7 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
     public boolean onCreateOptionsMenu(Menu menu) {
         //初期メニュー
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_list, menu);
+        inflater.inflate(R.menu.toolbar_add, menu);
 
         return true;
     }

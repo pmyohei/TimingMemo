@@ -7,6 +7,9 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "RecordTable")
 public class RecordTable {
 
+    //----------------------------
+    // カラム定義
+    //----------------------------
     // プライマリーID
     @PrimaryKey(autoGenerate = true)
     private int pid;
@@ -15,19 +18,23 @@ public class RecordTable {
     @ColumnInfo(name = "name")
     private String name;
 
-    // メモ開始時間
+    // メモ開始時間（yyyy/mm/dd hh:mm:ss）
     @ColumnInfo(name = "startRecordingTime")
     private String startRecordingTime;
 
-    // メモ終了時間
+    // メモ終了時間（yyyy/mm/dd hh:mm:ss）
     @ColumnInfo(name = "endRecordingTime")
     private String endRecordingTime;
 
-    // メモ記録時間
+    // メモ記録時間（hh:mm:ss）
     @ColumnInfo(name = "recordingTime")
     private String recordingTime;
 
 
+
+    //----------------------------
+    // getter/setter
+    //----------------------------
     public int getPid() {
         return pid;
     }

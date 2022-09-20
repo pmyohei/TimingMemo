@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -360,9 +359,9 @@ public class MemoRegistrationActivity extends AppCompatActivity {
         // 表示メニュー
         int menuId;
         if( mIsNewMemoRegistration ){
-            menuId = R.menu.toolbar_memo_registration;
+            menuId = R.menu.toolbar_save;
         } else {
-            menuId = R.menu.toolbar_memo_update;
+            menuId = R.menu.toolbar_save_remove;
         }
 
         // メニューを割り当て

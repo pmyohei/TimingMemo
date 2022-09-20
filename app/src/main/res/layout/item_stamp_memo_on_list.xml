@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_stampMemo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    android:padding="8dp"
+    android:background="@drawable/basic_border">
+
+    <View
+        android:id="@+id/v_memoColor"
+        android:layout_width="@dimen/memo_color_size"
+        android:layout_height="@dimen/memo_color_size"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:background="@color/memoColor2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_stampMemo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="memo1"
+        android:textSize="20sp"
+        android:textColor="@color/subColor"
+        android:textAlignment="textStart"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/v_memoColor" />
+
+    <TextView
+        android:id="@+id/tv_stampTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="00:21:12 ( -00:05 )"
+        android:textSize="16sp"
+        android:textColor="@color/subColor"
+        app:layout_constraintTop_toBottomOf="@+id/tv_stampMemo"
+        app:layout_constraintStart_toEndOf="@id/v_memoColor" />
+
+    <TextView
+        android:id="@+id/tv_systemTimeLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/sytem_time_label"
+        android:textSize="16sp"
+        android:textColor="@color/subColor"
+        app:layout_constraintTop_toBottomOf="@+id/tv_stampTime"
+        app:layout_constraintEnd_toStartOf="@id/tv_systemTime" />
+
+    <TextView
+        android:id="@+id/tv_systemTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:text="13:23:02"
+        android:textSize="16sp"
+        android:textColor="@color/subColor"
+        app:layout_constraintTop_toBottomOf="@+id/tv_stampTime"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

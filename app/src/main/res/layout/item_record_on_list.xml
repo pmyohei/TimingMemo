@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_record"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    android:padding="4dp"
+    android:background="@drawable/basic_border">
+
+    <TextView
+        android:id="@+id/tv_recordName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/record_item_padding"
+        android:text="record"
+        android:textSize="28sp"
+        android:textColor="@color/subColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_recordingTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/record_item_padding"
+        android:layout_marginLeft="@dimen/record_item_margin_left"
+        android:text="20min"
+        android:textSize="24sp"
+        android:textColor="@color/subColor"
+        app:layout_constraintTop_toBottomOf="@+id/tv_recordName"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_startTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/record_item_padding"
+        android:layout_marginLeft="@dimen/record_item_margin_left"
+        android:text="2022/08/15 12:20:40"
+        android:textSize="20sp"
+        android:textColor="@color/subColor"
+        app:layout_constraintTop_toBottomOf="@+id/tv_recordingTime"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_endTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/record_item_padding"
+        android:layout_marginLeft="@dimen/record_item_margin_left"
+        android:text="2022/08/15 12:50:12"
+        android:textSize="20sp"
+        android:textColor="@color/subColor"
+        app:layout_constraintTop_toBottomOf="@+id/tv_startTime"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

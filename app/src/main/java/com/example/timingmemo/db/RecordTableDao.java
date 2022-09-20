@@ -14,8 +14,11 @@ public interface RecordTableDao {
     List<RecordTable> getAll();
 
     @Insert
-    void insert(RecordTable taskTable);
+    long insert(RecordTable recordTable);
 
     @Delete
-    void delete(RecordTable taskTable);
+    void delete(RecordTable recordTable);
+
+    @Query("DELETE FROM recordTable")
+    void deleteAll();
 }

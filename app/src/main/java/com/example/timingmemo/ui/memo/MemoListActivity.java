@@ -292,7 +292,7 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
     public boolean onCreateOptionsMenu(Menu menu) {
         //初期メニュー
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_list, menu);
+        inflater.inflate(R.menu.toolbar_add, menu);
 
         return true;
     }
