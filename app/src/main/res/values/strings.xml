@@ -29,6 +29,8 @@
     <string name="dialog_title_confirm_remove">削除確認</string>
     <string name="dialog_content_memo_confirm_remove">メモを削除しますか？</string>
     <string name="dialog_content_category_confirm_remove">カテゴリを削除しますか？\nこのカテゴリ内のメモは削除されず、「カテゴリなし」になります。</string>
+    <string name="dialog_content_record_confirm_remove">記録を削除しますか？</string>
+    <string name="dialog_content_stampmemo_confirm_remove">記録されたメモを削除しますか？</string>
     <string name="dialog_positive_confirm_remove">削除</string>
 
     <!--  Record  -->

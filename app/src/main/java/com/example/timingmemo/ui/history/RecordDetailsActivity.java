@@ -6,17 +6,25 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.timingmemo.R;
 import com.example.timingmemo.db.RecordTable;
 import com.example.timingmemo.db.StampMemoTable;
 import com.example.timingmemo.db.async.AsyncReadRecordCategory;
 import com.example.timingmemo.db.async.AsyncReadStampMemoCategory;
+import com.example.timingmemo.db.async.AsyncRemoveMemo;
+import com.example.timingmemo.db.async.AsyncRemoveRecord;
+import com.example.timingmemo.ui.memo.MemoListActivity;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -29,12 +37,18 @@ public class RecordDetailsActivity extends AppCompatActivity {
     //--------------------------------
     // 画面遷移 - キー文字列
     //--------------------------------
+    // 画面遷移：送信情報
     public static final String KEY_ID_ADD = "is_add";
     public static final String KEY_TARGET_MEMO_PID = "target_memo_pid";
     public static final String KEY_TARGET_MEMO_NAME = "target_memo_name";
     public static final String KEY_TARGET_MEMO_COLOR = "target_memo_color";
     public static final String KEY_TARGET_MEMO_DELAYTIME = "target_memo_delaytime";
     public static final String KEY_TARGET_MEMO_STAMPTIME = "target_memo_stamptime";
+
+    // 画面遷移：戻り情報
+    public static final int RESULT_RECORD_UPDATE = 201;
+    public static final int RESULT_RECORD_REMOVE = 202;
+    public static final String KEY_RECORD_PID = "record_pid";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +159,68 @@ public class RecordDetailsActivity extends AppCompatActivity {
     }
 
     /*
+     * 削除確認ダイアログの表示
+     */
+    private void confirmRemove() {
+
+        // 各種文言
+        String title = getString(R.string.dialog_title_confirm_remove);
+        String content = getString(R.string.dialog_content_record_confirm_remove);
+        String positive = getString(R.string.dialog_positive_confirm_remove);
+        String negative = getString( android.R.string.cancel );
+
+        // 確認ダイアログを表示
+        AlertDialog dialog = new AlertDialog.Builder(this)
+            .setTitle( title )
+            .setMessage( content )
+            .setPositiveButton( positive, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // 削除処理へ
+                    saveRemoveRecord();
+                }
+            })
+            .setNegativeButton(negative, null)
+            .show();
+    }
+
+    /*
+     * ＤＢ保存処理 - 記録削除
+     */
+    private void saveRemoveRecord() {
+
+        Intent intent = getIntent();
+        int recordPid = intent.getIntExtra(HistoryFragment.KEY_TARGET_RECORD_PID, -1);
+        if (recordPid == -1) {
+            // ガード
+            Toast.makeText(this, R.string.toast_error, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // DB削除処理
+        AsyncRemoveRecord db = new AsyncRemoveRecord(this, recordPid, new AsyncRemoveRecord.OnFinishListener() {
+            @Override
+            public void onFinish(int pid) {
+                // 画面遷移元へのデータを設定し、終了
+                setFinishIntent( pid );
+                finish();
+            }
+        });
+        // 非同期処理開始
+        db.execute();
+    }
+
+    /*
+     * 画面終了のindentデータを設定
+     */
+    private void setFinishIntent( int pid ) {
+        // resultコード設定
+        Intent intent = getIntent();
+        intent.putExtra(KEY_RECORD_PID, pid);
+        setResult(RESULT_RECORD_REMOVE, intent);
+    }
+
+    /*
      * ツールバーオプションメニュー生成
      */
     @Override
@@ -178,7 +254,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_remove:
-//                confirmRemove();
+                confirmRemove();
                 return true;
 
             default:

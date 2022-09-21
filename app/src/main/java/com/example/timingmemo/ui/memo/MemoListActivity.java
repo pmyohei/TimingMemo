@@ -68,7 +68,7 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
     }
 
     /*
-     * メモとカテゴリデータを取得
+     * 画面遷移ランチャーを生成
      */
     private void setMemoRegistrationLancher() {
 
@@ -82,7 +82,7 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
                         Intent intent = result.getData();
                         int resultCode = result.getResultCode();
                         if( resultCode != MemoRegistrationActivity.RESULT_MEMO_REGISTRAION) {
-                            // 該当外ならないもせず終了
+                            // 該当外ならなにもせず終了
                             return;
                         }
 

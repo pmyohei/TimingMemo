@@ -19,6 +19,9 @@ public interface RecordTableDao {
     @Delete
     void delete(RecordTable recordTable);
 
+    @Query("DELETE FROM recordTable WHERE pid=(:pid)")
+    void delete( int pid );
+
     @Query("DELETE FROM recordTable")
     void deleteAll();
 }
