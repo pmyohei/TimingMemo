@@ -8,7 +8,7 @@
     tools:context=".ui.record.RecordFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_top"
+        android:id="@+id/cl_timer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/mainColor"
@@ -16,65 +16,56 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/ll_memo1"
-        app:layout_constraintVertical_weight="0.3">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_countdown"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@color/movieColor2"
-            tools:context=".ui.record.RecordFragment"
-            app:layout_constraintEnd_toStartOf="@+id/text_2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_weight="0.7">
-
-            <TextView
-                android:id="@+id/tx_timer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="00:00:00"
-                android:textAlignment="center"
-                android:textColor="@color/movieColor3"
-                android:textSize="20sp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintBottom_toTopOf="@+id/cl_recordCtrl"
+        app:layout_constraintVertical_weight="1">
 
         <TextView
-            android:id="@+id/text_2"
+            android:id="@+id/tx_timer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/timeColor"
+            android:gravity="center"
+            android:text="00:00:00"
+            android:textAlignment="center"
+            android:textColor="@color/movieColor3"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_delayTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_weight="7" />
+
+        <TextView
+            android:id="@+id/tv_delayTime"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@color/movieColor4"
             android:gravity="center"
-            android:text="-0s"
+            android:text="-00:00"
             android:textAlignment="center"
             android:textColor="@color/movieColor5"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cl_countdown"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_weight="0.3" />
+            app:layout_constraintStart_toEndOf="@+id/tx_timer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--    記録再生イメージ／記録制御    -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ll_memo1"
+        android:id="@+id/cl_recordCtrl"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/movieColor3"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/cl_top"
-        app:layout_constraintBottom_toTopOf="@+id/dummy"
+        app:layout_constraintTop_toBottomOf="@+id/cl_timer"
+        app:layout_constraintBottom_toTopOf="@+id/tab_category"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_weight="0.6">
+        app:layout_constraintVertical_weight="3">
 
+        <!--    記録イメージ    -->
         <ImageView
             android:id="@+id/iv_recordCircle"
             android:layout_width="120dp"
@@ -86,10 +77,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
+        <!--    記録制御ボタン    -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ll_recordControl"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:background="@color/movieColor3"
             android:layout_marginBottom="12dp"
             app:layout_constraintTop_toBottomOf="@+id/iv_recordCircle"
@@ -135,43 +127,36 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/dummy"
+
+    <!-- インジケータ -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@android:color/transparent"
+        app:tabTextColor="@color/subLittleColor"
+        app:tabSelectedTextColor="@color/subColor"
+        app:tabGravity="center"
+        app:tabIndicatorColor="@color/subColor"
+        app:tabIndicatorFullWidth="false"
+        app:tabMode="scrollable"
+        app:tabRippleColor="@null"
+        app:tabTextAppearance="@style/TabLayoutText"
+        app:layout_constraintTop_toBottomOf="@+id/cl_recordCtrl"
+        app:layout_constraintBottom_toTopOf="@+id/vp2_memoList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- カテゴリ別メモリスト -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp2_memoList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/movieColor1"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/ll_memo1"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_weight="1">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/basic_border"
-            android:padding="12dp"
-            android:layout_margin="12dp"
-            android:gravity="center"
-            android:text="@string/memo"
-            android:textColor="@color/movieColor3" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/basic_border"
-            android:padding="12dp"
-            android:layout_margin="12dp"
-            android:gravity="center"
-            android:text="@string/memo"
-            android:textColor="@color/movieColor3" />
-
-    </LinearLayout>
-
-
-
-
+        app:layout_constraintTop_toBottomOf="@+id/tab_category"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_weight="5"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

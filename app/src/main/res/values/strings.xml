@@ -11,6 +11,7 @@
     <string name="toolbar_title_memo_registration">Memo</string>
     <string name="toolbar_title_category_list">Category List</string>
     <string name="toolbar_title_category_registration">Category</string>
+    <string name="toolbar_title_stamp_memo_new">Add Memo</string>
     <string name="toolbar_title_stamp_memo_update">Rewriting Memo</string>
 
     <!--  memo  -->
@@ -26,7 +27,9 @@
     <!--  Dialog  -->
     <string name="waiting">processing</string>
     <string name="updating">Updating</string>
+    <string name="dialog_title_confirm_rewrire">書き変え確認</string>
     <string name="dialog_title_confirm_remove">削除確認</string>
+    <string name="dialog_content_memo_confirm_rewrire">記録したメモを書き換えますか？</string>
     <string name="dialog_content_memo_confirm_remove">メモを削除しますか？</string>
     <string name="dialog_content_category_confirm_remove">カテゴリを削除しますか？\nこのカテゴリ内のメモは削除されず、「カテゴリなし」になります。</string>
     <string name="dialog_content_record_confirm_remove">記録を削除しますか？</string>
@@ -34,7 +37,7 @@
     <string name="dialog_positive_confirm_remove">削除</string>
 
     <!--  Record  -->
-    <string name="sytem_time_label">記録時間</string>
+    <string name="clear_delay_time">00:00</string>
 
     <!--  menu  -->
     <string name="menu_new">new</string>

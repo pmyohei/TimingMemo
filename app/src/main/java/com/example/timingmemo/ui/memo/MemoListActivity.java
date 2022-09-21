@@ -158,7 +158,7 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
         // ViewPager2の設定
         //--------------------------
         // ページ毎（カテゴリ別）のメモリストを生成
-        ArrayList<ArrayList<UserMemoTable>> memosByCategory = getMemosByCategoryList();
+        ArrayList<ArrayList<UserMemoTable>> memosByCategory = MemoPageAdapter.getMemosByCategoryList( mUserCategories, mUserMemos );
 
         // Pageアダプタを設定
         MemoPageAdapter memoPageAdapter = new MemoPageAdapter(memosByCategory);
@@ -180,51 +180,6 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
         new TabLayoutMediator(tab_category, vp2_memoList,
                 (tab, position) -> tab.setText(tabCategoryName.get(position))
         ).attach();
-    }
-
-
-
-    /*
-     * カテゴリ名を文字列リストとして取得
-     */
-    private ArrayList<ArrayList<UserMemoTable>> getMemosByCategoryList() {
-
-        //-------------------------------------------------
-        // カテゴリ別でメモを振り分けるため、カテゴリpidリストを用意
-        //-------------------------------------------------
-        List<Integer> categoryPids = new ArrayList<>();
-        // リストの先頭はカテゴリなしの値を設定
-        categoryPids.add(UserMemoTable.NO_CATEGORY);
-        // カテゴリのpidをリストへ追加
-        for (UserCategoryTable category : mUserCategories) {
-            int pid = category.getPid();
-            categoryPids.add(pid);
-        }
-
-        //-------------------------------------------------
-        // カテゴリ別でメモを振り分け
-        //-------------------------------------------------
-        ArrayList<ArrayList<UserMemoTable>> memosByCategory = new ArrayList<>();
-
-        // カテゴリ分繰り返し
-        for (int categoryPid : categoryPids) {
-            // 新規リストを追加
-            ArrayList<UserMemoTable> memos = new ArrayList<>();
-
-            // メモ数分繰り返し
-            for (UserMemoTable memoTable : mUserMemos) {
-                // カテゴリpidと「メモが割り当てられたカテゴリpid」が一致している場合、リストへメモを追加
-                int memoCategoryPid = memoTable.getCategoryPid();
-                if (categoryPid == memoCategoryPid) {
-                    memos.add( memoTable );
-                }
-            }
-
-            // あるカテゴリのメモリストを追加
-            memosByCategory.add(memos);
-        }
-
-        return memosByCategory;
     }
 
     /*

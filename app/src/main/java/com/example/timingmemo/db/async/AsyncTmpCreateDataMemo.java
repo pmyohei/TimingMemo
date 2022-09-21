@@ -172,6 +172,15 @@ public class AsyncTmpCreateDataMemo extends AsyncShowProgress {
             stampMemoTableDao.insert( stamp1 );
             stampMemoTableDao.insert( stamp2 );
             stampMemoTableDao.insert( stamp3 );
+
+            // レコード保存
+            RecordTable recordTable2 = new RecordTable();
+            recordTable2.setName( "Record 1234567890123456789012345678901234567890" );
+            recordTable2.setStartRecordingTime( startTime );
+            recordTable2.setEndRecordingTime( endTime );
+            recordTable2.setRecordingTime( "00:20:00" );
+
+            recordTableDao.insert( recordTable2 );
         }
     }
 

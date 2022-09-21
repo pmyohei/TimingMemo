@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.timingmemo.R;
+import com.example.timingmemo.db.UserCategoryTable;
 import com.example.timingmemo.db.UserMemoTable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /*
  * カテゴリ分のページ表示用アダプタ
@@ -108,6 +110,49 @@ public class MemoPageAdapter extends RecyclerView.Adapter<MemoPageAdapter.MemoPa
      */
     public void setOnMemoClickListener( MemoListAdapter.MemoClickListener listener ) {
         mMemoClickListener = listener;
+    }
+
+    /*
+     * メモリストをカテゴリ別リストとして生成
+     */
+    public static ArrayList<ArrayList<UserMemoTable>> getMemosByCategoryList( ArrayList<UserCategoryTable> userCategories, ArrayList<UserMemoTable> userMemos ) {
+
+        //-------------------------------------------------
+        // カテゴリ別でメモを振り分けるため、カテゴリpidリストを用意
+        //-------------------------------------------------
+        List<Integer> categoryPids = new ArrayList<>();
+        // リストの先頭はカテゴリなしの値を設定
+        categoryPids.add( UserMemoTable.NO_CATEGORY );
+        // カテゴリのpidをリストへ追加
+        for (UserCategoryTable category : userCategories) {
+            int pid = category.getPid();
+            categoryPids.add(pid);
+        }
+
+        //-------------------------------------------------
+        // カテゴリ別でメモを振り分け
+        //-------------------------------------------------
+        ArrayList<ArrayList<UserMemoTable>> memosByCategory = new ArrayList<>();
+
+        // カテゴリ分繰り返し
+        for (int categoryPid : categoryPids) {
+            // 1カテゴリ当たりのメモリストを追加
+            ArrayList<UserMemoTable> memosPerCategory = new ArrayList<>();
+
+            // メモ数分繰り返し
+            for (UserMemoTable memoTable : userMemos) {
+                // カテゴリpidと「メモが割り当てられたカテゴリpid」が一致している場合、リストへメモを追加
+                int memoCategoryPid = memoTable.getCategoryPid();
+                if (categoryPid == memoCategoryPid) {
+                    memosPerCategory.add( memoTable );
+                }
+            }
+
+            // あるカテゴリのメモリストを追加
+            memosByCategory.add(memosPerCategory);
+        }
+
+        return memosByCategory;
     }
 
 }

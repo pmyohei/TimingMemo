@@ -28,27 +28,13 @@
         android:id="@+id/tv_stampTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_marginStart="8dp"
         android:padding="4dp"
         android:text="00:00:00"
         android:textSize="24sp"
         android:textColor="@color/subColor"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_stampMemoUpdate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_delayTime"/>
-
-    <TextView
-        android:id="@+id/tv_delayTime"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="4dp"
-        android:text="-00:00"
-        android:textSize="24sp"
-        android:textColor="@color/subColor"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_stampMemoUpdate"
-        app:layout_constraintStart_toEndOf="@+id/tv_stampTime"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <!--  メモ名  -->
     <EditText
@@ -116,11 +102,22 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--    区切り線    -->
+    <View
+        android:id="@+id/v_borderMemoList"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/subColor"
+        app:layout_constraintTop_toBottomOf="@+id/cl_color"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <!-- インジケータ -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:background="@android:color/transparent"
         app:tabTextColor="@color/subLittleColor"
         app:tabSelectedTextColor="@color/subColor"
@@ -132,9 +129,9 @@
         app:tabTextAppearance="@style/TabLayoutText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl_color" />
+        app:layout_constraintTop_toBottomOf="@+id/v_borderMemoList" />
 
-    <!-- 各種デザイン情報の入力ページ -->
+    <!-- カテゴリ別メモリスト -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp2_memoList"
         android:layout_width="match_parent"

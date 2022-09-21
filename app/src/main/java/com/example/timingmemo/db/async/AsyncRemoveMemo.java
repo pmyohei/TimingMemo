@@ -55,12 +55,12 @@ public class AsyncRemoveMemo extends AsyncShowProgress {
         }
 
         /*
-         * DBへ保存
+         * DBから削除
          */
         @SuppressLint("ResourceType")
         private void removeDB(){
 
-            // メモの新規登録
+            // メモを削除
             UserMemoTableDao memoDao = mDB.daoUserMemoTable();
             memoDao.delete( mUserMemoPid );
         }

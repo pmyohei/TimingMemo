@@ -1,30 +1,29 @@
 package com.example.timingmemo.ui.history;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.timingmemo.R;
-import com.example.timingmemo.db.RecordTable;
 import com.example.timingmemo.db.StampMemoTable;
-import com.example.timingmemo.db.async.AsyncReadRecordCategory;
 import com.example.timingmemo.db.async.AsyncReadStampMemoCategory;
-import com.example.timingmemo.db.async.AsyncRemoveMemo;
 import com.example.timingmemo.db.async.AsyncRemoveRecord;
-import com.example.timingmemo.ui.memo.MemoListActivity;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -40,15 +39,21 @@ public class RecordDetailsActivity extends AppCompatActivity {
     // 画面遷移：送信情報
     public static final String KEY_ID_ADD = "is_add";
     public static final String KEY_TARGET_MEMO_PID = "target_memo_pid";
+    public static final String KEY_TARGET_RECORD_PID = "target_record_pid";
     public static final String KEY_TARGET_MEMO_NAME = "target_memo_name";
     public static final String KEY_TARGET_MEMO_COLOR = "target_memo_color";
-    public static final String KEY_TARGET_MEMO_DELAYTIME = "target_memo_delaytime";
     public static final String KEY_TARGET_MEMO_STAMPTIME = "target_memo_stamptime";
 
     // 画面遷移：戻り情報
     public static final int RESULT_RECORD_UPDATE = 201;
     public static final int RESULT_RECORD_REMOVE = 202;
     public static final String KEY_RECORD_PID = "record_pid";
+
+    //--------------------------------
+    // フィールド変数
+    //--------------------------------
+    private ArrayList<StampMemoTable> mStampMemos;
+    private ActivityResultLauncher<Intent> mStampMemoUpdateLancher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +63,11 @@ public class RecordDetailsActivity extends AppCompatActivity {
         // ツールバーの設定
         setToolbar();
 
+        // 画面遷移ランチャーの生成
+        setStampMemoUpdateLancher();
+
         // 記録メモをDBから取得
         getStampMemoOnDB();
-
-
     }
 
     /*
@@ -85,6 +91,58 @@ public class RecordDetailsActivity extends AppCompatActivity {
     }
 
     /*
+     * 画面遷移ランチャーの生成
+     */
+    private void setStampMemoUpdateLancher() {
+
+        // 記録メモ更新画面遷移ランチャーの作成
+        mStampMemoUpdateLancher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    // ResultCodeの取得
+                    int resultCode = result.getResultCode();
+                    if (resultCode == Activity.RESULT_CANCELED) {
+                        // 戻るボタンでの終了なら何もしない
+                        return;
+                    }
+
+                    //--------------------
+                    // アダプタへ更新通知
+                    //--------------------
+                    RecyclerView rv_stampMemo = findViewById(R.id.rv_stampMemo);
+                    StampMemoListAdapter adapter = (StampMemoListAdapter) rv_stampMemo.getAdapter();
+
+                    Intent intent = result.getData();
+                    int position;
+
+                    // 操作に応じた通知処理
+                    switch (resultCode) {
+                        // 新規追加
+                        case StampMemoUpdateActivity.RESULT_STAMP_MEMO_ADD:
+                            position = insertStampMemoList( intent );
+                            adapter.notifyItemInserted( position );
+                            break;
+
+                        // 更新
+                        case StampMemoUpdateActivity.RESULT_STAMP_MEMO_UPDATE:
+                            position = updateStampMemoList( intent );
+                            adapter.notifyItemChanged( position );
+                            break;
+
+                        // 削除
+                        case StampMemoUpdateActivity.RESULT_STAMP_MEMO_REMOVE:
+                            position = removeStampMemoList( intent );
+                            adapter.notifyItemRemoved( position );
+                            break;
+                    }
+                }
+            });
+    }
+
+    /*
      * DBから記録を取得
      */
     private void getStampMemoOnDB() {
@@ -102,6 +160,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
             @Override
             public void onFinish(ArrayList<StampMemoTable> stampMemos) {
                 // 取得した記録メモをリスト表示
+                mStampMemos = stampMemos;
                 setStampMempList(stampMemos);
             }
         });
@@ -127,7 +186,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(StampMemoTable stampMemo) {
                 // 画面遷移　→　記録メモ更新画面
-                transitionStampMemoUpdate( stampMemo );
+                transitionStampMemoUpdate(stampMemo);
             }
         });
     }
@@ -135,27 +194,127 @@ public class RecordDetailsActivity extends AppCompatActivity {
     /*
      * 画面遷移 - 記録メモ更新画面
      */
-    private void transitionStampMemoUpdate( StampMemoTable stampMemo ) {
+    private void transitionStampMemoUpdate(StampMemoTable stampMemo) {
 
         Intent intent = new Intent(this, StampMemoUpdateActivity.class);
         boolean isAdd = true;
 
         // 記録メモの更新の場合の設定
-        if( stampMemo != null ){
-            intent.putExtra( KEY_TARGET_MEMO_NAME, stampMemo.getMemoName() );
-            intent.putExtra( KEY_TARGET_MEMO_COLOR, stampMemo.getMemoColor() );
-            intent.putExtra( KEY_TARGET_MEMO_DELAYTIME, stampMemo.getDelayTime() );
-            intent.putExtra( KEY_TARGET_MEMO_STAMPTIME, stampMemo.getStampingPlayTime() );
+        if (stampMemo != null) {
+            intent.putExtra(KEY_TARGET_MEMO_PID, stampMemo.getPid());
+            intent.putExtra(KEY_TARGET_MEMO_NAME, stampMemo.getMemoName());
+            intent.putExtra(KEY_TARGET_MEMO_COLOR, stampMemo.getMemoColor());
+            intent.putExtra(KEY_TARGET_MEMO_STAMPTIME, stampMemo.getStampingPlayTime());
 
             // 新規追加ではない
             isAdd = false;
         }
 
+        // 表示対象の記録のPIDを取得
+        int recordPid = getIntent().getIntExtra(HistoryFragment.KEY_TARGET_RECORD_PID, -1);
+        if (recordPid == -1) {
+            // フェールセーフ
+            return;
+        }
+
         // 新規・更新 共通設定
-        intent.putExtra( KEY_ID_ADD, isAdd );
+        intent.putExtra(KEY_ID_ADD, isAdd);
+        intent.putExtra(KEY_TARGET_RECORD_PID, recordPid);
 
         // 画面遷移開始
-        startActivity( intent );
+        startActivity(intent);
+    }
+
+    /*
+     * 記録メモリスト：新規追加
+     */
+    private int insertStampMemoList( Intent intent ) {
+
+        // 新規追加 or 更新された記録メモ情報を取得
+        StampMemoTable stampMemo = getUpdatedStampMemoFromDist( intent );
+
+        // リストに追加し、追加後のindexを返す
+        mStampMemos.add( stampMemo );
+        return (mStampMemos.size() - 1);
+    }
+
+    /*
+     * 記録メモリスト：更新
+     */
+    private int updateStampMemoList( Intent intent ) {
+
+        // 新規追加 or 更新された記録メモ情報を取得
+        StampMemoTable stampMemo = getUpdatedStampMemoFromDist( intent );
+        int stampMemoPid = stampMemo.getPid();
+
+        // リスト上の位置を取得
+        int position = getStampMemoListPos( stampMemoPid );
+        // 更新
+        StampMemoTable targetStampMemo = mStampMemos.get(position);
+        targetStampMemo = stampMemo;
+
+        return position;
+    }
+
+    /*
+     * 記録メモリスト：削除
+     */
+    private int removeStampMemoList( Intent intent ) {
+        // リストから削除
+        int pid = intent.getIntExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_PID, -1 );
+        int position = getStampMemoListPos( pid );
+        mStampMemos.remove( position );
+
+        return position;
+    }
+
+    /*
+     * 画面遷移先からの「新規追加 or 更新された記録メモ情報」を取得
+     */
+    private StampMemoTable getUpdatedStampMemoFromDist(Intent intent ) {
+
+        //-------------------------------
+        // 画面遷移先からの記録メモ情報を取得
+        //-------------------------------
+        int pid = intent.getIntExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_PID, -1 );
+        int recordPid = intent.getIntExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_RECORD_PID, -1 );
+        String memoName = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_NAME );
+        int color = intent.getIntExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_COLOR, 0x00000000 );
+        String delayTime = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_DELAYTIME );
+        String stampTime = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_STAMPTIME );
+        String systemTime = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_SYSTEMTIME );
+
+        //-------------------------------
+        // 記録メモ情報を作成
+        //-------------------------------
+        StampMemoTable stampMemo = new StampMemoTable();
+        stampMemo.setPid( pid );
+        stampMemo.setRecordPid( recordPid );
+        stampMemo.setMemoName( memoName );
+        stampMemo.setMemoColor( color );
+        stampMemo.setDelayTime( delayTime );
+        stampMemo.setStampingPlayTime( stampTime );
+        stampMemo.setStampingSystemTime( systemTime );
+
+        return stampMemo;
+    }
+
+    /*
+     * 記録メモリストの位置取得
+     */
+    private int getStampMemoListPos( int targetPid ) {
+
+        int position = 0;
+        for( StampMemoTable stampMemo: mStampMemos ){
+
+            int searchPid = stampMemo.getPid();
+            if( searchPid == targetPid ){
+                return position;
+            }
+            position++;
+        }
+
+        return -1;
     }
 
     /*

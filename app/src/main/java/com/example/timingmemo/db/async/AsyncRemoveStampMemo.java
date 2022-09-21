@@ -9,29 +9,26 @@ import com.example.timingmemo.db.AppDatabase;
 import com.example.timingmemo.db.AppDatabaseManager;
 import com.example.timingmemo.db.StampMemoTable;
 import com.example.timingmemo.db.StampMemoTableDao;
+import com.example.timingmemo.db.UserMemoTableDao;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class AsyncReadStampMemoCategory extends AsyncShowProgress {
+public class AsyncRemoveStampMemo extends AsyncShowProgress {
 
     private final AppDatabase mDB;
+    private final int mStampMemoPid;
     private final OnFinishListener mOnFinishListener;
-    private ArrayList<StampMemoTable> mStampMemos;
-    private int mRecordPid;
-
 
     /*
      * コンストラクタ
      */
-    public AsyncReadStampMemoCategory(Context context, int recordPid, OnFinishListener listener) {
+    public AsyncRemoveStampMemo(Context context, int memoPid, OnFinishListener listener) {
         super(context);
 
         mDB = AppDatabaseManager.getInstance(context);
+        mStampMemoPid = memoPid;
         mOnFinishListener = listener;
-        mRecordPid = recordPid;
     }
 
     /*
@@ -48,7 +45,7 @@ public class AsyncReadStampMemoCategory extends AsyncShowProgress {
         public void run() {
 
             //メイン処理
-            readDB();
+            removeDB();
 
             //後処理
             handler.post(new Runnable() {
@@ -60,14 +57,13 @@ public class AsyncReadStampMemoCategory extends AsyncShowProgress {
         }
 
         /*
-         * DB読み込み
+         * DBから削除
          */
         @SuppressLint("ResourceType")
-        private void readDB(){
-            // 指定された記録に紐づく記録メモを全て取得
+        private void removeDB(){
+            // 記録メモの削除
             StampMemoTableDao dao = mDB.daoStampMemoTable();
-            List<StampMemoTable> stampMemos = dao.getStampMemosLinkedRecord( mRecordPid );
-            mStampMemos = new ArrayList<>( stampMemos );
+            dao.delete( mStampMemoPid );
         }
     }
 
@@ -95,15 +91,16 @@ public class AsyncReadStampMemoCategory extends AsyncShowProgress {
      */
     void onPostExecute() {
         super.onPostExecute();
-        //完了リスナー処理
-        mOnFinishListener.onFinish(mStampMemos);
+        mOnFinishListener.onFinish( mStampMemoPid );
     }
 
     /*
      * 完了リスナー
      */
     public interface OnFinishListener {
-        void onFinish( ArrayList<StampMemoTable> records );
+        void onFinish( int pid );
     }
+
+
 
 }

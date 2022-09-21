@@ -83,7 +83,7 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
     }
 
     /*
-     * メモとカテゴリデータを取得
+     * 画面遷移ランチャーの設定
      */
     private void setCategoryRegistrationLancher() {
 

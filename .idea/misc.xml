@@ -29,21 +29,26 @@
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/activity_main.xml" value="0.18645833333333334" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/activity_memo_list.xml" value="0.18645833333333334" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/activity_memo_registration.xml" value="0.2869791666666667" />
+        <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/activity_memo_registration_tmp2.xml" value="0.18385416666666668" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/activity_record_details.xml" value="0.2864583333333333" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/activity_recorded_memo_update.xml" value="0.19270833333333334" />
+        <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/activity_stamp_memo_update.xml" value="0.2" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/fragment_history.xml" value="0.2864583333333333" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/fragment_memo.xml" value="0.18645833333333334" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/fragment_record.xml" value="0.17760416666666667" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/item_category_spinner_dropdown.xml" value="0.18020833333333333" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/item_memo_on_list.xml" value="0.17760416666666667" />
+        <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/item_record_on_list.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/item_selection_color.xml" value="0.27219202898550726" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/item_stamp_memo_on_list.xml" value="0.18489583333333334" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/memo_bottom_sheet.xml" value="0.2869791666666667" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/memo_list_in_page.xml" value="0.17760416666666667" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/progress_dialog.xml" value="0.18645833333333334" />
+        <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/menu/toolbar_add_remove.xml" value="0.18385416666666668" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/menu/toolbar_memo_list.xml" value="0.17447916666666666" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/menu/toolbar_memo_registration.xml" value="0.15260416666666668" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/menu/toolbar_memo_update.xml" value="0.15260416666666668" />
+        <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/TimingMemo/app/src/main/res/menu/toolbar_save.xml" value="0.18385416666666668" />
         <entry key="..\:/Users/takahashi_yhi/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_dropdown_item.xml" value="0.18020833333333333" />
       </map>
     </option>

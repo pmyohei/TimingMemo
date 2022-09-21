@@ -47,10 +47,10 @@ public class HistoryFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_history, container, false);
 
         // 画面遷移ランチャーを生成
-        setRecordDetailsLancher();
+        setRecordDetailsLancher( root );
 
         // 記録をDBから取得
-        getRecordsOnDB();
+        getRecordsOnDB( root );
 
         return root;
     }
@@ -58,7 +58,7 @@ public class HistoryFragment extends Fragment {
     /*
      * DBから記録を取得
      */
-    private void getRecordsOnDB() {
+    private void getRecordsOnDB( View root ) {
 
         // DB読み込み処理
         AsyncReadRecordCategory db = new AsyncReadRecordCategory(getContext(), new AsyncReadRecordCategory.OnFinishListener() {
@@ -66,7 +66,7 @@ public class HistoryFragment extends Fragment {
             public void onFinish(ArrayList<RecordTable> records) {
                 // 記録をリストに設定
                 mRecords = records;
-                setRecordList(records);
+                setRecordList(root, records);
             }
         });
         //非同期処理開始
@@ -76,7 +76,7 @@ public class HistoryFragment extends Fragment {
     /*
      * 画面遷移ランチャーを生成
      */
-    private void setRecordDetailsLancher() {
+    private void setRecordDetailsLancher( View root ) {
 
         mRecordDetailsLancher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -111,7 +111,7 @@ public class HistoryFragment extends Fragment {
                         //------------------
                         // アダプタへ更新通知
                         //------------------
-                        RecyclerView rv_recordList = getActivity().findViewById(R.id.rv_recordList);
+                        RecyclerView rv_recordList = root.findViewById(R.id.rv_recordList);
                         RecordListAdapter adapter = (RecordListAdapter) rv_recordList.getAdapter();
 
                         // 操作に応じた通知処理
@@ -133,10 +133,10 @@ public class HistoryFragment extends Fragment {
     /*
      * 記録をリストで表示
      */
-    private void setRecordList(ArrayList<RecordTable> records) {
+    private void setRecordList( View root, ArrayList<RecordTable> records) {
 
         // 記録をリスト表示
-        RecyclerView rv_recordList = getActivity().findViewById(R.id.rv_recordList);
+        RecyclerView rv_recordList = root.findViewById(R.id.rv_recordList);
         RecordListAdapter adapter = new RecordListAdapter(records);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
