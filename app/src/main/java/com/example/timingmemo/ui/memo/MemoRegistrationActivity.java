@@ -50,8 +50,7 @@ public class MemoRegistrationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_memo_registration);
-        setContentView(R.layout.activity_memo_registration_tmp2);
+        setContentView(R.layout.activity_memo_registration);
 
         // 新規メモ or メモ更新 の情報を保持
         Intent intent = getIntent();

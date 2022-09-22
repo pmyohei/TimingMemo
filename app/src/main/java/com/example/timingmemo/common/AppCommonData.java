@@ -12,6 +12,14 @@ import java.util.List;
 
 public class AppCommonData extends Application {
 
+    //--------------------------------
+    // アプリ間共通定数
+    //--------------------------------
+    public static final String TIME_FORMAT_DELIMITER = ":";
+
+    //--------------------------------
+    // アプリ間共通変数
+    //--------------------------------
     private ArrayList<UserMemoTable> mUserMemos;
     private ArrayList<UserCategoryTable> mUserCategories;
     private ArrayList<RecordTable> mRecords;

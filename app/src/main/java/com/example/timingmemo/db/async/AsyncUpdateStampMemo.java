@@ -23,6 +23,7 @@ public class AsyncUpdateStampMemo extends AsyncShowProgress {
     private final AppDatabase mDB;
     private final Context mContext;
     private final StampMemoTable mStampMemo;
+    private boolean mIsChangedPlayTime;
     private final OnFinishListener mOnFinishListener;
 
     /*
@@ -76,7 +77,7 @@ public class AsyncUpdateStampMemo extends AsyncShowProgress {
             int targetPid = mStampMemo.getPid();
             String updatedMemoName = mStampMemo.getMemoName();
             int updatedMemoColor = mStampMemo.getMemoColor();
-            String updatedStampTime = mStampMemo.getStampingPlayTime();
+            String updatedPlayTime = mStampMemo.getStampingPlayTime();
 
             //----------------------
             // 更新対象の記録メモを更新
@@ -88,11 +89,14 @@ public class AsyncUpdateStampMemo extends AsyncShowProgress {
             targetStampMemo.setMemoColor( updatedMemoColor );
 
             // 更新前の記録時間を保持し、記録時間を上書き
-            String preStampTime = targetStampMemo.getStampingPlayTime();
-            targetStampMemo.setStampingPlayTime( updatedStampTime );
+            String prePlayTime = targetStampMemo.getStampingPlayTime();
+            targetStampMemo.setStampingPlayTime( updatedPlayTime );
+
+            // 記録時間の変更有無：変更ありの場合true
+            mIsChangedPlayTime = !( prePlayTime.equals( updatedPlayTime ) );
 
             // 遅延時間と記録時間（システム時間）は、記録時間に変更がある場合更新
-            if( !preStampTime.equals( updatedStampTime ) ){
+            if( mIsChangedPlayTime ){
 
                 // 遅延時間 → クリア
                 String clearDelayTime = mContext.getString( R.string.clear_delay_time );
@@ -135,16 +139,13 @@ public class AsyncUpdateStampMemo extends AsyncShowProgress {
     void onPostExecute() {
         super.onPostExecute();
 
-        mOnFinishListener.onFinish( mStampMemo );
+        mOnFinishListener.onFinish( mStampMemo, mIsChangedPlayTime );
     }
 
     /*
      * 完了リスナー
      */
     public interface OnFinishListener {
-        void onFinish( StampMemoTable stampMemo );
+        void onFinish( StampMemoTable stampMemo, boolean isChangedPlayTime );
     }
-
-
-
 }

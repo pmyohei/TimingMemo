@@ -18,21 +18,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.timingmemo.R;
+import com.example.timingmemo.TimePickerDialog;
 import com.example.timingmemo.common.AppCommonData;
 import com.example.timingmemo.db.StampMemoTable;
 import com.example.timingmemo.db.UserCategoryTable;
 import com.example.timingmemo.db.UserMemoTable;
 import com.example.timingmemo.db.async.AsyncCreateStampMemo;
 import com.example.timingmemo.db.async.AsyncReadMemoCategory;
-import com.example.timingmemo.db.async.AsyncRemoveMemo;
 import com.example.timingmemo.db.async.AsyncRemoveStampMemo;
 import com.example.timingmemo.db.async.AsyncUpdateStampMemo;
-import com.example.timingmemo.ui.memo.MemoListActivity;
 import com.example.timingmemo.ui.memo.MemoListAdapter;
 import com.example.timingmemo.ui.memo.MemoPageAdapter;
 import com.example.timingmemo.ui.memo.MemoSelectionColorAdapter;
@@ -48,18 +46,19 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
     //--------------------------------
     // 画面遷移 - キー文字列
     //--------------------------------
-    // 画面遷移：戻り情報
+    // 画面遷移：戻り情報：result code
     public static final int RESULT_STAMP_MEMO_ADD = 201;
     public static final int RESULT_STAMP_MEMO_UPDATE = 202;
     public static final int RESULT_STAMP_MEMO_REMOVE = 203;
-
+    // 画面遷移：戻り情報：key
     public static final String KEY_STAMP_MEMO_PID = "stamp_memo_pid";
     public static final String KEY_STAMP_MEMO_RECORD_PID = "stamp_memo_record_pid";
     public static final String KEY_STAMP_MEMO_NAME = "stamp_memo_name";
     public static final String KEY_STAMP_MEMO_COLOR = "stamp_memo_color";
     public static final String KEY_STAMP_MEMO_DELAYTIME = "stamp_memo_delaytime";
-    public static final String KEY_STAMP_MEMO_STAMPTIME = "stamp_memo_stamptime";
+    public static final String KEY_STAMP_MEMO_PLAYTIME = "stamp_memo_playtime";
     public static final String KEY_STAMP_MEMO_SYSTEMTIME = "stamp_memo_systemtime";
+    public static final String KEY_CHANGED_PLAYTIME = "changed_play_time";
 
     //--------------------------------
     // フィールド変数
@@ -224,6 +223,30 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
                 v_color.setBackgroundColor(color);
             }
         });
+
+        //--------------------------
+        // 記録メモ時間リスナー
+        //--------------------------
+        TextView tv_playTime = findViewById(R.id.tv_playTime);
+        tv_playTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 設定中の時分秒
+                String hhmmss = tv_playTime.getText().toString();
+
+                // 時間設定Dialogを開く
+                TimePickerDialog dialog = TimePickerDialog.newInstance( hhmmss );
+                dialog.setOnPositiveClickListener(new TimePickerDialog.PositiveClickListener() {
+                        @Override
+                        public void onPositiveClick(String hhmmssStr) {
+                            // 入力された時分秒をビューに反映
+                            tv_playTime.setText( hhmmssStr );
+                        }
+                    }
+                );
+                dialog.show( getSupportFragmentManager(), "SHOW" );
+            }
+        });
     }
 
     /*
@@ -242,14 +265,14 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
         Intent intent = getIntent();
         String memoName = intent.getStringExtra(RecordDetailsActivity.KEY_TARGET_MEMO_NAME);
         int memoColor = intent.getIntExtra(RecordDetailsActivity.KEY_TARGET_MEMO_COLOR, 0x00000000);
-        String stampTime = intent.getStringExtra(RecordDetailsActivity.KEY_TARGET_MEMO_STAMPTIME);
+        String playTime = intent.getStringExtra(RecordDetailsActivity.KEY_TARGET_MEMO_PLAYTIME);
 
         //------------------
         // 記録メモ情報の設定
         //------------------
         // 記録メモ時間の設定
-        TextView tv_stampTime = findViewById(R.id.tv_stampTime);
-        tv_stampTime.setText(stampTime);
+        TextView tv_playTime = findViewById(R.id.tv_playTime);
+        tv_playTime.setText(playTime);
 
         // メモ名・メモ色の設定
         setSelectedMemoInfo(memoName, memoColor);
@@ -370,7 +393,7 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
             @Override
             public void onFinish(StampMemoTable stampMemo) {
                 // 画面遷移元へのデータを設定し、終了
-                setFinishIntent( RESULT_STAMP_MEMO_ADD, stampMemo, -1 );
+                setFinishIntent( RESULT_STAMP_MEMO_ADD, stampMemo, -1, true );
                 finish();
             }
         });
@@ -399,9 +422,9 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
         //--------------------------
         AsyncUpdateStampMemo db = new AsyncUpdateStampMemo(this, stampMemo, new AsyncUpdateStampMemo.OnFinishListener() {
             @Override
-            public void onFinish(StampMemoTable stampMemo) {
+            public void onFinish(StampMemoTable stampMemo, boolean isChangedPlayTime) {
                 // 画面遷移元へのデータを設定し、終了
-                setFinishIntent( RESULT_STAMP_MEMO_UPDATE, stampMemo, -1 );
+                setFinishIntent( RESULT_STAMP_MEMO_UPDATE, stampMemo, -1, isChangedPlayTime );
                 finish();
             }
         });
@@ -426,13 +449,13 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
         }
 
         //--------------------------
-        // DB保存処理
+        // DB削除処理
         //--------------------------
         AsyncRemoveStampMemo db = new AsyncRemoveStampMemo(this, memoPid, new AsyncRemoveStampMemo.OnFinishListener() {
             @Override
             public void onFinish(int pid) {
                 // 画面遷移元へのデータを設定し、終了
-                setFinishIntent( RESULT_STAMP_MEMO_REMOVE, null, pid );
+                setFinishIntent( RESULT_STAMP_MEMO_REMOVE, null, pid, false );
                 finish();
             }
         });
@@ -449,11 +472,11 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
         //---------------------------
         // レイアウトから記録メモ情報を取得
         //---------------------------
-        TextView tv_stampTime = findViewById(R.id.tv_stampTime);
+        TextView tv_playTime = findViewById(R.id.tv_playTime);
         EditText et_memoName = findViewById(R.id.et_memoName);
         View v_selectedColor = findViewById(R.id.v_selectedColor);
 
-        String stampTime = tv_stampTime.getText().toString();
+        String playTime = tv_playTime.getText().toString();
         String memoName = et_memoName.getText().toString();
         ColorDrawable colorDrawable = (ColorDrawable) v_selectedColor.getBackground();
         int memoColor = colorDrawable.getColor();
@@ -462,7 +485,7 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
         // 記録メモを生成
         //---------------------------
         StampMemoTable stampMemo = new StampMemoTable();
-        stampMemo.setStampingPlayTime(stampTime);
+        stampMemo.setStampingPlayTime(playTime);
         stampMemo.setMemoName(memoName);
         stampMemo.setMemoColor(memoColor);
 
@@ -482,7 +505,7 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
     /*
      * 画面終了のindentデータを設定
      */
-    private void setFinishIntent( int resultCode, StampMemoTable stampMemo, int pid ) {
+    private void setFinishIntent( int resultCode, StampMemoTable stampMemo, int pid, boolean isChangedPlayTime ) {
 
         Intent intent = getIntent();
         int stampMemoPid;
@@ -498,8 +521,9 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
             intent.putExtra(KEY_STAMP_MEMO_NAME, stampMemo.getMemoName());
             intent.putExtra(KEY_STAMP_MEMO_COLOR, stampMemo.getMemoColor());
             intent.putExtra(KEY_STAMP_MEMO_DELAYTIME, stampMemo.getDelayTime());
-            intent.putExtra(KEY_STAMP_MEMO_STAMPTIME, stampMemo.getStampingPlayTime());
+            intent.putExtra(KEY_STAMP_MEMO_PLAYTIME, stampMemo.getStampingPlayTime());
             intent.putExtra(KEY_STAMP_MEMO_SYSTEMTIME, stampMemo.getStampingSystemTime());
+            intent.putExtra(KEY_CHANGED_PLAYTIME, isChangedPlayTime);
         }
 
         // Pidの設定

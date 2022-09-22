@@ -64,9 +64,9 @@ public class AsyncReadStampMemoCategory extends AsyncShowProgress {
          */
         @SuppressLint("ResourceType")
         private void readDB(){
-            // 指定された記録に紐づく記録メモを全て取得
+            // 指定された記録に紐づく記録メモを全て取得（取得は「打刻時の経過時間」で昇順ソート状態）
             StampMemoTableDao dao = mDB.daoStampMemoTable();
-            List<StampMemoTable> stampMemos = dao.getStampMemosLinkedRecord( mRecordPid );
+            List<StampMemoTable> stampMemos = dao.getStampMemosLinkedRecordOrderAsc( mRecordPid );
             mStampMemos = new ArrayList<>( stampMemos );
         }
     }

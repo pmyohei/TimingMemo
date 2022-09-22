@@ -4,7 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <!--  メモ登録画面 -->
-    <dimen name="user_select_color_size">48dp</dimen>
+    <dimen name="user_select_color_size">40dp</dimen>
+    <dimen name="user_selectable_color_size">40dp</dimen>
 
     <!--  記録時間グラフ1メモリ（1min）当たりの横幅 -->
     <dimen name="memory_1min_length">20dp</dimen>

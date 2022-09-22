@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey;
         indices     = { @Index(
                 value = {"recordPid"})}
 )
-public class StampMemoTable {
+public class StampMemoTable implements Comparable<StampMemoTable> {
 
     //----------------------------
     // カラム定義
@@ -47,7 +47,6 @@ public class StampMemoTable {
     // 遅延時間（mm:ss）
     @ColumnInfo(name = "delayTime")
     private String delayTime;
-
 
 
     //----------------------------
@@ -101,4 +100,18 @@ public class StampMemoTable {
     public void setDelayTime(String delayTime) {
         this.delayTime = delayTime;
     }
+
+    //----------------------------
+    // インターフェース実装
+    //----------------------------
+    /*
+     * 「打刻時の経過時間」でのソート用
+     */
+    @Override
+    public int compareTo( StampMemoTable stampMemo ){
+        // 「打刻時の経過時間」の比較結果を返す
+        return this.stampingPlayTime.compareTo( stampMemo.getStampingPlayTime() );
+    }
+
+
 }

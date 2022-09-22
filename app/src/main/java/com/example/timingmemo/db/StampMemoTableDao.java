@@ -17,6 +17,9 @@ public interface StampMemoTableDao {
     @Query("SELECT * FROM stampMemoTable WHERE recordPid=(:recordPid)")
     List<StampMemoTable> getStampMemosLinkedRecord(int recordPid );
 
+    @Query("SELECT * FROM stampMemoTable WHERE recordPid=(:recordPid) ORDER BY stampingPlayTime")
+    List<StampMemoTable> getStampMemosLinkedRecordOrderAsc(int recordPid );
+
     @Query("SELECT * FROM stampMemoTable WHERE pid=(:pid)")
     StampMemoTable getStampMemo(int pid );
 

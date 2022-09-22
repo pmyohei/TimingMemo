@@ -1,6 +1,5 @@
 package com.example.timingmemo.ui.history;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.timingmemo.R;
-import com.example.timingmemo.db.RecordTable;
 import com.example.timingmemo.db.StampMemoTable;
 
 import java.util.ArrayList;
@@ -34,7 +32,7 @@ public class StampMemoListAdapter extends RecyclerView.Adapter<StampMemoListAdap
         private final ConstraintLayout cl_stampMemo;
         private final View v_memoColor;
         private final TextView tv_stampMemo;
-        private final TextView tv_stampTime;
+        private final TextView tv_playTime;
         private final TextView tv_systemTime;
 
         public StampMemoListViewHolder(View itemView, int position) {
@@ -43,7 +41,7 @@ public class StampMemoListAdapter extends RecyclerView.Adapter<StampMemoListAdap
             cl_stampMemo = itemView.findViewById( R.id.cl_stampMemo);
             v_memoColor = itemView.findViewById( R.id.v_memoColor );
             tv_stampMemo = itemView.findViewById( R.id.tv_stampMemo);
-            tv_stampTime = itemView.findViewById( R.id.tv_stampTime);
+            tv_playTime = itemView.findViewById( R.id.tv_playTime);
             tv_systemTime = itemView.findViewById( R.id.tv_systemTime);
         }
 
@@ -58,19 +56,19 @@ public class StampMemoListAdapter extends RecyclerView.Adapter<StampMemoListAdap
             StampMemoTable stampMemo = mStampMemos.get( position );
             int memoColor = stampMemo.getMemoColor();
             String memoName = stampMemo.getMemoName();
-            String stampTime = stampMemo.getStampingPlayTime();
+            String playTime = stampMemo.getStampingPlayTime();
             String systemTime = stampMemo.getStampingSystemTime();
             String delayTime = stampMemo.getDelayTime();
 
             // 記録メモ時間の組み立て：メモ時間＋遅延時間
-            String stampTimeStr = stampTime + "(-" + delayTime + ")";
+            String playTimeStr = playTime + "(-" + delayTime + ")";
 
             //---------------------
             // 記録メモ情報の設定
             //---------------------
             v_memoColor.setBackgroundColor( memoColor );
             tv_stampMemo.setText( memoName );
-            tv_stampTime.setText( stampTimeStr );
+            tv_playTime.setText( playTimeStr );
             tv_systemTime.setText( systemTime );
 
             // クリックリスナー

@@ -17,7 +17,7 @@
     <!--  memo  -->
     <string name="memo">Memo</string>
     <string name="hint_memo_name">Memo Name</string>
-    <string name="title_color">Color</string>
+    <string name="title_color">Memo Colors</string>
 
     <!--  category  -->
     <string name="category">Category</string>
@@ -29,6 +29,7 @@
     <string name="updating">Updating</string>
     <string name="dialog_title_confirm_rewrire">書き変え確認</string>
     <string name="dialog_title_confirm_remove">削除確認</string>
+    <string name="dialog_title_update_playtime">記録時間の変更</string>
     <string name="dialog_content_memo_confirm_rewrire">記録したメモを書き換えますか？</string>
     <string name="dialog_content_memo_confirm_remove">メモを削除しますか？</string>
     <string name="dialog_content_category_confirm_remove">カテゴリを削除しますか？\nこのカテゴリ内のメモは削除されず、「カテゴリなし」になります。</string>

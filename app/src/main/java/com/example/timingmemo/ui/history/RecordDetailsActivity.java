@@ -26,6 +26,7 @@ import com.example.timingmemo.db.async.AsyncReadStampMemoCategory;
 import com.example.timingmemo.db.async.AsyncRemoveRecord;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 /*
@@ -42,7 +43,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
     public static final String KEY_TARGET_RECORD_PID = "target_record_pid";
     public static final String KEY_TARGET_MEMO_NAME = "target_memo_name";
     public static final String KEY_TARGET_MEMO_COLOR = "target_memo_color";
-    public static final String KEY_TARGET_MEMO_STAMPTIME = "target_memo_stamptime";
+    public static final String KEY_TARGET_MEMO_PLAYTIME = "target_memo_playtime";
 
     // 画面遷移：戻り情報
     public static final int RESULT_RECORD_UPDATE = 201;
@@ -116,26 +117,22 @@ public class RecordDetailsActivity extends AppCompatActivity {
                     StampMemoListAdapter adapter = (StampMemoListAdapter) rv_stampMemo.getAdapter();
 
                     Intent intent = result.getData();
-                    int position;
 
                     // 操作に応じた通知処理
                     switch (resultCode) {
                         // 新規追加
                         case StampMemoUpdateActivity.RESULT_STAMP_MEMO_ADD:
-                            position = insertStampMemoList( intent );
-                            adapter.notifyItemInserted( position );
+                            insertStampMemoList( intent, adapter );
                             break;
 
                         // 更新
                         case StampMemoUpdateActivity.RESULT_STAMP_MEMO_UPDATE:
-                            position = updateStampMemoList( intent );
-                            adapter.notifyItemChanged( position );
+                            updateStampMemoList( intent, adapter );
                             break;
 
                         // 削除
                         case StampMemoUpdateActivity.RESULT_STAMP_MEMO_REMOVE:
-                            position = removeStampMemoList( intent );
-                            adapter.notifyItemRemoved( position );
+                            removeStampMemoList( intent, adapter );
                             break;
                     }
                 }
@@ -158,10 +155,9 @@ public class RecordDetailsActivity extends AppCompatActivity {
         // DB読み込み処理
         AsyncReadStampMemoCategory db = new AsyncReadStampMemoCategory(this, pid, new AsyncReadStampMemoCategory.OnFinishListener() {
             @Override
-            public void onFinish(ArrayList<StampMemoTable> stampMemos) {
+            public void onFinish(ArrayList<StampMemoTable> sortedStampMemos) {
                 // 取得した記録メモをリスト表示
-                mStampMemos = stampMemos;
-                setStampMempList(stampMemos);
+                setStampMemoList( sortedStampMemos );
             }
         });
         //非同期処理開始
@@ -171,11 +167,13 @@ public class RecordDetailsActivity extends AppCompatActivity {
     /*
      * 記録メモをリストで表示
      */
-    private void setStampMempList(ArrayList<StampMemoTable> stampMemos) {
+    private void setStampMemoList(ArrayList<StampMemoTable> stampMemos) {
+        // リスト保持
+        mStampMemos = stampMemos;
 
         // 記録メモをリスト表示
         RecyclerView rv_stampMemo = findViewById(R.id.rv_stampMemo);
-        StampMemoListAdapter adapter = new StampMemoListAdapter(stampMemos);
+        StampMemoListAdapter adapter = new StampMemoListAdapter(mStampMemos);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
         rv_stampMemo.setAdapter(adapter);
@@ -204,7 +202,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
             intent.putExtra(KEY_TARGET_MEMO_PID, stampMemo.getPid());
             intent.putExtra(KEY_TARGET_MEMO_NAME, stampMemo.getMemoName());
             intent.putExtra(KEY_TARGET_MEMO_COLOR, stampMemo.getMemoColor());
-            intent.putExtra(KEY_TARGET_MEMO_STAMPTIME, stampMemo.getStampingPlayTime());
+            intent.putExtra(KEY_TARGET_MEMO_PLAYTIME, stampMemo.getStampingPlayTime());
 
             // 新規追加ではない
             isAdd = false;
@@ -228,44 +226,73 @@ public class RecordDetailsActivity extends AppCompatActivity {
     /*
      * 記録メモリスト：新規追加
      */
-    private int insertStampMemoList( Intent intent ) {
+    private void insertStampMemoList( Intent intent, StampMemoListAdapter adapter ) {
 
-        // 新規追加 or 更新された記録メモ情報を取得
+        // 新規追加された記録メモ情報を取得
         StampMemoTable stampMemo = getUpdatedStampMemoFromDist( intent );
 
-        // リストに追加し、追加後のindexを返す
-        mStampMemos.add( stampMemo );
-        return (mStampMemos.size() - 1);
+        // 「打刻時の経過時間」から、ソート済みリストの適切な位置に挿入する
+        int insertPosition = getInsertPosition( stampMemo.getStampingPlayTime() );
+        mStampMemos.add( insertPosition, stampMemo );
+
+        // アダプタに通知
+        adapter.notifyItemInserted( insertPosition );
     }
 
     /*
      * 記録メモリスト：更新
      */
-    private int updateStampMemoList( Intent intent ) {
+    private void updateStampMemoList( Intent intent, StampMemoListAdapter adapter ) {
 
-        // 新規追加 or 更新された記録メモ情報を取得
+        //----------------------------
+        // リスト更新
+        //----------------------------
+        // 更新された記録メモ情報を取得
         StampMemoTable stampMemo = getUpdatedStampMemoFromDist( intent );
         int stampMemoPid = stampMemo.getPid();
 
-        // リスト上の位置を取得
+        // リスト上の位置を取得し、更新
         int position = getStampMemoListPos( stampMemoPid );
-        // 更新
-        StampMemoTable targetStampMemo = mStampMemos.get(position);
-        targetStampMemo = stampMemo;
+        mStampMemos.set( position, stampMemo );
 
-        return position;
+        //----------------------------
+        // リストソート処理
+        //----------------------------
+        boolean isChangedPlayTime = intent.getBooleanExtra( StampMemoUpdateActivity.KEY_CHANGED_PLAYTIME, false );
+        if( !isChangedPlayTime ){
+            // 記録時間更新なしなら、ソートなし
+            // アダプタに通知
+            adapter.notifyItemChanged( position );
+            return;
+        }
+
+        // リストをソートし、ソート後の位置を取得
+        Collections.sort( mStampMemos );
+        int sortedPosition = getStampMemoListPos( stampMemoPid );
+        if( position == sortedPosition ){
+            // 位置が変わらなければ、ソートなし
+            // アダプタに通知
+            adapter.notifyItemChanged( position );
+            return;
+        }
+
+        // 通知範囲を取得して、アダプタに通知
+        int startIndex = Math.min( position, sortedPosition );
+        int endIndex = Math.max( position, sortedPosition );
+        adapter.notifyItemRangeChanged( startIndex, endIndex );
     }
 
     /*
      * 記録メモリスト：削除
      */
-    private int removeStampMemoList( Intent intent ) {
+    private void removeStampMemoList( Intent intent, StampMemoListAdapter adapter ) {
         // リストから削除
         int pid = intent.getIntExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_PID, -1 );
         int position = getStampMemoListPos( pid );
         mStampMemos.remove( position );
 
-        return position;
+        // アダプタに通知
+        adapter.notifyItemRemoved( position );
     }
 
     /*
@@ -281,7 +308,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
         String memoName = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_NAME );
         int color = intent.getIntExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_COLOR, 0x00000000 );
         String delayTime = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_DELAYTIME );
-        String stampTime = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_STAMPTIME );
+        String playTime = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_PLAYTIME);
         String systemTime = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_SYSTEMTIME );
 
         //-------------------------------
@@ -293,7 +320,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
         stampMemo.setMemoName( memoName );
         stampMemo.setMemoColor( color );
         stampMemo.setDelayTime( delayTime );
-        stampMemo.setStampingPlayTime( stampTime );
+        stampMemo.setStampingPlayTime( playTime );
         stampMemo.setStampingSystemTime( systemTime );
 
         return stampMemo;
@@ -316,6 +343,29 @@ public class RecordDetailsActivity extends AppCompatActivity {
 
         return -1;
     }
+
+    /*
+     * 記録メモリストに対して、指定された「打刻時の経過時間」の挿入位置を取得
+     *   例）para：「00:20:00」
+     *   [0]：「00:10:00」
+     *   [1]：「00:30:00」
+     *   → この場合、「1」を返す
+     */
+    private int getInsertPosition( String targetPlayTime ) {
+
+        int position = 0;
+        for( StampMemoTable stampMemo: mStampMemos ){
+            // リスト内の時間が、対象の時間よりも後の場合
+            String searchPlayTime = stampMemo.getStampingPlayTime();
+            if( searchPlayTime.compareTo( targetPlayTime ) > 0){
+                return position;
+            }
+            position++;
+        }
+
+        return -1;
+    }
+
 
     /*
      * 削除確認ダイアログの表示
