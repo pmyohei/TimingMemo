@@ -178,7 +178,7 @@ public class AsyncTmpCreateDataMemo extends AsyncShowProgress {
             recordTable2.setName( "Record 1234567890123456789012345678901234567890" );
             recordTable2.setStartRecordingTime( startTime );
             recordTable2.setEndRecordingTime( endTime );
-            recordTable2.setRecordingTime( "00:20:00" );
+            recordTable2.setRecordingTime( "01:12:40" );
 
             recordTableDao.insert( recordTable2 );
         }

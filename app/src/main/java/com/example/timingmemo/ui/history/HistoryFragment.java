@@ -34,6 +34,7 @@ public class HistoryFragment extends Fragment {
     //--------------------------------
     public static final String KEY_TARGET_RECORD_PID = "target_record_pid";
     public static final String KEY_TARGET_RECORD_NAME = "target_record_name";
+    public static final String KEY_TARGET_RECORD_RECORDING_TIME = "target_recording_time";
 
     //--------------------------------
     // フィールド変数
@@ -151,6 +152,7 @@ public class HistoryFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), RecordDetailsActivity.class);
                 intent.putExtra(KEY_TARGET_RECORD_PID, record.getPid());
                 intent.putExtra(KEY_TARGET_RECORD_NAME, record.getName());
+                intent.putExtra(KEY_TARGET_RECORD_RECORDING_TIME, record.getRecordingTime());
                 mRecordDetailsLancher.launch(intent);
             }
         });

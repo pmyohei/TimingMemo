@@ -15,9 +15,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.Toast;
 
 import com.example.timingmemo.R;
@@ -98,45 +101,45 @@ public class RecordDetailsActivity extends AppCompatActivity {
 
         // 記録メモ更新画面遷移ランチャーの作成
         mStampMemoUpdateLancher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
 
-                    // ResultCodeの取得
-                    int resultCode = result.getResultCode();
-                    if (resultCode == Activity.RESULT_CANCELED) {
-                        // 戻るボタンでの終了なら何もしない
-                        return;
+                        // ResultCodeの取得
+                        int resultCode = result.getResultCode();
+                        if (resultCode == Activity.RESULT_CANCELED) {
+                            // 戻るボタンでの終了なら何もしない
+                            return;
+                        }
+
+                        //--------------------
+                        // アダプタへ更新通知
+                        //--------------------
+                        RecyclerView rv_stampMemo = findViewById(R.id.rv_stampMemo);
+                        StampMemoListAdapter adapter = (StampMemoListAdapter) rv_stampMemo.getAdapter();
+
+                        Intent intent = result.getData();
+
+                        // 操作に応じた通知処理
+                        switch (resultCode) {
+                            // 新規追加
+                            case StampMemoUpdateActivity.RESULT_STAMP_MEMO_ADD:
+                                insertStampMemoList(intent, adapter);
+                                break;
+
+                            // 更新
+                            case StampMemoUpdateActivity.RESULT_STAMP_MEMO_UPDATE:
+                                updateStampMemoList(intent, adapter);
+                                break;
+
+                            // 削除
+                            case StampMemoUpdateActivity.RESULT_STAMP_MEMO_REMOVE:
+                                removeStampMemoList(intent, adapter);
+                                break;
+                        }
                     }
-
-                    //--------------------
-                    // アダプタへ更新通知
-                    //--------------------
-                    RecyclerView rv_stampMemo = findViewById(R.id.rv_stampMemo);
-                    StampMemoListAdapter adapter = (StampMemoListAdapter) rv_stampMemo.getAdapter();
-
-                    Intent intent = result.getData();
-
-                    // 操作に応じた通知処理
-                    switch (resultCode) {
-                        // 新規追加
-                        case StampMemoUpdateActivity.RESULT_STAMP_MEMO_ADD:
-                            insertStampMemoList( intent, adapter );
-                            break;
-
-                        // 更新
-                        case StampMemoUpdateActivity.RESULT_STAMP_MEMO_UPDATE:
-                            updateStampMemoList( intent, adapter );
-                            break;
-
-                        // 削除
-                        case StampMemoUpdateActivity.RESULT_STAMP_MEMO_REMOVE:
-                            removeStampMemoList( intent, adapter );
-                            break;
-                    }
-                }
-            });
+                });
     }
 
     /*
@@ -157,11 +160,58 @@ public class RecordDetailsActivity extends AppCompatActivity {
             @Override
             public void onFinish(ArrayList<StampMemoTable> sortedStampMemos) {
                 // 取得した記録メモをリスト表示
-                setStampMemoList( sortedStampMemos );
+                setStampMemoList(sortedStampMemos);
+
+                // タイムグラフの描画
+                drawTimeGraph();
             }
         });
         //非同期処理開始
         db.execute();
+    }
+
+    /*
+     * タイムグラフの描画
+     */
+    private void drawTimeGraph() {
+
+        // 親ビューのレイアウトが確定したタイミングで描画処理を行う
+        HorizontalScrollView hsv_graph = findViewById(R.id.hsv_graph);
+        hsv_graph.post(() -> {
+
+            TimeGraphMemoryView tgmv_graph = findViewById(R.id.tgmv_graph);
+
+            // グラフの横幅を設定
+            setGraphLayoutWidth( tgmv_graph, hsv_graph );
+
+            // グラフメモリ設定
+            tgmv_graph.setGraghMemoryPath();
+
+            // 描画
+            tgmv_graph.invalidate();
+        });
+    }
+
+    /*
+     * タイムグラフの横サイズを設定
+     */
+    private void setGraphLayoutWidth( TimeGraphMemoryView tgmv_graph, ViewGroup parentView ) {
+        // 記録時間
+        Intent intent = getIntent();
+        String recordingTime = intent.getStringExtra(HistoryFragment.KEY_TARGET_RECORD_RECORDING_TIME);
+
+        // グラフの横幅を計算
+        int graghWidth = tgmv_graph.calcGraphWidthFromRecordTime(recordingTime);
+
+        // 親ビューのサイズと比較し、大きい方を設定サイズとする（最低でも画面横いっぱいは描画させるため）
+        int parentWidth = parentView.getWidth();
+        int setWidth = Math.max(parentWidth, graghWidth);
+
+        Log.i("目盛り", "setGraphLayoutWidth setWidth" + setWidth);
+
+        // レイアウトに反映
+        tgmv_graph.getLayoutParams().width = setWidth;
+        tgmv_graph.requestLayout();
     }
 
     /*
@@ -220,7 +270,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
         intent.putExtra(KEY_TARGET_RECORD_PID, recordPid);
 
         // 画面遷移開始
-        startActivity(intent);
+        mStampMemoUpdateLancher.launch( intent );
     }
 
     /*
