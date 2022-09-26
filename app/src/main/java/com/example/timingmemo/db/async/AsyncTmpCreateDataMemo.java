@@ -150,21 +150,21 @@ public class AsyncTmpCreateDataMemo extends AsyncShowProgress {
 
             stamp1.setRecordPid( rPid );
             stamp1.setMemoName( "Memo1" );
-            stamp1.setMemoColor( 0xFF773456 );
+            stamp1.setMemoColor( 0xFFc41a30 );
             stamp1.setDelayTime( "00:05" );
             stamp1.setStampingPlayTime( "00:02:12" );
             stamp1.setStampingSystemTime( startTime );
 
             stamp2.setRecordPid( rPid );
             stamp2.setMemoName( "Memo2" );
-            stamp2.setMemoColor( 0xFF122006 );
+            stamp2.setMemoColor( 0xFFFCE45C );
             stamp2.setDelayTime( "00:23" );
             stamp2.setStampingPlayTime( "00:08:01" );
             stamp2.setStampingSystemTime( startTime );
 
             stamp3.setRecordPid( rPid );
             stamp3.setMemoName( "Memo3" );
-            stamp3.setMemoColor( 0xFFee99f0 );
+            stamp3.setMemoColor( 0xFF494544 );
             stamp3.setDelayTime( "01:05" );
             stamp3.setStampingPlayTime( "00:18:31" );
             stamp3.setStampingSystemTime( startTime );

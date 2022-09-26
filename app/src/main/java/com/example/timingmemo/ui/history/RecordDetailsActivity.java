@@ -161,7 +161,6 @@ public class RecordDetailsActivity extends AppCompatActivity {
             public void onFinish(ArrayList<StampMemoTable> sortedStampMemos) {
                 // 取得した記録メモをリスト表示
                 setStampMemoList(sortedStampMemos);
-
                 // タイムグラフの描画
                 drawTimeGraph();
             }
@@ -183,10 +182,8 @@ public class RecordDetailsActivity extends AppCompatActivity {
 
             // グラフの横幅を設定
             setGraphLayoutWidth( tgmv_graph, hsv_graph );
-
             // グラフメモリ設定
-            tgmv_graph.setGraghMemoryPath();
-
+            tgmv_graph.setStampMemoList( mStampMemos );
             // 描画
             tgmv_graph.invalidate();
         });
@@ -209,7 +206,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
 
         Log.i("目盛り", "setGraphLayoutWidth setWidth" + setWidth);
 
-        // レイアウトに反映
+        // レイアウトの横幅を変更
         tgmv_graph.getLayoutParams().width = setWidth;
         tgmv_graph.requestLayout();
     }
