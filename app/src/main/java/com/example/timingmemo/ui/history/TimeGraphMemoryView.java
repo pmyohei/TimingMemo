@@ -34,6 +34,10 @@ public class TimeGraphMemoryView extends View {
     private final int TIME_TEXT_HALF_WIDTH;                         // 時間テキストの半分の長さ = (文字数 / 2) * １文字当たりの横幅　）
     private final int TIME_TEXT_CHAR_NUM = 8;                       // 時間テキストフォーマット「hh:mm:ss」の文字数
 
+    // 描画目盛りy位置 上／下 index
+    final int POSY_UPPER = 0;
+    final int POSY_LOWER = 1;
+
     //---------------------------
     // フィールド変数
     //----------------------------
@@ -111,20 +115,104 @@ public class TimeGraphMemoryView extends View {
      * グラフ目盛りのPathを設定
      *   設定対象：開始の縦線、単位毎の縦線
      */
-    public void setGraghMemoryPatha() {
+    public void setGraghMemoryPath() {
 
-        setGraghMemoryStartMiddlePath(  );
+        //----------------
+        // Path設定可否判定
+        //----------------
+        // 記録時間が設定されるまで、目盛りは描画しない
+        if( mRecordTime == null ){
+            return;
+        }
 
-//        setGraghMemoryEndPath(  );
+        //----------------
+        // Path設定
+        //----------------
+        // Pathリセット
+        mGraghMemoryPath.reset();
 
+        // 目盛りPathの設定
+        setGraghMemoryStartMiddlePath( mGraghMemoryPath );
+        setGraghMemoryEndPath( mGraghMemoryPath );
 
+        // Pathをclose
+        mGraghMemoryPath.close();
     }
 
     /*
      * グラフ目盛りのPathを設定
      *   設定対象：開始の縦線、単位毎の縦線
      */
-    public void setGraghMemoryStartMiddlePath() {
+    public void setGraghMemoryStartMiddlePath( Path path ) {
+
+        //---------------------------
+        // 目盛りPath生成初期化
+        //---------------------------
+        // 目盛りx位置の初期位置（時間テキスト分を考慮）
+        float xPos = MEMORY_START_POS_X;
+        // リストクリア
+        mGraghTextPosXList.clear();
+        // 記録時間の分データ（小数点（秒情報）は切り捨て：例) 00:20:10 → 20 ）
+        int totalMinute = (int) Math.floor(mRecordTotalMinuteTime);
+
+        //---------------------------
+        // 目盛りPath生成
+        //---------------------------
+        // 1分毎に縦の目盛りPathを設定
+        for (int drawMinute = 0; drawMinute <= totalMinute; drawMinute++) {
+
+            //---------------------------------------
+            // 時間テキストx位置
+            //---------------------------------------
+            // 時間テキストを表示するx位置をリストに追加
+            addTextPosXList(xPos, drawMinute);
+
+            //---------------------------------------
+            // 目盛り
+            //---------------------------------------
+            // グラフ縦線の高さの範囲（上限・下限）を取得
+            float[] drawHeightRange = getDrawHeightRange(drawMinute);
+
+            // 縦線を設定
+            path.moveTo(xPos, drawHeightRange[POSY_UPPER]);
+            path.lineTo(xPos, drawHeightRange[POSY_LOWER]);
+
+            // １目盛り分横へ移動
+            xPos += MEMORY_UNIT_LENGTH;
+        }
+    }
+
+
+    /*
+     * グラフ目盛りのPathを設定
+     *   設定対象：終端の縦線
+     */
+    private void setGraghMemoryEndPath(Path path) {
+
+        // 目盛り端の判定を得るための値
+        final int FOR_EDGE = 0;
+
+        // 記録時間のx位置を算出
+        float posX = getPosXFromTime( mRecordTime );
+        // 記録時間のy位置を算出（両端のY位置を取得するために、指定時間として０を指定）
+        float[] yRange = getDrawHeightRange( FOR_EDGE );
+
+        //----------------------------------------------------------------------
+        // 終端の目盛り位置をリストに追加（両端のY位置を取得するために、指定時間として０を指定）
+        //----------------------------------------------------------------------
+        addTextPosXList(posX, FOR_EDGE);
+
+        //------------------
+        // 終端目盛りを設定
+        //------------------
+        path.moveTo(posX, yRange[POSY_UPPER]);
+        path.lineTo(posX, yRange[POSY_LOWER]);
+    }
+
+    /*
+     * グラフ目盛りの高さ範囲を取得
+     */
+    private float[] getDrawHeightRange(int minute) {
 
         //---------------------------
         // 各目盛りのY座標
@@ -152,90 +240,11 @@ public class TimeGraphMemoryView extends View {
                 (height * 0.25f) + TIME_TEXT_CHAR_HEIGHT,
                 (height * 0.75f)
         };
-        // 描画目盛りy位置 上／下 index
-        final int POSY_UPPER = 0;
-        final int POSY_LOWER = 1;
-
-        //---------------------------
-        // 目盛りPath生成初期化
-        //---------------------------
-        // Pathリセット
-        mGraghMemoryPath.reset();
-        // 目盛りx位置の初期位置（時間テキスト分を考慮）
-        float xPos = MEMORY_START_POS_X;
-        // リストクリア
-        mGraghTextPosXList.clear();
-        // 記録時間の分データ（小数点（秒情報）は切り捨て：例) 00:20:10 → 20 ）
-        int totalMinute = (int) Math.floor(mRecordTotalMinuteTime);
-
-        //---------------------------
-        // 目盛りPath生成
-        //---------------------------
-        // 1分毎に縦の目盛りPathを設定
-        for (int drawMinute = 0; drawMinute <= totalMinute; drawMinute++) {
-
-            //---------------------------------------
-            // 時間テキスト
-            //---------------------------------------
-            // 時間テキストを表示するx位置をリストに追加
-            addTextPosXList(xPos, drawMinute, false);
-
-            //---------------------------------------
-            // 目盛り
-            //---------------------------------------
-            // グラフ縦線の高さの範囲（上限・下限）を取得
-            float[] drawHeightRange
-                    = getDrawHeightRange(drawMinute, everyEdgeRange, every10Range, every5Range, every1Range);
-
-            // 縦線を設定
-            mGraghMemoryPath.moveTo(xPos, drawHeightRange[POSY_UPPER]);
-            mGraghMemoryPath.lineTo(xPos, drawHeightRange[POSY_LOWER]);
-
-            // １目盛り分横へ移動
-            xPos += MEMORY_UNIT_LENGTH;
-        }
-
-        //------------------------
-        // 終端の縦線を設定
-        //------------------------
-        // 秒
-        float second = mRecordTotalMinuteTime - totalMinute;
-        // 直前の目盛り位置を渡すため、進んだ１目盛り分を戻す
-        xPos -= MEMORY_UNIT_LENGTH;
-        // 終端目盛りの設定
-        setGraghMemoryEndPath(xPos, second, everyEdgeRange);
-
-        // Pathを閉じる
-        mGraghMemoryPath.close();
-    }
-
-
-    /*
-     * グラフ目盛りのPathを設定
-     *   設定対象：終端の縦線
-     */
-    private void setGraghMemoryEndPath(float justBeforePosX, float second, float[] everyEdgeRange) {
-
-        // 直前の目盛りのX座標に、秒分を加算
-        justBeforePosX += MEMORY_UNIT_LENGTH * second;
-
-        // 終端線を設定
-        mGraghMemoryPath.moveTo(justBeforePosX, everyEdgeRange[0]);
-        mGraghMemoryPath.lineTo(justBeforePosX, everyEdgeRange[1]);
-
-        // 終端の目盛り位置をリストに追加
-        addTextPosXList(justBeforePosX, 0, true);
-    }
-
-    /*
-     * グラフ目盛りの高さ範囲を取得
-     */
-    private float[] getDrawHeightRange(int minute, float[] everyEdgeRange, float[] every10Range, float[] every5Range, float[] every1Range) {
 
         //---------------------
         // 目盛り両端判定
         //---------------------
-        if (minute == 0) {
+        if ( minute == 0 ) {
             return everyEdgeRange;
         }
 
@@ -257,10 +266,10 @@ public class TimeGraphMemoryView extends View {
     /*
      * 時間テキスト描画X位置リストへのX位置追加
      */
-    private void addTextPosXList(float xPos, int minute, boolean isEnd) {
+    private void addTextPosXList(float xPos, int minute) {
 
         // 10刻み or 記録時刻の場合
-        if (((minute % 10) == 0) || isEnd) {
+        if ((minute % 10) == 0) {
             mGraghTextPosXList.add(xPos);
         }
     }
@@ -479,7 +488,7 @@ public class TimeGraphMemoryView extends View {
         Log.i("目盛り", "onLayout() w=" + (right - left));
 
         // 目盛りPathの設定
-        setGraghMemoryStartMiddlePath();
+        setGraghMemoryPath();
     }
 
 }
