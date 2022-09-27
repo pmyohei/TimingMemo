@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/toolbar_add_remove">
+        app:menu="@menu/toolbar_add_remove_edit">
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -32,7 +32,7 @@
         android:layout_marginTop="20dp"
         android:overScrollMode="never"
         app:layout_constraintTop_toBottomOf="@id/toolbar_recordDetails"
-        app:layout_constraintBottom_toTopOf="@id/rv_stampMemo"
+        app:layout_constraintBottom_toTopOf="@id/sp_scaleUnit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_weight="1">
@@ -47,7 +47,7 @@
             android:paddingBottom="12dp"
             android:background="@color/subColor">
 
-            <com.example.timingmemo.ui.history.TimeGraphMemoryView
+            <com.example.timingmemo.ui.history.RecordTimeGraphView
                 android:id="@+id/tgmv_graph"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
@@ -55,6 +55,29 @@
         </LinearLayout>
 
     </HorizontalScrollView>
+
+    <Spinner
+        android:id="@+id/sp_scaleUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:spinnerMode="dropdown"
+        android:backgroundTint="@color/subColor"
+        app:layout_constraintTop_toBottomOf="@+id/hsv_graph"
+        app:layout_constraintBottom_toTopOf="@+id/v_border"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!--    区切り線    -->
+    <View
+        android:id="@+id/v_border"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/subColor"
+        app:layout_constraintTop_toBottomOf="@+id/sp_scaleUnit"
+        app:layout_constraintBottom_toTopOf="@+id/rv_stampMemo"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!--  記録済みメモリスト  -->
     <androidx.recyclerview.widget.RecyclerView
@@ -64,7 +87,7 @@
         android:clipToPadding="false"
         android:paddingTop="40dp"
         android:paddingBottom="100dp"
-        app:layout_constraintTop_toBottomOf="@id/hsv_graph"
+        app:layout_constraintTop_toBottomOf="@id/v_border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

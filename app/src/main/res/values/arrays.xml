@@ -13,4 +13,10 @@
         <item>@color/memoColor9</item>
     </array>
 
+    <!--  記録時間グラフ目盛り間隔  -->
+    <array name="recordGraghScaleUnit">
+        <item>@string/gragh_scale_10min_unit</item>
+        <item>@string/gragh_scale_1min_unit</item>
+    </array>
+
 </resources>

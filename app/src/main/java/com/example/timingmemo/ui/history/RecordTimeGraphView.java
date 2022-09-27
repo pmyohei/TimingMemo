@@ -19,7 +19,7 @@ import java.util.Map;
 /*
  * 記録済みの目盛りグラフ
  */
-public class TimeGraphMemoryView extends View {
+public class RecordTimeGraphView extends View {
 
     //---------------------------
     // 定数
@@ -28,8 +28,8 @@ public class TimeGraphMemoryView extends View {
     private final int TIME_TEXT_SIZE = 40;
     private final int TIME_TEXT_CHAR_HEIGHT = TIME_TEXT_SIZE;       // テキストの縦幅は、指定サイズ
     private final int TIME_TEXT_CHAR_WIDTH = TIME_TEXT_SIZE / 2;    // テキストの横幅は、指定サイズの半分
-    private final float MEMORY_UNIT_LENGTH;                         // 目盛り１単位辺りの長さ
-    private final float MEMORY_START_POS_X;                         // 目盛り描画開始位置（X座標）
+    private final float SCALE_UNIT_LENGTH;                          // 目盛り１単位辺りの長さ
+    private final float SCALE_START_POS_X;                          // 目盛り描画開始位置（X座標）
     private final int TIME_TEXT_WIDTH;                              // 時間テキストの長さ
     private final int TIME_TEXT_HALF_WIDTH;                         // 時間テキストの半分の長さ = (文字数 / 2) * １文字当たりの横幅　）
     private final int TIME_TEXT_CHAR_NUM = 8;                       // 時間テキストフォーマット「hh:mm:ss」の文字数
@@ -38,41 +38,53 @@ public class TimeGraphMemoryView extends View {
     final int POSY_UPPER = 0;
     final int POSY_LOWER = 1;
 
+    // 目盛り単位
+    final int SCALE_UNIT_10_MIN = 0;   // 10min刻み：最小目盛り間隔=1min
+    final int SCALE_UNIT_1_MIN = 1;    // 1min(60s)刻み：最小目盛り間隔=6s
+
+    // 目盛り高さ種別
+    final int SCALE_HEIGHT_HIGH = 0;
+    final int SCALE_HEIGHT_MIDDLE = 1;
+    final int SCALE_HEIGHT_LOW = 2;
+
     //---------------------------
     // フィールド変数
     //----------------------------
-    private Paint mGraghMemoryPaint;
+    private Paint mGraghScalePaint;
     private Paint mGraghTextPaint;
-    private Path mGraghMemoryPath;
+    private Path mGraghScalePath;
     private String mRecordTime;
-    private float mRecordTotalMinuteTime;
+    private float mRecordTotalMinute;
+    private int mScaleUnit;
     private ArrayList<Float> mGraghTextPosXList;                    // 時間テキストx位置リスト
     private ArrayList<StampMemoTable> mStampMemos;
     private Map<Integer, Paint> mStampMemoPaintMap;                 // 記録メモPaintMap
 
-    public TimeGraphMemoryView(Context context) {
+
+
+    public RecordTimeGraphView(Context context) {
         this(context, null);
     }
 
-    public TimeGraphMemoryView(Context context, AttributeSet attrs) {
+    public RecordTimeGraphView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TimeGraphMemoryView(Context context, AttributeSet attrs, int defStyle) {
+    public RecordTimeGraphView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         // 目盛り１単位辺りの長さ
-        MEMORY_UNIT_LENGTH = getResources().getDimension(R.dimen.memory_1min_length);
+        SCALE_UNIT_LENGTH = getResources().getDimension(R.dimen.scale_1min_length);
         // 時間テキストの長さ
         TIME_TEXT_WIDTH = TIME_TEXT_CHAR_NUM * TIME_TEXT_CHAR_WIDTH;
         TIME_TEXT_HALF_WIDTH = TIME_TEXT_WIDTH / 2;
         // 目盛り描画スタート位置
-        MEMORY_START_POS_X = TIME_TEXT_HALF_WIDTH;
+        SCALE_START_POS_X = TIME_TEXT_HALF_WIDTH;
 
         // 時間テキストx位置リスト
         mGraghTextPosXList = new ArrayList<>();
         // Path（空）生成
-        mGraghMemoryPath = new Path();
+        mGraghScalePath = new Path();
         mStampMemoPaintMap = new HashMap<>();
 
         // Paint生成
@@ -88,13 +100,13 @@ public class TimeGraphMemoryView extends View {
         // 目盛り
         //-----------------------------
         // 目盛り色
-        int memoryColor = getResources().getColor(R.color.mainColor);
+        int scaleColor = getResources().getColor(R.color.mainColor);
 
         // Paint設定
-        mGraghMemoryPaint = new Paint();
-        mGraghMemoryPaint.setStyle(Paint.Style.STROKE);
-        mGraghMemoryPaint.setColor(memoryColor);
-        mGraghMemoryPaint.setStrokeWidth(4);
+        mGraghScalePaint = new Paint();
+        mGraghScalePaint.setStyle(Paint.Style.STROKE);
+        mGraghScalePaint.setColor(scaleColor);
+        mGraghScalePaint.setStrokeWidth(4);
 
         //-----------------------------
         // テキスト
@@ -115,13 +127,13 @@ public class TimeGraphMemoryView extends View {
      * グラフ目盛りのPathを設定
      *   設定対象：開始の縦線、単位毎の縦線
      */
-    public void setGraghMemoryPath() {
+    private void setGraghScalePath() {
 
         //----------------
         // Path設定可否判定
         //----------------
         // 記録時間が設定されるまで、目盛りは描画しない
-        if( mRecordTime == null ){
+        if (mRecordTime == null) {
             return;
         }
 
@@ -129,56 +141,58 @@ public class TimeGraphMemoryView extends View {
         // Path設定
         //----------------
         // Pathリセット
-        mGraghMemoryPath.reset();
+        mGraghScalePath.reset();
 
         // 目盛りPathの設定
-        setGraghMemoryStartMiddlePath( mGraghMemoryPath );
-        setGraghMemoryEndPath( mGraghMemoryPath );
+        setGraghScaleStartMiddlePath(mGraghScalePath);
+        setGraghScaleEndPath(mGraghScalePath);
 
         // Pathをclose
-        mGraghMemoryPath.close();
+        mGraghScalePath.close();
     }
 
     /*
      * グラフ目盛りのPathを設定
      *   設定対象：開始の縦線、単位毎の縦線
      */
-    public void setGraghMemoryStartMiddlePath( Path path ) {
+    private void setGraghScaleStartMiddlePath(Path path) {
 
         //---------------------------
         // 目盛りPath生成初期化
         //---------------------------
         // 目盛りx位置の初期位置（時間テキスト分を考慮）
-        float xPos = MEMORY_START_POS_X;
+        float xPos = SCALE_START_POS_X;
         // リストクリア
         mGraghTextPosXList.clear();
-        // 記録時間の分データ（小数点（秒情報）は切り捨て：例) 00:20:10 → 20 ）
-        int totalMinute = (int) Math.floor(mRecordTotalMinuteTime);
+        // 目盛り間隔に応じた記録時間を取得
+        int totalTime = getDrawScaleTotalTime();
+        // １目盛り進む時間を取得
+        int timeAdvance = get1ScaleTimeAdvance();
 
         //---------------------------
         // 目盛りPath生成
         //---------------------------
-        // 1分毎に縦の目盛りPathを設定
-        for (int drawMinute = 0; drawMinute <= totalMinute; drawMinute++) {
+        // 1単位毎に目盛りPathを設定
+        for (int drawTime = 0; drawTime <= totalTime; drawTime += timeAdvance) {
 
             //---------------------------------------
             // 時間テキストx位置
             //---------------------------------------
             // 時間テキストを表示するx位置をリストに追加
-            addTextPosXList(xPos, drawMinute);
+            addTextPosXList(xPos, drawTime);
 
             //---------------------------------------
             // 目盛り
             //---------------------------------------
             // グラフ縦線の高さの範囲（上限・下限）を取得
-            float[] drawHeightRange = getDrawHeightRange(drawMinute);
+            float[] drawHeightRange = getDrawHeightRange(drawTime);
 
             // 縦線を設定
             path.moveTo(xPos, drawHeightRange[POSY_UPPER]);
             path.lineTo(xPos, drawHeightRange[POSY_LOWER]);
 
             // １目盛り分横へ移動
-            xPos += MEMORY_UNIT_LENGTH;
+            xPos += SCALE_UNIT_LENGTH;
         }
     }
 
@@ -187,15 +201,15 @@ public class TimeGraphMemoryView extends View {
      * グラフ目盛りのPathを設定
      *   設定対象：終端の縦線
      */
-    private void setGraghMemoryEndPath(Path path) {
+    private void setGraghScaleEndPath(Path path) {
 
         // 目盛り端の判定を得るための値
         final int FOR_EDGE = 0;
 
         // 記録時間のx位置を算出
-        float posX = getPosXFromTime( mRecordTime );
+        float posX = getPosXFromTime(mRecordTime);
         // 記録時間のy位置を算出（両端のY位置を取得するために、指定時間として０を指定）
-        float[] yRange = getDrawHeightRange( FOR_EDGE );
+        float[] yRange = getDrawHeightRange(FOR_EDGE);
 
         //----------------------------------------------------------------------
         // 終端の目盛り位置をリストに追加（両端のY位置を取得するために、指定時間として０を指定）
@@ -209,10 +223,90 @@ public class TimeGraphMemoryView extends View {
         path.lineTo(posX, yRange[POSY_LOWER]);
     }
 
+
+    /*
+     * 目盛り描画の合計時間を取得
+     */
+    private int getDrawScaleTotalTime() {
+
+        if (mScaleUnit == SCALE_UNIT_10_MIN) {
+            //  １０分刻みの場合は、記録時間の分データ（小数点（秒情報）は切り捨て：例) 00:20:10 → 20 ）
+            return (int) Math.floor(mRecordTotalMinute);
+
+        } else {
+            //  １０分刻みの場合は、記録時間の秒データ
+            return (int) (mRecordTotalMinute * 60f);
+        }
+    }
+
+    /*
+     * 1目盛り進む時間を取得
+     */
+    private int get1ScaleTimeAdvance() {
+
+        if (mScaleUnit == SCALE_UNIT_10_MIN) {
+            // １０分刻みの場合は、最小目盛りは１分単位
+            return 1;
+        } else {
+            // １分刻みの場合は、最小目盛りは６秒単位
+            return 6;
+        }
+    }
+
+    /*
+     * 10目盛り進む時間を取得
+     */
+    private int get10ScaleTimeAdvance() {
+
+        if (mScaleUnit == SCALE_UNIT_10_MIN) {
+            // １０分刻みの場合は、目盛りは10分単位
+            return 10;
+        } else {
+            // １分刻みの場合は、最小目盛りは1分単位
+            return 1;
+        }
+    }
+
+    /*
+     * 指定時間における目盛りの長さの取得
+     */
+    private float getScaleLengthFromTime(float time) {
+
+        // 目盛り間隔に応じて目盛りの長さを計算
+        if (mScaleUnit == SCALE_UNIT_10_MIN) {
+            return getScale10UnitLength(time);
+        } else {
+            return getScale1UnitLength(time);
+        }
+    }
+
+    /*
+     * 指定時間における目盛りの長さの取得：目盛り１０分刻み
+     */
+    private float getScale10UnitLength(float minuteSecond) {
+
+        // 指定時間の目盛りの長さ
+        return (minuteSecond * SCALE_UNIT_LENGTH);
+    }
+
+    /*
+     * 指定時間における目盛りの長さの取得：目盛り１分刻み
+     */
+    private float getScale1UnitLength(float minuteSecond) {
+
+        // 分／秒を秒に変換
+        float second = minuteSecond * 60;
+        // 目盛り数
+        int scaleNum = (int) (second / 6);
+
+        // 指定時間の目盛りの長さ
+        return (scaleNum * SCALE_UNIT_LENGTH);
+    }
+
     /*
      * グラフ目盛りの高さ範囲を取得
      */
-    private float[] getDrawHeightRange(int minute) {
+    private float[] getDrawHeightRange(int time) {
 
         //---------------------------
         // 各目盛りのY座標
@@ -226,17 +320,17 @@ public class TimeGraphMemoryView extends View {
                 height
         };
         // 10単位毎
-        final float[] every10Range = new float[]{
+        final float[] everyHighRange = new float[]{
                 (height * 0.1f) + TIME_TEXT_CHAR_HEIGHT,
                 (height * 0.9f)
         };
         // 5単位毎
-        final float[] every5Range = new float[]{
+        final float[] everyMiddleRange = new float[]{
                 (height * 0.15f) + TIME_TEXT_CHAR_HEIGHT,
                 (height * 0.85f)
         };
         // 1単位毎
-        final float[] every1Range = new float[]{
+        final float[] everyLowRange = new float[]{
                 (height * 0.25f) + TIME_TEXT_CHAR_HEIGHT,
                 (height * 0.75f)
         };
@@ -244,32 +338,83 @@ public class TimeGraphMemoryView extends View {
         //---------------------
         // 目盛り両端判定
         //---------------------
-        if ( minute == 0 ) {
+        if (time == 0) {
             return everyEdgeRange;
         }
 
         //---------------------
-        // 目盛り両端の間判定
+        // 目盛りの高さ範囲の取得
         //---------------------
-        if ((minute % 10) == 0) {
-            // 10刻み
-            return every10Range;
-        } else if ((minute % 5) == 0) {
-            // 5刻み
-            return every5Range;
+        // 目盛りの高さ判定
+        int drawHeight;
+        if (mScaleUnit == SCALE_UNIT_10_MIN) {
+            drawHeight = getDrawHeight10min(time);
         } else {
-            // 1刻み
-            return every1Range;
+            drawHeight = getDrawHeight1min(time);
+        }
+
+        // 高さに応じた範囲を取得
+        if (drawHeight == SCALE_HEIGHT_HIGH) {
+            return everyHighRange;
+        } else if (drawHeight == SCALE_HEIGHT_MIDDLE) {
+            return everyMiddleRange;
+        } else {
+            return everyLowRange;
+        }
+    }
+
+    /*
+     * グラフ目盛りの高さ種別を取得：１０分刻み
+     */
+    private int getDrawHeight10min(int minute) {
+
+        if ((minute % 10) == 0) {
+            // 10min刻み
+            return SCALE_HEIGHT_HIGH;
+        } else if ((minute % 5) == 0) {
+            // 5min刻み
+            return SCALE_HEIGHT_MIDDLE;
+        } else {
+            // 1min刻み
+            return SCALE_HEIGHT_LOW;
+        }
+    }
+
+    /*
+     * グラフ目盛りの高さ種別を取得：１分刻み
+     */
+    private int getDrawHeight1min(int second) {
+
+        if ((second % 60) == 0) {
+            // 60s刻み
+            return SCALE_HEIGHT_HIGH;
+        } else if ((second % 30) == 0) {
+            // 30s刻み
+            return SCALE_HEIGHT_MIDDLE;
+        } else {
+            // 6s刻み
+            return SCALE_HEIGHT_LOW;
         }
     }
 
     /*
      * 時間テキスト描画X位置リストへのX位置追加
      */
-    private void addTextPosXList(float xPos, int minute) {
+    private void addTextPosXList(float xPos, int time) {
 
-        // 10刻み or 記録時刻の場合
-        if ((minute % 10) == 0) {
+        // 時間テキストの表示時間間隔
+        int timeTextJustTime;
+        if (mScaleUnit == SCALE_UNIT_10_MIN) {
+            // 10分刻みなら、10分毎
+            timeTextJustTime = 10;
+        } else {
+            // 1分刻みなら、60秒毎
+            timeTextJustTime = 60;
+        }
+
+        // 指定時間が時間テキストの表示時間の場合
+        if ((time % timeTextJustTime) == 0) {
+            // リストに位置を追加
             mGraghTextPosXList.add(xPos);
         }
     }
@@ -278,15 +423,35 @@ public class TimeGraphMemoryView extends View {
      * 記録時間からグラフの横幅を計算
      *   para1：hh:mm:ss
      */
-    public int calcGraphWidthFromRecordTime(String recordTime) {
-        // 記録時間を保持
-        mRecordTime = recordTime;
-        // 記録時間を分として取得
-        mRecordTotalMinuteTime = getMinuteFromTime( recordTime );
+    public int calcGraphWidthFromRecordTime() {
 
-        // 記録時間に対して必要な横幅
-        int timeGraghWidth = (int) ((mRecordTotalMinuteTime * MEMORY_UNIT_LENGTH) + TIME_TEXT_WIDTH);
+        //-----------------------
+        // 記録時間に応じた横幅の計算
+        //-----------------------
+        // 記録時間分の横幅を取得
+        float scaleLength = getScaleLengthFromTime( mRecordTotalMinute );
+
+        // 記録時間に対して必要な横幅を計算
+        int timeGraghWidth = (int) (scaleLength + TIME_TEXT_WIDTH);
         return timeGraghWidth;
+    }
+
+    /*
+     * 記録時間の設定
+     */
+    public void setRecordTime( String recordTime ) {
+        // 記録時間の設定
+        mRecordTime = recordTime;
+        // 記録時間を分として保持
+        mRecordTotalMinute = getMinuteFromTime( recordTime );
+    }
+
+    /*
+     * 記録時間の設定
+     */
+    public void setDefaultScaleUnit() {
+        // デフォルトメモリ単位の設定
+        mScaleUnit = getDefaultScaleUnit(mRecordTotalMinute);
     }
 
     /*
@@ -294,6 +459,32 @@ public class TimeGraphMemoryView extends View {
      */
     public void setStampMemoList(ArrayList<StampMemoTable> stampMemos) {
         mStampMemos = stampMemos;
+    }
+
+    /*
+     * 目盛り単位の設定
+     */
+    public void setScaleUnit(int unit ) {
+        mScaleUnit = unit;
+    }
+
+    /*
+     * 目盛り単位の取得
+     */
+    public int getScaleUnit() {
+        return mScaleUnit;
+    }
+
+    /*
+     * デフォルトの目盛り単位の取得
+     */
+    private int getDefaultScaleUnit(float minute ) {
+
+        if( minute <= 10 ){
+            return SCALE_UNIT_1_MIN;
+        } else {
+            return SCALE_UNIT_10_MIN;
+        }
     }
 
     /*
@@ -333,11 +524,14 @@ public class TimeGraphMemoryView extends View {
         }
 
         //----------------------------
-        // 時間テキストを１０単位毎に描画
+        // 時間テキストを大目盛り単位毎に描画
         //----------------------------
+        // 進める時間
+        int timeAdvance = get10ScaleTimeAdvance();
+
         // リスト最後の直前までの情報を描画
         last = mGraghTextPosXList.size() - 1;
-        for (int i = 0, minute = 0; i < last; i++, minute += 10) {
+        for (int i = 0, minute = 0; i < last; i++, minute += timeAdvance) {
             // 分を「hh:mm:ss」に変換
             String timeText = formatHHMMSS(minute);
             // 描画
@@ -439,9 +633,11 @@ public class TimeGraphMemoryView extends View {
     private float getPosXFromTime(String hhmmss) {
         // 時間に変換
         float minuteSecond = getMinuteFromTime( hhmmss );
+        // 時間の目盛りの長さを取得
+        float scaleLength = getScaleLengthFromTime( minuteSecond );
 
         // 座標：グラフ描画スタート位置 + 指定時間分の長さ
-        return MEMORY_START_POS_X + ( minuteSecond * MEMORY_UNIT_LENGTH );
+        return SCALE_START_POS_X + scaleLength;
     }
 
     /*
@@ -463,9 +659,9 @@ public class TimeGraphMemoryView extends View {
         Log.i("通過", "drawPath()");
 
         // Path情報があれば描画
-        if ( !mGraghMemoryPath.isEmpty() ) {
+        if ( !mGraghScalePath.isEmpty() ) {
             // 目盛り描画
-            canvas.drawPath(mGraghMemoryPath, mGraghMemoryPaint);
+            canvas.drawPath(mGraghScalePath, mGraghScalePaint);
             // 時間テキストの描画
             drawTimeText( canvas );
             // 記録メモを描画
@@ -488,7 +684,7 @@ public class TimeGraphMemoryView extends View {
         Log.i("目盛り", "onLayout() w=" + (right - left));
 
         // 目盛りPathの設定
-        setGraghMemoryPath();
+        setGraghScalePath();
     }
 
 }

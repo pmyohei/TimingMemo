@@ -15,18 +15,22 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.timingmemo.R;
 import com.example.timingmemo.db.StampMemoTable;
 import com.example.timingmemo.db.async.AsyncReadStampMemoCategory;
 import com.example.timingmemo.db.async.AsyncRemoveRecord;
+import com.example.timingmemo.db.async.AsyncUpdateRecord;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,24 +56,27 @@ public class RecordDetailsActivity extends AppCompatActivity {
     public static final int RESULT_RECORD_UPDATE = 201;
     public static final int RESULT_RECORD_REMOVE = 202;
     public static final String KEY_RECORD_PID = "record_pid";
+    public static final String KEY_RECORD_NAME = "record_name";
 
     //--------------------------------
     // フィールド変数
     //--------------------------------
     private ArrayList<StampMemoTable> mStampMemos;
     private ActivityResultLauncher<Intent> mStampMemoUpdateLancher;
+    private boolean misInitScaleUnitSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_details);
 
+        // 目盛り単位指定UIの初期コール
+        misInitScaleUnitSelected = false;
+
         // ツールバーの設定
         setToolbar();
-
         // 画面遷移ランチャーの生成
         setStampMemoUpdateLancher();
-
         // 記録メモをDBから取得
         getStampMemoOnDB();
     }
@@ -162,7 +169,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
                 // 取得した記録メモをリスト表示
                 setStampMemoList(sortedStampMemos);
                 // タイムグラフの描画
-                drawTimeGraph();
+                initTimeGraph();
             }
         });
         //非同期処理開始
@@ -170,41 +177,101 @@ public class RecordDetailsActivity extends AppCompatActivity {
     }
 
     /*
-     * タイムグラフの描画
+     * タイムグラフの初期化
      */
-    private void drawTimeGraph() {
+    private void initTimeGraph() {
 
         // 親ビューのレイアウトが確定したタイミングで描画処理を行う
         HorizontalScrollView hsv_graph = findViewById(R.id.hsv_graph);
         hsv_graph.post(() -> {
 
-            TimeGraphMemoryView tgmv_graph = findViewById(R.id.tgmv_graph);
+            //--------------------
+            // グラフ初期設定
+            //--------------------
+            // 記録時間
+            Intent intent = getIntent();
+            String recordingTime = intent.getStringExtra(HistoryFragment.KEY_TARGET_RECORD_RECORDING_TIME);
 
-            // グラフの横幅を設定
-            setGraphLayoutWidth( tgmv_graph, hsv_graph );
-            // グラフメモリ設定
-            tgmv_graph.setStampMemoList( mStampMemos );
+            // 記録時間／目盛り単位デフォルト値の設定
+            RecordTimeGraphView tgmv_graph = findViewById(R.id.tgmv_graph);
+            tgmv_graph.setRecordTime( recordingTime );
+            tgmv_graph.setDefaultScaleUnit();
+            // グラフの最大横幅
+            setGraphLayoutWidth(tgmv_graph, hsv_graph);
+            // 記録メモの設定
+            tgmv_graph.setStampMemoList(mStampMemos);
             // 描画
             tgmv_graph.invalidate();
+
+            //-----------------------
+            // グラフ目盛り間隔UIの設定
+            //-----------------------
+            setGraghScaleUnitUI();
+        });
+    }
+
+    /*
+     * グラフ目盛り単位UIの設定
+     */
+    private void setGraghScaleUnitUI() {
+
+        RecordTimeGraphView tgmv_graph = findViewById(R.id.tgmv_graph);
+
+        //-----------------------
+        // グラフ目盛り間隔UIの設定
+        //-----------------------
+        // Spinnerで選択肢を提示
+        Spinner sp_scaleUnit = findViewById(R.id.sp_scaleUnit);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.recordGraghScaleUnit, R.layout.spinner_scale_unit_item);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_scale_unit_item);
+        sp_scaleUnit.setAdapter(adapter);
+
+        // 目盛りデフォルト単位を初期設定値とする
+        int scaleUnit = tgmv_graph.getScaleUnit();
+        sp_scaleUnit.setSelection( scaleUnit );
+
+        // 選択リスナー
+        sp_scaleUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                // 初回コールは何もしない
+                if( !misInitScaleUnitSelected ){
+                    misInitScaleUnitSelected = true;
+                    return;
+                }
+
+                //---------------------------
+                // 記録時間グラフの目盛り単位を変更
+                //---------------------------
+                HorizontalScrollView hsv_graph = findViewById(R.id.hsv_graph);
+
+                // 記録時間グラフ変更
+                tgmv_graph.setScaleUnit(i);
+                setGraphLayoutWidth(tgmv_graph, hsv_graph);
+                tgmv_graph.invalidate();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
         });
     }
 
     /*
      * タイムグラフの横サイズを設定
      */
-    private void setGraphLayoutWidth( TimeGraphMemoryView tgmv_graph, ViewGroup parentView ) {
-        // 記録時間
-        Intent intent = getIntent();
-        String recordingTime = intent.getStringExtra(HistoryFragment.KEY_TARGET_RECORD_RECORDING_TIME);
+    private void setGraphLayoutWidth(RecordTimeGraphView tgmv_graph, ViewGroup parentView) {
 
         // グラフの横幅を計算
-        int graghWidth = tgmv_graph.calcGraphWidthFromRecordTime(recordingTime);
+        int graghWidth = tgmv_graph.calcGraphWidthFromRecordTime();
 
         // 親ビューのサイズと比較し、大きい方を設定サイズとする（最低でも画面横いっぱいは描画させるため）
         int parentWidth = parentView.getWidth();
         int setWidth = Math.max(parentWidth, graghWidth);
 
-        Log.i("目盛り", "setGraphLayoutWidth setWidth" + setWidth);
+//        Log.i("目盛り", "setGraphLayoutWidth setWidth" + setWidth);
 
         // レイアウトの横幅を変更
         tgmv_graph.getLayoutParams().width = setWidth;
@@ -267,59 +334,59 @@ public class RecordDetailsActivity extends AppCompatActivity {
         intent.putExtra(KEY_TARGET_RECORD_PID, recordPid);
 
         // 画面遷移開始
-        mStampMemoUpdateLancher.launch( intent );
+        mStampMemoUpdateLancher.launch(intent);
     }
 
     /*
      * 記録メモリスト：新規追加
      */
-    private void insertStampMemoList( Intent intent, StampMemoListAdapter adapter ) {
+    private void insertStampMemoList(Intent intent, StampMemoListAdapter adapter) {
 
         // 新規追加された記録メモ情報を取得
-        StampMemoTable stampMemo = getUpdatedStampMemoFromDist( intent );
+        StampMemoTable stampMemo = getUpdatedStampMemoFromDist(intent);
 
         // 「打刻時の経過時間」から、ソート済みリストの適切な位置に挿入する
-        int insertPosition = getInsertPosition( stampMemo.getStampingPlayTime() );
-        mStampMemos.add( insertPosition, stampMemo );
+        int insertPosition = getInsertPosition(stampMemo.getStampingPlayTime());
+        mStampMemos.add(insertPosition, stampMemo);
 
         // アダプタに通知
-        adapter.notifyItemInserted( insertPosition );
+        adapter.notifyItemInserted(insertPosition);
     }
 
     /*
      * 記録メモリスト：更新
      */
-    private void updateStampMemoList( Intent intent, StampMemoListAdapter adapter ) {
+    private void updateStampMemoList(Intent intent, StampMemoListAdapter adapter) {
 
         //----------------------------
         // リスト更新
         //----------------------------
         // 更新された記録メモ情報を取得
-        StampMemoTable stampMemo = getUpdatedStampMemoFromDist( intent );
+        StampMemoTable stampMemo = getUpdatedStampMemoFromDist(intent);
         int stampMemoPid = stampMemo.getPid();
 
         // リスト上の位置を取得し、更新
-        int position = getStampMemoListPos( stampMemoPid );
-        mStampMemos.set( position, stampMemo );
+        int position = getStampMemoListPos(stampMemoPid);
+        mStampMemos.set(position, stampMemo);
 
         //----------------------------
         // リストソート処理
         //----------------------------
-        boolean isChangedPlayTime = intent.getBooleanExtra( StampMemoUpdateActivity.KEY_CHANGED_PLAYTIME, false );
-        if( !isChangedPlayTime ){
+        boolean isChangedPlayTime = intent.getBooleanExtra(StampMemoUpdateActivity.KEY_CHANGED_PLAYTIME, false);
+        if (!isChangedPlayTime) {
             // 記録時間更新なしなら、ソートなし
             // アダプタに通知
-            adapter.notifyItemChanged( position );
+            adapter.notifyItemChanged(position);
             return;
         }
 
         // リストをソートし、ソート後の位置を取得
-        Collections.sort( mStampMemos );
-        int sortedPosition = getStampMemoListPos( stampMemoPid );
-        if( position == sortedPosition ){
+        Collections.sort(mStampMemos);
+        int sortedPosition = getStampMemoListPos(stampMemoPid);
+        if (position == sortedPosition) {
             // 位置が変わらなければ、ソートなし
             // アダプタに通知
-            adapter.notifyItemChanged( position );
+            adapter.notifyItemChanged(position);
             return;
         }
 
@@ -327,51 +394,51 @@ public class RecordDetailsActivity extends AppCompatActivity {
         // アダプタに通知
         //-----------------------------------
         // 通知範囲の取得
-        int startIndex = Math.min( position, sortedPosition );
-        int endIndex = Math.max( position, sortedPosition );
-        adapter.notifyItemRangeChanged( startIndex, endIndex );
+        int startIndex = Math.min(position, sortedPosition);
+        int endIndex = Math.max(position, sortedPosition);
+        adapter.notifyItemRangeChanged(startIndex, endIndex);
     }
 
     /*
      * 記録メモリスト：削除
      */
-    private void removeStampMemoList( Intent intent, StampMemoListAdapter adapter ) {
+    private void removeStampMemoList(Intent intent, StampMemoListAdapter adapter) {
         // リストから削除
-        int pid = intent.getIntExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_PID, -1 );
-        int position = getStampMemoListPos( pid );
-        mStampMemos.remove( position );
+        int pid = intent.getIntExtra(StampMemoUpdateActivity.KEY_STAMP_MEMO_PID, -1);
+        int position = getStampMemoListPos(pid);
+        mStampMemos.remove(position);
 
         // アダプタに通知
-        adapter.notifyItemRemoved( position );
+        adapter.notifyItemRemoved(position);
     }
 
     /*
      * 画面遷移先からの「新規追加 or 更新された記録メモ情報」を取得
      */
-    private StampMemoTable getUpdatedStampMemoFromDist(Intent intent ) {
+    private StampMemoTable getUpdatedStampMemoFromDist(Intent intent) {
 
         //-------------------------------
         // 画面遷移先からの記録メモ情報を取得
         //-------------------------------
-        int pid = intent.getIntExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_PID, -1 );
-        int recordPid = intent.getIntExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_RECORD_PID, -1 );
-        String memoName = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_NAME );
-        int color = intent.getIntExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_COLOR, 0x00000000 );
-        String delayTime = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_DELAYTIME );
-        String playTime = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_PLAYTIME);
-        String systemTime = intent.getStringExtra( StampMemoUpdateActivity.KEY_STAMP_MEMO_SYSTEMTIME );
+        int pid = intent.getIntExtra(StampMemoUpdateActivity.KEY_STAMP_MEMO_PID, -1);
+        int recordPid = intent.getIntExtra(StampMemoUpdateActivity.KEY_STAMP_MEMO_RECORD_PID, -1);
+        String memoName = intent.getStringExtra(StampMemoUpdateActivity.KEY_STAMP_MEMO_NAME);
+        int color = intent.getIntExtra(StampMemoUpdateActivity.KEY_STAMP_MEMO_COLOR, 0x00000000);
+        String delayTime = intent.getStringExtra(StampMemoUpdateActivity.KEY_STAMP_MEMO_DELAYTIME);
+        String playTime = intent.getStringExtra(StampMemoUpdateActivity.KEY_STAMP_MEMO_PLAYTIME);
+        String systemTime = intent.getStringExtra(StampMemoUpdateActivity.KEY_STAMP_MEMO_SYSTEMTIME);
 
         //-------------------------------
         // 記録メモ情報を作成
         //-------------------------------
         StampMemoTable stampMemo = new StampMemoTable();
-        stampMemo.setPid( pid );
-        stampMemo.setRecordPid( recordPid );
-        stampMemo.setMemoName( memoName );
-        stampMemo.setMemoColor( color );
-        stampMemo.setDelayTime( delayTime );
-        stampMemo.setStampingPlayTime( playTime );
-        stampMemo.setStampingSystemTime( systemTime );
+        stampMemo.setPid(pid);
+        stampMemo.setRecordPid(recordPid);
+        stampMemo.setMemoName(memoName);
+        stampMemo.setMemoColor(color);
+        stampMemo.setDelayTime(delayTime);
+        stampMemo.setStampingPlayTime(playTime);
+        stampMemo.setStampingSystemTime(systemTime);
 
         return stampMemo;
     }
@@ -379,13 +446,13 @@ public class RecordDetailsActivity extends AppCompatActivity {
     /*
      * 記録メモリストの位置取得
      */
-    private int getStampMemoListPos( int targetPid ) {
+    private int getStampMemoListPos(int targetPid) {
 
         int position = 0;
-        for( StampMemoTable stampMemo: mStampMemos ){
+        for (StampMemoTable stampMemo : mStampMemos) {
 
             int searchPid = stampMemo.getPid();
-            if( searchPid == targetPid ){
+            if (searchPid == targetPid) {
                 return position;
             }
             position++;
@@ -401,16 +468,16 @@ public class RecordDetailsActivity extends AppCompatActivity {
      *   [1]：「00:30:00」
      *   → この場合、「1」を返す
      */
-    private int getInsertPosition( String targetPlayTime ) {
+    private int getInsertPosition(String targetPlayTime) {
 
         //-------------------------
         // リスト内挿入位置検索
         //-------------------------
         int position = 0;
-        for( StampMemoTable stampMemo: mStampMemos ){
+        for (StampMemoTable stampMemo : mStampMemos) {
             // リスト内の時間が、対象の時間よりも後の場合
             String searchPlayTime = stampMemo.getStampingPlayTime();
-            if( searchPlayTime.compareTo( targetPlayTime ) > 0){
+            if (searchPlayTime.compareTo(targetPlayTime) > 0) {
                 return position;
             }
             position++;
@@ -432,21 +499,21 @@ public class RecordDetailsActivity extends AppCompatActivity {
         String title = getString(R.string.dialog_title_confirm_remove);
         String content = getString(R.string.dialog_content_record_confirm_remove);
         String positive = getString(R.string.dialog_positive_confirm_remove);
-        String negative = getString( android.R.string.cancel );
+        String negative = getString(android.R.string.cancel);
 
         // 確認ダイアログを表示
         AlertDialog dialog = new AlertDialog.Builder(this)
-            .setTitle( title )
-            .setMessage( content )
-            .setPositiveButton( positive, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // 削除処理へ
-                    saveRemoveRecord();
-                }
-            })
-            .setNegativeButton(negative, null)
-            .show();
+                .setTitle(title)
+                .setMessage(content)
+                .setPositiveButton(positive, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 削除処理へ
+                        saveRemoveRecord();
+                    }
+                })
+                .setNegativeButton(negative, null)
+                .show();
     }
 
     /*
@@ -467,7 +534,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
             @Override
             public void onFinish(int pid) {
                 // 画面遷移元へのデータを設定し、終了
-                setFinishIntent( pid );
+                setFinishIntent( RESULT_RECORD_REMOVE, pid, null );
                 finish();
             }
         });
@@ -476,13 +543,72 @@ public class RecordDetailsActivity extends AppCompatActivity {
     }
 
     /*
+     * 記録名編集ダイアログの表示
+     */
+    private void showRecordEditDialog() {
+
+        // 記録名
+        Intent intent = getIntent();
+        String recordName = intent.getStringExtra(HistoryFragment.KEY_TARGET_RECORD_NAME);
+
+        // 時間設定Dialogを開く
+        RecordNameEditDialog dialog = RecordNameEditDialog.newInstance( recordName );
+        dialog.setOnPositiveClickListener(new RecordNameEditDialog.PositiveClickListener() {
+                @Override
+                public void onPositiveClick(String recordName) {
+                    // 記録名に反映
+                    Toolbar toolbar = findViewById(R.id.toolbar_recordDetails);
+                    toolbar.setTitle(recordName);
+
+                    // 保存処理
+                    saveUpdateRecord( recordName );
+                }
+            }
+        );
+        dialog.show( getSupportFragmentManager(), "SHOW" );
+    }
+
+    /*
+     * ＤＢ保存処理 - 記録更新
+     */
+    private void saveUpdateRecord(String recordName) {
+
+        Intent intent = getIntent();
+        int recordPid = intent.getIntExtra(HistoryFragment.KEY_TARGET_RECORD_PID, -1);
+        if (recordPid == -1) {
+            // ガード
+            Toast.makeText(this, R.string.toast_error, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // DB更新処理
+        AsyncUpdateRecord db = new AsyncUpdateRecord(this, recordPid, recordName, new AsyncUpdateRecord.OnFinishListener() {
+            @Override
+            public void onFinish(int pid, String updatedRecordName) {
+                // 画面遷移元へのデータを設定し、終了
+                setFinishIntent( RESULT_RECORD_UPDATE, pid, updatedRecordName);
+            }
+        });
+        // 非同期処理開始
+        db.execute();
+    }
+
+
+    /*
      * 画面終了のindentデータを設定
      */
-    private void setFinishIntent( int pid ) {
-        // resultコード設定
+    private void setFinishIntent( int resultCode, int pid, String recordName ) {
+
         Intent intent = getIntent();
         intent.putExtra(KEY_RECORD_PID, pid);
-        setResult(RESULT_RECORD_REMOVE, intent);
+
+        // 更新の場合
+        if( resultCode == RESULT_RECORD_UPDATE ){
+            intent.putExtra(KEY_RECORD_NAME, recordName);
+        }
+
+        // resultコード設定
+        setResult(resultCode, intent);
     }
 
     /*
@@ -492,7 +618,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // メニューを割り当て
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_add_remove, menu);
+        inflater.inflate(R.menu.toolbar_add_remove_edit, menu);
 
         return true;
     }
@@ -514,12 +640,19 @@ public class RecordDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+            // 記録メモの追加
             case R.id.action_add:
                 transitionStampMemoUpdate( null );
                 return true;
 
+            // 記録削除
             case R.id.action_remove:
                 confirmRemove();
+                return true;
+
+            // 記録名の編集
+            case R.id.action_edit:
+                showRecordEditDialog();
                 return true;
 
             default:

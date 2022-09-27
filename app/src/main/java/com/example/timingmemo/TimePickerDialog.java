@@ -33,23 +33,12 @@ public class TimePickerDialog extends DialogFragment {
         Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.dialog_time_picker);
 
-        // タイトル
-        setTitle( dialog );
         // Time Pickerの設定
         setTimePicker( dialog );
         // ユーザーOKイメージ押下設定
         setPositiveImage( dialog );
 
         return dialog;
-    }
-
-    /*
-     * タイトル設定
-     */
-    private void setTitle( Dialog dialog ) {
-        String title = getResources().getString(R.string.dialog_title_update_playtime);
-        TextView tv_title = dialog.findViewById(R.id.tv_timePickerDialogTitle);
-        tv_title.setText( title );
     }
 
     /*

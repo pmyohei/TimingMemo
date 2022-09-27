@@ -32,13 +32,22 @@
     </style>
 
     <!--  EditText スタイル  -->
-    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+    <style name="EditTextSubColorStyle" parent="Widget.AppCompat.EditText">
         <item name="colorControlNormal">@color/subColor</item>
         <item name="colorControlActivated">@color/subColor</item>
         <item name="android:textCursorDrawable">@color/subColor</item>
         <item name="android:textColor">@color/subColor</item>
         <item name="android:textColorHint">@color/subLittleColor</item>
-        <item name="android:textColorHighlight">@color/subColor</item>
+        <item name="android:textColorHighlight">@color/timeColor</item>
+    </style>
+
+    <style name="EditTextMainColorStyle" parent="Widget.AppCompat.EditText">
+        <item name="colorControlNormal">@color/mainColor</item>
+        <item name="colorControlActivated">@color/mainColor</item>
+        <item name="android:textCursorDrawable">@color/mainColor</item>
+        <item name="android:textColor">@color/mainColor</item>
+        <item name="android:textColorHint">@color/mainLittleColor</item>
+        <item name="android:textColorHighlight">@color/timeColor</item>
     </style>
 
     <!--  ツールバー スタイル  -->

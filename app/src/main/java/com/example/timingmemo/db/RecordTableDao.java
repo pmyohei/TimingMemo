@@ -13,6 +13,12 @@ public interface RecordTableDao {
     @Query("SELECT * FROM recordTable")
     List<RecordTable> getAll();
 
+    @Query("SELECT * FROM recordTable WHERE pid=(:pid) ")
+    RecordTable get( int pid );
+
+    @Query("UPDATE recordTable SET name=(:recordName) WHERE pid=(:pid) ")
+    void updateRecordName( int pid, String recordName );
+
     @Insert
     long insert(RecordTable recordTable);
 

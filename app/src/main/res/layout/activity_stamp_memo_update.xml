@@ -55,8 +55,8 @@
 
     <!--  メモ名  -->
     <EditText
-        style="@style/EditTextStyle"
-        app:theme="@style/EditTextStyle"
+        style="@style/EditTextSubColorStyle"
+        app:theme="@style/EditTextSubColorStyle"
         android:id="@+id/et_memoName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

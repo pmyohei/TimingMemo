@@ -2,8 +2,10 @@
 <resources>
 <!--    <color name="mainColor">#74b49b</color>-->
     <color name="mainColor">#55ABA8</color>
+    <color name="mainLittleColor">#8055ABA8</color>
 <!--    <color name="subColor">#f4f9f4</color>-->
     <color name="subColor">#F9FFD9</color>
+    <color name="subMiddleColor">#CCF9FFD9</color>
     <color name="subLittleColor">#80F9FFD9</color>
     <color name="timeColor">#FD5E53</color>
     <color name="delayColor">#17223B</color>

@@ -15,4 +15,10 @@
         android:title="@string/menu_remove"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/action_edit"
+        android:icon="@drawable/baseline_edit_24"
+        android:title="@string/menu_edit"
+        app:showAsAction="always"/>
+
 </menu>

@@ -122,10 +122,8 @@ public class AsyncTmpCreateDataMemo extends AsyncShowProgress {
             RecordTableDao recordTableDao = mDB.daoRecordTable();
             StampMemoTableDao stampMemoTableDao = mDB.daoStampMemoTable();
 
-/*
             recordTableDao.deleteAll();
             stampMemoTableDao.deleteAll();
-*/
 
             // システム時間の取得
             @SuppressLint("SimpleDateFormat") final DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -181,6 +179,51 @@ public class AsyncTmpCreateDataMemo extends AsyncShowProgress {
             recordTable2.setRecordingTime( "01:12:40" );
 
             recordTableDao.insert( recordTable2 );
+
+            // レコード保存
+            RecordTable recordTable3 = new RecordTable();
+            recordTable3.setName( "Record short" );
+            recordTable3.setStartRecordingTime( startTime );
+            recordTable3.setEndRecordingTime( endTime );
+            recordTable3.setRecordingTime( "00:01:30" );
+
+            recordTableDao.insert( recordTable3 );
+
+            // レコード保存
+            RecordTable recordTable4 = new RecordTable();
+            recordTable4.setName( "Record short2" );
+            recordTable4.setStartRecordingTime( startTime );
+            recordTable4.setEndRecordingTime( endTime );
+            recordTable4.setRecordingTime( "00:04:59" );
+
+            recordTableDao.insert( recordTable4 );
+
+            // レコード保存
+            RecordTable recordTable5 = new RecordTable();
+            recordTable5.setName( "Record short3" );
+            recordTable5.setStartRecordingTime( startTime );
+            recordTable5.setEndRecordingTime( endTime );
+            recordTable5.setRecordingTime( "00:09:59" );
+
+            recordTableDao.insert( recordTable5 );
+
+            // レコード保存
+            RecordTable recordTable6 = new RecordTable();
+            recordTable6.setName( "Record short3" );
+            recordTable6.setStartRecordingTime( startTime );
+            recordTable6.setEndRecordingTime( endTime );
+            recordTable6.setRecordingTime( "00:00:30" );
+
+            recordTableDao.insert( recordTable6 );
+
+            // レコード保存
+            RecordTable recordTable7 = new RecordTable();
+            recordTable7.setName( "Record short3" );
+            recordTable7.setStartRecordingTime( startTime );
+            recordTable7.setEndRecordingTime( endTime );
+            recordTable7.setRecordingTime( "00:07:30" );
+
+            recordTableDao.insert( recordTable7 );
         }
     }
 

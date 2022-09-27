@@ -118,12 +118,17 @@ public class HistoryFragment extends Fragment {
                         // 操作に応じた通知処理
                         switch (resultCode) {
                             case RecordDetailsActivity.RESULT_RECORD_UPDATE:
+                                // リストを更新して通知
+                                String recordName = intent.getStringExtra(RecordDetailsActivity.KEY_RECORD_NAME);
+                                mRecords.get( position ).setName( recordName );
+
                                 adapter.notifyItemChanged(position);
                                 break;
 
                             case RecordDetailsActivity.RESULT_RECORD_REMOVE:
                                 // リストから記録を削除して通知
                                 mRecords.remove( position );
+
                                 adapter.notifyItemRemoved(position);
                                 break;
                         }

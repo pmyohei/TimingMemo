@@ -8,7 +8,7 @@
     <dimen name="user_selectable_color_size">40dp</dimen>
 
     <!--  記録時間グラフ1メモリ（1min）当たりの横幅 -->
-    <dimen name="memory_1min_length">20dp</dimen>
+    <dimen name="scale_1min_length">20dp</dimen>
 
     <!--  record画面の記録時間コントールボタンサイズ -->
     <dimen name="record_control_icon_size">40dp</dimen>

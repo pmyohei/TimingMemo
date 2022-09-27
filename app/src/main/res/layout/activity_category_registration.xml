@@ -27,13 +27,13 @@
     </androidx.appcompat.widget.Toolbar>
 
     <EditText
-        style="@style/EditTextStyle"
+        style="@style/EditTextSubColorStyle"
         android:id="@+id/et_categoryName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:hint="@string/hint_category_name"
-        app:theme="@style/EditTextStyle"
+        app:theme="@style/EditTextSubColorStyle"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_categoryList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

@@ -63,14 +63,17 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        style="@style/EditTextStyle"
-        app:theme="@style/EditTextStyle"
+        style="@style/EditTextSubColorStyle"
+        app:theme="@style/EditTextSubColorStyle"
         android:id="@+id/et_memoName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
         android:hint="@string/hint_memo_name"
+        android:inputType="text"
+        android:scrollbars="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/sp_category"
         app:layout_constraintStart_toEndOf="@+id/v_selectedColor"
         app:layout_constraintEnd_toEndOf="parent"/>

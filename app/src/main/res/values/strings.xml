@@ -30,6 +30,7 @@
     <string name="dialog_title_confirm_rewrire">書き変え確認</string>
     <string name="dialog_title_confirm_remove">削除確認</string>
     <string name="dialog_title_update_playtime">記録時間の変更</string>
+    <string name="dialog_title_update_record_name">記録名の変更</string>
     <string name="dialog_content_memo_confirm_rewrire">記録したメモを書き換えますか？</string>
     <string name="dialog_content_memo_confirm_remove">メモを削除しますか？</string>
     <string name="dialog_content_category_confirm_remove">カテゴリを削除しますか？\nこのカテゴリ内のメモは削除されず、「カテゴリなし」になります。</string>
@@ -39,11 +40,15 @@
 
     <!--  Record  -->
     <string name="clear_delay_time">00:00</string>
+    <string name="hint_record_name">Record Name</string>
+    <string name="gragh_scale_10min_unit">10min</string>
+    <string name="gragh_scale_1min_unit">1min</string>
 
     <!--  menu  -->
     <string name="menu_new">new</string>
     <string name="menu_save">save</string>
     <string name="menu_remove">remove</string>
+    <string name="menu_edit">edit</string>
 
     <!--  toast  -->
     <string name="toast_error">エラーが発生しました。本画面を閉じてください。</string>
