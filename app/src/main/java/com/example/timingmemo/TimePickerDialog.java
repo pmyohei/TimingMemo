@@ -57,9 +57,9 @@ public class TimePickerDialog extends DialogFragment {
      */
     private void setTimePicker( Dialog dialog ) {
 
-        NumberPicker np_hh1 = (NumberPicker) dialog.findViewById(R.id.np_hh1);
-        NumberPicker np_mm1 = (NumberPicker) dialog.findViewById(R.id.np_mm1);
-        NumberPicker np_ss1 = (NumberPicker) dialog.findViewById(R.id.np_ss1);
+        NumberPicker np_hh1 = dialog.findViewById(R.id.np_hh1);
+        NumberPicker np_mm1 = dialog.findViewById(R.id.np_mm1);
+        NumberPicker np_ss1 = dialog.findViewById(R.id.np_ss1);
 
         //----------------------------------
         // NumberPicker初期設定
@@ -67,9 +67,9 @@ public class TimePickerDialog extends DialogFragment {
         // 時間の範囲を設定
         np_hh1.setMaxValue(99);
         np_hh1.setMinValue(0);
-        np_mm1.setMaxValue(60);
+        np_mm1.setMaxValue(59);
         np_mm1.setMinValue(0);
-        np_ss1.setMaxValue(60);
+        np_ss1.setMaxValue(59);
         np_ss1.setMinValue(0);
 
         // 数値フォーマット設定

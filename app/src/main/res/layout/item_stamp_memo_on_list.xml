@@ -13,10 +13,10 @@
         android:id="@+id/v_memoColor"
         android:layout_width="@dimen/memo_color_size"
         android:layout_height="@dimen/memo_color_size"
-        android:layout_marginTop="12dp"
         android:layout_marginStart="12dp"
         android:background="@color/memoColor2"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView

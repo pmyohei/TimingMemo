@@ -323,7 +323,10 @@ public class RecordDetailsActivity extends AppCompatActivity {
             return;
         }
 
-        // 通知範囲を取得して、アダプタに通知
+        //-----------------------------------
+        // アダプタに通知
+        //-----------------------------------
+        // 通知範囲の取得
         int startIndex = Math.min( position, sortedPosition );
         int endIndex = Math.max( position, sortedPosition );
         adapter.notifyItemRangeChanged( startIndex, endIndex );
@@ -400,6 +403,9 @@ public class RecordDetailsActivity extends AppCompatActivity {
      */
     private int getInsertPosition( String targetPlayTime ) {
 
+        //-------------------------
+        // リスト内挿入位置検索
+        //-------------------------
         int position = 0;
         for( StampMemoTable stampMemo: mStampMemos ){
             // リスト内の時間が、対象の時間よりも後の場合
@@ -410,7 +416,10 @@ public class RecordDetailsActivity extends AppCompatActivity {
             position++;
         }
 
-        return -1;
+        //---------------------------
+        // 見つからなければ、終端位置を返す
+        //---------------------------
+        return position;
     }
 
 

@@ -23,6 +23,7 @@ public class AsyncUpdateStampMemo extends AsyncShowProgress {
     private final AppDatabase mDB;
     private final Context mContext;
     private final StampMemoTable mStampMemo;
+    private StampMemoTable mUpdatedStampMemo;
     private boolean mIsChangedPlayTime;
     private final OnFinishListener mOnFinishListener;
 
@@ -111,6 +112,9 @@ public class AsyncUpdateStampMemo extends AsyncShowProgress {
 
             // テーブル更新
             dao.update( targetStampMemo );
+
+            // 更新後情報として保持
+            mUpdatedStampMemo = targetStampMemo;
         }
     }
 
@@ -139,7 +143,7 @@ public class AsyncUpdateStampMemo extends AsyncShowProgress {
     void onPostExecute() {
         super.onPostExecute();
 
-        mOnFinishListener.onFinish( mStampMemo, mIsChangedPlayTime );
+        mOnFinishListener.onFinish( mUpdatedStampMemo, mIsChangedPlayTime );
     }
 
     /*
