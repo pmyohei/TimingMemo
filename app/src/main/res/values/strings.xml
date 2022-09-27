@@ -49,5 +49,6 @@
     <string name="toast_error">エラーが発生しました。本画面を閉じてください。</string>
     <string name="toast_memo_name_empty">メモ名未入力</string>
     <string name="toast_category_name_empty">カテゴリ名未入力</string>
+    <string name="toast_complete_update">更新しました</string>
 
 </resources>

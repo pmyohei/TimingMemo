@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -420,12 +421,14 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
         //--------------------------
         // DB保存処理
         //--------------------------
+        Context context = this;
         AsyncUpdateStampMemo db = new AsyncUpdateStampMemo(this, stampMemo, new AsyncUpdateStampMemo.OnFinishListener() {
             @Override
             public void onFinish(StampMemoTable stampMemo, boolean isChangedPlayTime) {
-                // 画面遷移元へのデータを設定し、終了
+                // 画面遷移元へのデータを設定
                 setFinishIntent( RESULT_STAMP_MEMO_UPDATE, stampMemo, -1, isChangedPlayTime );
-                finish();
+                // 更新完了のメッセージを表示
+                Toast.makeText(context, R.string.toast_complete_update, Toast.LENGTH_SHORT).show();
             }
         });
         // 非同期処理開始
