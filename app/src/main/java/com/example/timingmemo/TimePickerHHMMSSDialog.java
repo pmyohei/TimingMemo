@@ -5,33 +5,31 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
-import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 
 import com.example.timingmemo.common.AppCommonData;
 
-public class TimePickerDialog extends DialogFragment {
+public class TimePickerHHMMSSDialog extends DialogFragment {
 
     // 時分秒文字列（"hh:mm:ss"）
-    public static String mhhmmssStr;
+    public String mhhmmssStr;
     // クリックリスナー
     private PositiveClickListener mPositiveClickListener;
 
     //空のコンストラクタ（DialogFragmentのお約束）
-    public TimePickerDialog() {
+    public TimePickerHHMMSSDialog() {
     }
 
     //インスタンス作成
-    public static TimePickerDialog newInstance( String hhmmssStr ) {
-        mhhmmssStr = hhmmssStr;
-        return new TimePickerDialog();
+    public static TimePickerHHMMSSDialog newInstance() {
+        return new TimePickerHHMMSSDialog();
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.dialog_time_picker);
+        dialog.setContentView(R.layout.dialog_time_picker_hhmmss);
 
         // Time Pickerの設定
         setTimePicker( dialog );
@@ -46,25 +44,25 @@ public class TimePickerDialog extends DialogFragment {
      */
     private void setTimePicker( Dialog dialog ) {
 
-        NumberPicker np_hh1 = dialog.findViewById(R.id.np_hh1);
-        NumberPicker np_mm1 = dialog.findViewById(R.id.np_mm1);
-        NumberPicker np_ss1 = dialog.findViewById(R.id.np_ss1);
+        NumberPicker np_h = dialog.findViewById(R.id.np_hh1);
+        NumberPicker np_m = dialog.findViewById(R.id.np_m);
+        NumberPicker np_s = dialog.findViewById(R.id.np_s);
 
         //----------------------------------
         // NumberPicker初期設定
         //----------------------------------
         // 時間の範囲を設定
-        np_hh1.setMaxValue(99);
-        np_hh1.setMinValue(0);
-        np_mm1.setMaxValue(59);
-        np_mm1.setMinValue(0);
-        np_ss1.setMaxValue(59);
-        np_ss1.setMinValue(0);
+        np_h.setMaxValue(99);
+        np_h.setMinValue(0);
+        np_m.setMaxValue(59);
+        np_m.setMinValue(0);
+        np_s.setMaxValue(59);
+        np_s.setMinValue(0);
 
         // 数値フォーマット設定
-        np_hh1.setFormatter( new PickerFormatter() );
-        np_mm1.setFormatter( new PickerFormatter() );
-        np_ss1.setFormatter( new PickerFormatter() );
+        np_h.setFormatter( new PickerFormatter() );
+        np_m.setFormatter( new PickerFormatter() );
+        np_s.setFormatter( new PickerFormatter() );
 
         //----------------------------------
         // 時分秒情報をPickerに反映
@@ -77,9 +75,9 @@ public class TimePickerDialog extends DialogFragment {
         int ss = Integer.parseInt( hhmmss[2] );
 
         // Pickerに反映
-        np_hh1.setValue( hh );
-        np_mm1.setValue( mm );
-        np_ss1.setValue( ss );
+        np_h.setValue( hh );
+        np_m.setValue( mm );
+        np_s.setValue( ss );
     }
 
     /*
@@ -106,13 +104,13 @@ public class TimePickerDialog extends DialogFragment {
         Dialog dialog = getDialog();
 
         // 設定された時分秒を取得
-        NumberPicker np_hh1 = (NumberPicker) dialog.findViewById(R.id.np_hh1);
-        NumberPicker np_mm1 = (NumberPicker) dialog.findViewById(R.id.np_mm1);
-        NumberPicker np_ss1 = (NumberPicker) dialog.findViewById(R.id.np_ss1);
+        NumberPicker np_h = dialog.findViewById(R.id.np_hh1);
+        NumberPicker np_m = dialog.findViewById(R.id.np_m);
+        NumberPicker np_s = dialog.findViewById(R.id.np_s);
 
-        Integer hhValue = np_hh1.getValue();
-        Integer mmValue = np_mm1.getValue();
-        Integer ssValue = np_ss1.getValue();
+        Integer hhValue = np_h.getValue();
+        Integer mmValue = np_m.getValue();
+        Integer ssValue = np_s.getValue();
         String hh = String.format( "%02d", hhValue );
         String mm = String.format( "%02d", mmValue );
         String ss = String.format( "%02d", ssValue );
@@ -122,6 +120,12 @@ public class TimePickerDialog extends DialogFragment {
         return (hh + delimiter + mm + delimiter + ss);
     }
 
+    /*
+     * 時間の設定
+     */
+    public void setTime( String hhmmssStr ) {
+        mhhmmssStr = hhmmssStr;
+    }
 
     /*
      * クリックリスナーの設定
@@ -129,6 +133,8 @@ public class TimePickerDialog extends DialogFragment {
     public void setOnPositiveClickListener( PositiveClickListener listener ) {
         mPositiveClickListener = listener;
     }
+
+
 
     /*
      * クリック検出用インターフェース
@@ -141,7 +147,7 @@ public class TimePickerDialog extends DialogFragment {
     /*
      * NumberPicker Formatter
      */
-    public class PickerFormatter implements NumberPicker.Formatter {
+    private class PickerFormatter implements NumberPicker.Formatter {
 
         public PickerFormatter() {}
 

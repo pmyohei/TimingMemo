@@ -7,7 +7,7 @@
     android:background="@color/subColor">
 
     <TextView
-        android:id="@+id/tv_timePickerDialogTitle"
+        android:id="@+id/tv_delayTimeContents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -32,7 +32,7 @@
         android:hint="@string/hint_memo_name"
         android:inputType="text"
         android:scrollbars="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/tv_timePickerDialogTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tv_delayTimeContents"
         app:layout_constraintBottom_toTopOf="@+id/v_border"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

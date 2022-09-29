@@ -20,7 +20,7 @@
         app:layout_constraintVertical_weight="1">
 
         <TextView
-            android:id="@+id/tx_timer"
+            android:id="@+id/tx_recordTime"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@color/timeColor"
@@ -30,25 +30,44 @@
             android:textColor="@color/movieColor3"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_delayTime"
+            app:layout_constraintEnd_toStartOf="@+id/ll_delayTime"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_weight="7" />
 
-        <TextView
-            android:id="@+id/tv_delayTime"
+        <LinearLayout
+            android:id="@+id/ll_delayTime"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@color/movieColor4"
             android:gravity="center"
-            android:text="-00:00"
-            android:textAlignment="center"
-            android:textColor="@color/movieColor5"
-            android:textSize="20sp"
+            android:orientation="horizontal"
+            android:background="@color/movieColor4"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tx_timer"
+            app:layout_constraintStart_toEndOf="@+id/tx_recordTime"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="3" />
+            app:layout_constraintHorizontal_weight="3">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="2dp"
+                android:gravity="center"
+                android:text="-"
+                android:textAlignment="center"
+                android:textColor="@color/movieColor5"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/tv_delayTime"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="00:00"
+                android:textAlignment="center"
+                android:textColor="@color/movieColor5"
+                android:textSize="20sp" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -56,35 +75,95 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_recordCtrl"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/movieColor3"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/cl_timer"
-        app:layout_constraintBottom_toTopOf="@+id/tab_category"
+        app:layout_constraintBottom_toTopOf="@+id/v_border2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_weight="3">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <!--    記録イメージ    -->
         <ImageView
             android:id="@+id/iv_recordCircle"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_gravity="center"
             android:background="@drawable/record_sample2"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/ll_recordControl"
+            app:layout_constraintBottom_toTopOf="@id/v_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
+        <View
+            android:id="@+id/v_stampMemoImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="gone"
+            android:background="@drawable/image_add_stamp_memo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/v_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <!--    区切り線    -->
+        <View
+            android:id="@+id/v_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/delayColor"
+            app:layout_constraintTop_toBottomOf="@+id/iv_recordCircle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!--    記録制御アイコン    -->
+        <ImageView
+            android:id="@+id/iv_play"
+            android:layout_width="@dimen/record_control_icon_size"
+            android:layout_height="@dimen/record_control_icon_size"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/baseline_time_play"
+            app:layout_constraintTop_toBottomOf="@+id/v_border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/iv_pause"
+            android:layout_width="@dimen/record_control_icon_size"
+            android:layout_height="@dimen/record_control_icon_size"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/baseline_time_pause"
+            app:layout_constraintTop_toBottomOf="@+id/v_border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/iv_stop"
+            android:layout_width="@dimen/record_control_icon_size"
+            android:layout_height="@dimen/record_control_icon_size"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/baseline_time_stop"
+            app:layout_constraintTop_toBottomOf="@+id/v_border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
         <!--    記録制御ボタン    -->
+<!--
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ll_recordControl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/movieColor3"
             android:layout_marginBottom="12dp"
-            app:layout_constraintTop_toBottomOf="@+id/iv_recordCircle"
+            app:layout_constraintTop_toBottomOf="@+id/v_border"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -98,8 +177,8 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/iv_play"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
                 android:id="@+id/iv_play"
@@ -109,31 +188,43 @@
                 android:background="@drawable/baseline_time_play"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/iv_stop"
-                app:layout_constraintStart_toEndOf="@+id/iv_pause" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
                 android:id="@+id/iv_stop"
                 android:layout_width="@dimen/record_control_icon_size"
                 android:layout_height="@dimen/record_control_icon_size"
                 android:layout_gravity="center"
+                android:layout_marginEnd="24dp"
                 android:background="@drawable/baseline_time_stop"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_play" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--    区切り線    -->
+    <View
+        android:id="@+id/v_border2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/subColor"
+        app:layout_constraintTop_toBottomOf="@+id/cl_recordCtrl"
+        app:layout_constraintBottom_toTopOf="@+id/tab_category"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- インジケータ -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="0dp"
         android:background="@android:color/transparent"
         app:tabTextColor="@color/subLittleColor"
         app:tabSelectedTextColor="@color/subColor"
@@ -143,7 +234,7 @@
         app:tabMode="scrollable"
         app:tabRippleColor="@null"
         app:tabTextAppearance="@style/TabLayoutText"
-        app:layout_constraintTop_toBottomOf="@+id/cl_recordCtrl"
+        app:layout_constraintTop_toBottomOf="@+id/v_border2"
         app:layout_constraintBottom_toTopOf="@+id/vp2_memoList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.timingmemo.R;
-import com.example.timingmemo.TimePickerDialog;
+import com.example.timingmemo.TimePickerHHMMSSDialog;
 import com.example.timingmemo.common.AppCommonData;
 import com.example.timingmemo.db.StampMemoTable;
 import com.example.timingmemo.db.UserCategoryTable;
@@ -236,8 +236,9 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
                 String hhmmss = tv_playTime.getText().toString();
 
                 // 時間設定Dialogを開く
-                TimePickerDialog dialog = TimePickerDialog.newInstance( hhmmss );
-                dialog.setOnPositiveClickListener(new TimePickerDialog.PositiveClickListener() {
+                TimePickerHHMMSSDialog dialog = TimePickerHHMMSSDialog.newInstance();
+                dialog.setTime( hhmmss );
+                dialog.setOnPositiveClickListener(new TimePickerHHMMSSDialog.PositiveClickListener() {
                         @Override
                         public void onPositiveClick(String hhmmssStr) {
                             // 入力された時分秒をビューに反映

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/subColor">
+
+    <TextView
+        android:id="@+id/tv_delayTimeDialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="24dp"
+        android:text="@string/dialog_title_update_delaytime"
+        android:textColor="@color/mainColor"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_delayTimeContents"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_delayTimeContents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="24dp"
+        android:text="@string/dialog_content_delaytime"
+        android:textColor="@color/mainColor"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_delayTimeDialogTitle"
+        app:layout_constraintBottom_toTopOf="@+id/np_m"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <NumberPicker
+        android:id="@+id/np_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/mainColor"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintTop_toBottomOf="@+id/tv_delayTimeContents"
+        app:layout_constraintBottom_toTopOf="@+id/v_border"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_m" />
+
+    <TextView
+        android:id="@+id/tv_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="m"
+        android:textColor="@color/mainColor"
+        app:layout_constraintTop_toBottomOf="@+id/tv_delayTimeContents"
+        app:layout_constraintBottom_toTopOf="@+id/v_border"
+        app:layout_constraintStart_toEndOf="@id/np_m"
+        app:layout_constraintEnd_toStartOf="@id/np_s"/>
+
+    <NumberPicker
+        android:id="@+id/np_s"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/mainColor"
+        app:layout_constraintTop_toBottomOf="@+id/tv_delayTimeContents"
+        app:layout_constraintBottom_toTopOf="@+id/v_border"
+        app:layout_constraintStart_toEndOf="@id/tv_m"
+        app:layout_constraintEnd_toStartOf="@id/tv_s" />
+
+    <TextView
+        android:id="@+id/tv_s"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="s"
+        android:textColor="@color/mainColor"
+        app:layout_constraintTop_toBottomOf="@+id/tv_delayTimeContents"
+        app:layout_constraintBottom_toTopOf="@+id/v_border"
+        app:layout_constraintStart_toEndOf="@id/np_s"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!--    区切り線    -->
+    <View
+        android:id="@+id/v_border"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/mainColor"
+        app:layout_constraintBottom_toTopOf="@+id/iv_save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_save"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/baseline_check_main_color_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
