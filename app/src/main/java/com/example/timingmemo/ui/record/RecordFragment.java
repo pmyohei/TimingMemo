@@ -688,7 +688,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(iv_recordCircle, "rotation", 0.0f, 360.0f);
         objectAnimator.setDuration(4000);
         objectAnimator.setInterpolator(new LinearInterpolator());
-        objectAnimator.setRepeatMode(ValueAnimator.RESTART);
+//        objectAnimator.setRepeatMode(ValueAnimator.RESTART);
         objectAnimator.setRepeatCount(ValueAnimator.INFINITE);
 
         return objectAnimator;
@@ -702,6 +702,8 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         // 制御に応じたアニメーション
         switch ( ctrl ){
             case RECORDING_ANIM_START:
+                // 開始タイミングでRepeatCountを設定
+                mRecordingAnimator.setRepeatCount(ValueAnimator.INFINITE);
                 mRecordingAnimator.start();
                 break;
 
@@ -714,7 +716,24 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
                 break;
 
             case RECORDING_ANIM_STOP:
-                mRecordingAnimator.cancel();
+                //--------------------------------------------------------------------------
+                // 停止時のアニメーションの挙動
+                // ・レコード１周前（アニメーション繰り返し未発生）：レコードイメージはアニメーションを最後まで実行されて初期状態になる
+                // ・レコード１周後（アニメーション繰り返し発生後）：レコードイメージは即座に初期状態になる
+                //--------------------------------------------------------------------------
+                // RepeatCountを０にすることでアニメーションを停止しているため、pauseの状態にあるなら、再開させる
+                if( mRecordingAnimator.isPaused() ){
+                    mRecordingAnimator.resume();
+                }
+
+                // RepeatCountを０にすることでアニメーションを停止
+                // ※cancel()ではレコードイメージがその時点で止まることになる
+                mRecordingAnimator.setRepeatCount( 0 );
+
+                // 記録終了後は、レコードイメージを初期状態に戻す
+                ImageView iv_recordCircle = mtx_recordTime.getRootView().findViewById(R.id.iv_recordCircle);
+                iv_recordCircle.setImageResource( R.drawable.record );
+
                 break;
         }
     }
