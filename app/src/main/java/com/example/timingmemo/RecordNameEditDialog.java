@@ -1,21 +1,17 @@
-package com.example.timingmemo.ui.history;
+package com.example.timingmemo;
 
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.NumberPicker;
 
 import androidx.fragment.app.DialogFragment;
-
-import com.example.timingmemo.R;
-import com.example.timingmemo.common.AppCommonData;
 
 public class RecordNameEditDialog extends DialogFragment {
 
     // 設定中の記録名
-    private static String mRecordName;
+    private String mRecordName;
     // クリックリスナー
     private PositiveClickListener mPositiveClickListener;
 
@@ -24,8 +20,7 @@ public class RecordNameEditDialog extends DialogFragment {
     }
 
     //インスタンス作成
-    public static RecordNameEditDialog newInstance( String recordName ) {
-        mRecordName = recordName;
+    public static RecordNameEditDialog newInstance() {
         return new RecordNameEditDialog();
     }
 
@@ -67,6 +62,13 @@ public class RecordNameEditDialog extends DialogFragment {
                 dismiss();
             }
         });
+    }
+
+    /*
+     * 記録名の設定
+     */
+    public void setRecordName( String recordName ) {
+        mRecordName = recordName;
     }
 
     /*

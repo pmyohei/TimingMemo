@@ -108,6 +108,10 @@ public class AsyncTmpCreateDataMemo extends AsyncShowProgress {
             memo.setName("Favorite");
             memo2.setName("important");
             memo3.setName("Test3");
+            memo.setColor( 0xffc41a30 );
+            memo2.setColor( 0xffFFAC84 );
+            memo3.setColor( 0xffFCE45C );
+
             category.setName("Movie");
 
             memoDao.insert(memo);
@@ -122,8 +126,10 @@ public class AsyncTmpCreateDataMemo extends AsyncShowProgress {
             RecordTableDao recordTableDao = mDB.daoRecordTable();
             StampMemoTableDao stampMemoTableDao = mDB.daoStampMemoTable();
 
+/*
             recordTableDao.deleteAll();
             stampMemoTableDao.deleteAll();
+*/
 
             // システム時間の取得
             @SuppressLint("SimpleDateFormat") final DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

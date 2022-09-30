@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.timingmemo.R;
+import com.example.timingmemo.RecordNameEditDialog;
 import com.example.timingmemo.db.StampMemoTable;
 import com.example.timingmemo.db.async.AsyncReadStampMemoCategory;
 import com.example.timingmemo.db.async.AsyncRemoveRecord;
@@ -552,7 +553,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
         String recordName = intent.getStringExtra(HistoryFragment.KEY_TARGET_RECORD_NAME);
 
         // 時間設定Dialogを開く
-        RecordNameEditDialog dialog = RecordNameEditDialog.newInstance( recordName );
+        RecordNameEditDialog dialog = RecordNameEditDialog.newInstance();
         dialog.setOnPositiveClickListener(new RecordNameEditDialog.PositiveClickListener() {
                 @Override
                 public void onPositiveClick(String recordName) {
@@ -565,6 +566,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
                 }
             }
         );
+        dialog.setRecordName( recordName );
         dialog.show( getSupportFragmentManager(), "SHOW" );
     }
 

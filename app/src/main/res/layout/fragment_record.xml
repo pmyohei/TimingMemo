@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:background="@color/timeColor"
             android:gravity="center"
-            android:text="00:00:00"
+            android:text="@string/init_record_time"
             android:textAlignment="center"
             android:textColor="@color/movieColor3"
             android:textSize="20sp"
@@ -55,7 +55,7 @@
                 android:text="-"
                 android:textAlignment="center"
                 android:textColor="@color/movieColor5"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tv_delayTime"
@@ -83,14 +83,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <TextView
+            android:id="@+id/tv_recordName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="@string/init_record_name"
+            android:textAlignment="center"
+            android:textColor="@color/movieColor5"
+            android:textSize="16sp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/iv_recordCircle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <!--    記録イメージ    -->
         <ImageView
             android:id="@+id/iv_recordCircle"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:background="@drawable/record_sample2"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/v_border"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/record"
+            app:layout_constraintTop_toBottomOf="@+id/tv_recordName"
+            app:layout_constraintBottom_toTopOf="@+id/v_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -98,6 +117,7 @@
             android:id="@+id/v_stampMemoImage"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginTop="12dp"
             android:visibility="gone"
             android:background="@drawable/image_add_stamp_memo"
             app:layout_constraintTop_toTopOf="parent"
@@ -110,6 +130,7 @@
             android:id="@+id/v_border"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="12dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:background="@color/delayColor"
@@ -122,8 +143,8 @@
             android:id="@+id/iv_play"
             android:layout_width="@dimen/record_control_icon_size"
             android:layout_height="@dimen/record_control_icon_size"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/baseline_time_play"
             app:layout_constraintTop_toBottomOf="@+id/v_border"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -134,8 +155,8 @@
             android:id="@+id/iv_pause"
             android:layout_width="@dimen/record_control_icon_size"
             android:layout_height="@dimen/record_control_icon_size"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/baseline_time_pause"
             app:layout_constraintTop_toBottomOf="@+id/v_border"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -146,8 +167,8 @@
             android:id="@+id/iv_stop"
             android:layout_width="@dimen/record_control_icon_size"
             android:layout_height="@dimen/record_control_icon_size"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/baseline_time_stop"
             app:layout_constraintTop_toBottomOf="@+id/v_border"
