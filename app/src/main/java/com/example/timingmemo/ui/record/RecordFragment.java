@@ -71,6 +71,8 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
     private Runnable mTimeRunnable;
     private ObjectAnimator mRecordingAnimator;
     private long mCountUpMsec;
+    private long mRecordStartSystemTime;
+    private long mRecordPauseSystemTime;
     private TextView mtx_recordTime;
     private TextView mtv_delayTime;
     private int mRecordPlayState;
@@ -138,6 +140,9 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         // カウントアップ開始
         mTimeHandler.post(mTimeRunnable);
 
+        // 記録開始時間
+        mRecordStartSystemTime = System.currentTimeMillis();
+
         // 記録
         String recordTime = mtx_recordTime.getText().toString();
         String startDate = AppCommonData.getNowDate();
@@ -181,14 +186,31 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
             return;
         }
 
-        // 時間を加算
+        long advancedTime = System.currentTimeMillis() - mRecordStartSystemTime;
+
+        // 記録時間を更新
+        String hhssmm = formatHHMMSS(advancedTime);
+        mtx_recordTime.setText(hhssmm);
+
+/*        // 時間を加算
         mCountUpMsec += TIME_INTERVAL;
         // 1s進んでいれば
         if ((mCountUpMsec % 1000) == 0) {
             // 記録時間を更新
             String hhssmm = formatHHMMSS(mCountUpMsec);
             mtx_recordTime.setText(hhssmm);
-        }
+        }*/
+
+
+    }
+
+    /*
+     * 停止時間分の記録経過時間調整処理
+     *    記録開始システム時間から、2つの時間の差分（経過時間）を減算する
+     */
+    private void adjustRecordStartTime() {
+        // 記録開始時間から、停止分の時間を差し引く
+        mRecordStartSystemTime += ( System.currentTimeMillis() - mRecordPauseSystemTime );
     }
 
     /*
@@ -209,10 +231,14 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
 
                 int animationCtrl = RECORDING_ANIM_RESUME;
 
-                // 記録停止中なら記録開始
                 if (mRecordPlayState == RECORD_STOP) {
+                    // 記録停止中の場合、記録開始
                     startRecordInit();
                     animationCtrl = RECORDING_ANIM_START;
+
+                } else if( mRecordPlayState == RECORD_PAUSE ) {
+                    // 記録一時停止中の場合、再開処理
+                    adjustRecordStartTime();
                 }
 
                 // 状態を記録中に更新
@@ -238,6 +264,8 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
 
                 // 時間カウント一時停止
                 mRecordPlayState = RECORD_PAUSE;
+                // 一時停止時点のシステム時間を保持
+                mRecordPauseSystemTime = System.currentTimeMillis();
                 // アイコン表示制御
                 showRecordControlIcon(root, View.VISIBLE, View.GONE, View.VISIBLE);
                 // レコードアニメーションの制御
@@ -603,7 +631,8 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
     private String formatHHMMSS(long msec) {
 
         // 単位を変換；msec → sec
-        long second = msec / 1000;
+//        long second = msec / 1000;
+        long second = (long)Math.floor( msec / 1000f );
         long minute = second / 60;
 
         // 時分秒変換
@@ -686,9 +715,9 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
 
         // Animatorの生成
         ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(iv_recordCircle, "rotation", 0.0f, 360.0f);
-        objectAnimator.setDuration(4000);
+//        objectAnimator.setDuration(4000);
         objectAnimator.setInterpolator(new LinearInterpolator());
-//        objectAnimator.setRepeatMode(ValueAnimator.RESTART);
+        objectAnimator.setRepeatMode(ValueAnimator.RESTART);
         objectAnimator.setRepeatCount(ValueAnimator.INFINITE);
 
         return objectAnimator;
@@ -703,7 +732,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         switch ( ctrl ){
             case RECORDING_ANIM_START:
                 // 開始タイミングでRepeatCountを設定
-                mRecordingAnimator.setRepeatCount(ValueAnimator.INFINITE);
+                mRecordingAnimator.setDuration( 4000 );
                 mRecordingAnimator.start();
                 break;
 
@@ -716,23 +745,15 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
                 break;
 
             case RECORDING_ANIM_STOP:
-                //--------------------------------------------------------------------------
-                // 停止時のアニメーションの挙動
-                // ・レコード１周前（アニメーション繰り返し未発生）：レコードイメージはアニメーションを最後まで実行されて初期状態になる
-                // ・レコード１周後（アニメーション繰り返し発生後）：レコードイメージは即座に初期状態になる
-                //--------------------------------------------------------------------------
-                // RepeatCountを０にすることでアニメーションを停止しているため、pauseの状態にあるなら、再開させる
+
+                // Durationを０にすることでアニメーションを停止しているため、pauseの状態にあるなら再開させる
                 if( mRecordingAnimator.isPaused() ){
                     mRecordingAnimator.resume();
                 }
 
-                // RepeatCountを０にすることでアニメーションを停止
+                // Durationを０にすることでアニメーションを停止
                 // ※cancel()ではレコードイメージがその時点で止まることになる
-                mRecordingAnimator.setRepeatCount( 0 );
-
-                // 記録終了後は、レコードイメージを初期状態に戻す
-                ImageView iv_recordCircle = mtx_recordTime.getRootView().findViewById(R.id.iv_recordCircle);
-                iv_recordCircle.setImageResource( R.drawable.record );
+                mRecordingAnimator.setDuration( 0 );
 
                 break;
         }
@@ -845,6 +866,8 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         //--------------------
         // メモ追加アニメーション
         //--------------------
-        startAddMemoAnimation( memoColor );
+//        startAddMemoAnimation( memoColor );
+        String message = getString(R.string.toast_stamp_memo) + "\n" + memoName + "\n" + playTime;
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }

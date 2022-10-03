@@ -3,16 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:fillAfter="true">
 
-<!--
-    <scale
-        android:duration="@android:integer/config_mediumAnimTime"
-        android:fromXScale="0%"
-        android:toXScale="100%"
-        android:fromYScale="0%"
-        android:toYScale="100%"
-        android:pivotX="50%"
-        android:pivotY="50%" />
--->
+    <translate
+        android:interpolator="@android:anim/decelerate_interpolator"
+        android:fromXDelta="0%p"
+        android:toXDelta="40%p"
+        android:fromYDelta="0%p"
+        android:toYDelta="50%p"
+        android:fillAfter="true"
+        android:duration="3000" />
 
     <alpha
         android:duration="@android:integer/config_shortAnimTime"

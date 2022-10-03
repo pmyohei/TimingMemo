@@ -113,7 +113,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <View
+        <!--    記録メモ追加アニメーション用   -->
+<!--        <View
             android:id="@+id/v_stampMemoImage"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -123,7 +124,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/v_border"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"/>-->
 
         <!--    区切り線    -->
         <View
@@ -157,6 +158,7 @@
             android:layout_height="@dimen/record_control_icon_size"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginStart="24dp"
             android:background="@drawable/baseline_time_pause"
             app:layout_constraintTop_toBottomOf="@+id/v_border"
             app:layout_constraintBottom_toBottomOf="parent"

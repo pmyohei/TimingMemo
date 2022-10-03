@@ -64,5 +64,6 @@
     <string name="toast_complete_update">更新しました</string>
     <string name="toast_complete_save_record">記録を保存しました</string>
     <string name="toast_waring_stamp_memo">再生ボタンを押して、記録を開始して下さい</string>
+    <string name="toast_stamp_memo">＜メモを記録＞</string>
 
 </resources>
