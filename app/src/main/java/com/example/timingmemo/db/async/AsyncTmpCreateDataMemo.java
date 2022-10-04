@@ -126,10 +126,8 @@ public class AsyncTmpCreateDataMemo extends AsyncShowProgress {
             RecordTableDao recordTableDao = mDB.daoRecordTable();
             StampMemoTableDao stampMemoTableDao = mDB.daoStampMemoTable();
 
-/*
             recordTableDao.deleteAll();
             stampMemoTableDao.deleteAll();
-*/
 
             // システム時間の取得
             @SuppressLint("SimpleDateFormat") final DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

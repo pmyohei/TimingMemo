@@ -35,6 +35,11 @@ public class AppCommonData extends Application {
     private RecordTable mRecord;
     private ArrayList<StampMemoTable> mStampMemos;
     private int mRecordPlayState;
+    private long mRecordStartSystemTime;
+    private long mRecordPauseSystemTime;
+    private String mRecordTime;
+    private String mDelayTime;
+    private boolean mIsRenewRecordStartTime;
 
 
     @Override
@@ -42,6 +47,7 @@ public class AppCommonData extends Application {
         super.onCreate();
 
         mStampMemos = new ArrayList<>();
+        mRecordPlayState = RecordFragment.RECORD_STOP;
     }
 
     @Override
@@ -78,6 +84,23 @@ public class AppCommonData extends Application {
         return names;
     }
 
+
+    /*
+     * 記録情報の一時保存処理
+     */
+    public void tmpSaveRecordData( RecordTable record, int state, ArrayList<StampMemoTable> stampMemos,
+                                   long startTime, long pauseTime, String recordTime, String delayTime, boolean isRenewRecordStartTime ){
+        // 記録情報を一時保持
+        mRecord = record;
+        mRecordPlayState = state;
+        mStampMemos = stampMemos;
+        mRecordStartSystemTime = startTime;
+        mRecordPauseSystemTime = pauseTime;
+        mRecordTime = recordTime;
+        mDelayTime = delayTime;
+        mIsRenewRecordStartTime = isRenewRecordStartTime;
+    }
+
     /*
      * 記録情報のクリア
      */
@@ -101,9 +124,9 @@ public class AppCommonData extends Application {
         return df.format(date);
     }
 
-    //---------------------
+    //-------------------------------------
     // getter / setter
-    //---------------------
+    //-------------------------------------
     public ArrayList<UserMemoTable> getUserMemos() {
         return mUserMemos;
     }
@@ -145,5 +168,32 @@ public class AppCommonData extends Application {
     }
     public void setRecordPlayState(int recordPlayState) {
         mRecordPlayState = recordPlayState;
+    }
+
+
+    public long getRecordStartSystemTime() {
+        return mRecordStartSystemTime;
+    }
+    public void setRecordStartSystemTime(long recordStartSystemTime) {
+        mRecordStartSystemTime = recordStartSystemTime;
+    }
+
+    public long getRecordPauseSystemTime() {
+        return mRecordPauseSystemTime;
+    }
+    public void setRecordPauseSystemTime(long recordPauseSystemTime) {
+        mRecordPauseSystemTime = recordPauseSystemTime;
+    }
+
+    public String getRecordTime() {
+        return mRecordTime;
+    }
+
+    public String getDelayTime() {
+        return mDelayTime;
+    }
+
+    public boolean isRenewRecordStartTime() {
+        return mIsRenewRecordStartTime;
     }
 }

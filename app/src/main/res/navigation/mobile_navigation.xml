@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_memo">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_memo"
         android:name="com.example.timingmemo.ui.memo.MemoFragment"
         android:label="@string/title_memo"
         tools:layout="@layout/fragment_memo" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_record"
         android:name="com.example.timingmemo.ui.record.RecordFragment"
         android:label="@string/title_record"
         tools:layout="@layout/fragment_record" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_history"
         android:name="com.example.timingmemo.ui.history.HistoryFragment"
         android:label="@string/title_history"
         tools:layout="@layout/fragment_history" />

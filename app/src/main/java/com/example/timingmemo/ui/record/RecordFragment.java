@@ -8,11 +8,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
@@ -53,7 +51,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
     public static final int RECORD_PLAY = 0;      // 記録中
     public static final int RECORD_PAUSE = 1;     // 記録一時停止中
     public static final int RECORD_STOP = 2;      // 記録終了
-    
+
     // レコードアニメーション制御
     private final int RECORDING_ANIM_START = 0;
     private final int RECORDING_ANIM_RESUME = 1;
@@ -70,20 +68,57 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
     private final Handler mTimeHandler = new Handler(Looper.getMainLooper());
     private Runnable mTimeRunnable;
     private ObjectAnimator mRecordingAnimator;
-    private long mCountUpMsec;
     private long mRecordStartSystemTime;
     private long mRecordPauseSystemTime;
-    private TextView mtx_recordTime;
+    private TextView mtv_recordTime;
     private TextView mtv_delayTime;
     private int mRecordPlayState;
+    private boolean mIsRenewRecordStartTime;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_record, container, false);
 
-        // 記録画面初期設定
+        //-----------------------------
+        // 初期処理
+        //-----------------------------
         init(root);
 
+        //-----------------------------
+        // リスナー設定
+        //-----------------------------
+        // 記録再生制御アイコンの設定
+        setRecordControlIconListerner(root);
+        // 記録時間／遅延時間設定
+        setRecordStartTimeDelayTimeListerner();
+        // 記録名設定
+        setRecordNameListerner(root);
+
+        //-----------------------------
+        // 記録中の情報を取得（ある場合）
+        //-----------------------------
+        // 記録中情報を取得
+        boolean isRecording = getRecordingDataFromCommonData();
+        if (isRecording) {
+            //--------------------
+            // 記録中の再開処理
+            //--------------------
+            initRecordingData();
+            // 記録再開
+            resumeRecordFromInterruption();
+        } else {
+            //--------------------
+            // 記録開始前の初期処理
+            //--------------------
+            initRecordData();
+        }
+
+        // 記録制御アイコンの表示非表示
+        showRecordControlIcon(root);
+
+        //-----------------------------
+        // ユーザー登録メモの取得／表示
+        //-----------------------------
         // メモとカテゴリ情報を取得
         boolean isGet = getUserData();
         if (isGet) {
@@ -94,29 +129,23 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
             getOnDB(root);
         }
 
-        // 記録再生制御アイコンの設定
-        setRecordControlIcon(root);
-        // アイコン表示制御
-        showRecordControlIcon(root, View.VISIBLE, View.GONE, View.GONE);
-        // 記録時間／遅延時間設定
-        setRecordStartTimeDelayTime(root);
-        // 記録時間／遅延時間設定
-        setRecordName(root);
-
         return root;
     }
 
     /*
-     * 初期設定
+     * 初期処理
      */
     private void init(View root) {
 
-        // 記録時間(msec)
-        mCountUpMsec = 0;
-        // 記録状態
-        mRecordPlayState = RECORD_STOP;
-        // 記録メモリスト
-        mStampMemos = new ArrayList<>();
+        //--------------------------------
+        // Viewの保持
+        //--------------------------------
+        mtv_recordTime = root.findViewById(R.id.tx_recordTime);
+        mtv_delayTime = root.findViewById(R.id.tv_delayTime);
+
+        //--------------------------------
+        // 必要処理の生成
+        //--------------------------------
         // 記録中のレコードアニメーション
         mRecordingAnimator = createRecordingAnimation(root);
 
@@ -126,7 +155,6 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
             public void run() {
                 // 記録時間更新
                 updateRecordTime();
-
                 // 次の時間を指定
                 mTimeHandler.postDelayed(this, TIME_INTERVAL);
             }
@@ -134,24 +162,129 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
     }
 
     /*
-     * 記録開始初期処理
+     * 記録処理の初期処理
      */
-    private void startRecordInit() {
-        // カウントアップ開始
+    private void initRecordData() {
+        // 記録
+        mRecord = new RecordTable();
+        // 記録メモリスト
+        mStampMemos = new ArrayList<>();
+        // 記録開始時間の再設定なし
+        mIsRenewRecordStartTime = false;
+    }
+
+    /*
+     * 記録中の場合の初期設定処理
+     */
+    private void initRecordingData() {
+
+        AppCommonData commonData = (AppCommonData) getActivity().getApplication();
+
+        //--------------------
+        // 記録時間
+        //--------------------
+        // 状態がpauseの場合のみ（開始中であれば時間経過のタイミングで更新されるため）
+        if (mRecordPlayState == RECORD_PAUSE) {
+            // 記録時間を更新
+            String recordTimeStr = commonData.getRecordTime();
+            mtv_recordTime.setText(recordTimeStr);
+        }
+
+        //--------------------
+        // 遅延時間
+        //--------------------
+        String delayTime = commonData.getDelayTime();
+        mtv_delayTime.setText(delayTime);
+
+        //--------------------
+        // 記録名
+        //--------------------
+        String recordName = commonData.getRecord().getName();
+        TextView tv_recordName = mtv_delayTime.getRootView().findViewById(R.id.tv_recordName);
+        tv_recordName.setText(recordName);
+    }
+
+    /*
+     * 記録開始処理
+     *   @para1：記録開始の契機が記録開始アイコン押下かどうか
+     */
+    private void startRecord() {
+
+        // 記録開始システム時間の初期設定
+        initRecordStartSystemTime(true);
+
+        // 時間周期コール開始
         mTimeHandler.post(mTimeRunnable);
 
-        // 記録開始時間
-        mRecordStartSystemTime = System.currentTimeMillis();
-
-        // 記録
-        String recordTime = mtx_recordTime.getText().toString();
+        //-------------------
+        // 記録データ新規生成
+        //-------------------
+        TextView tv_recordName = mtv_recordTime.getRootView().findViewById(R.id.tv_recordName);
+        String recordName = tv_recordName.getText().toString();
+        String recordTime = mtv_recordTime.getText().toString();
         String startDate = AppCommonData.getNowDate();
-        mRecord = new RecordTable();
+
         mRecord.setStartRecordingTime(startDate);
         mRecord.setRecordingTime(recordTime);
+        mRecord.setName(recordName);
+    }
 
-        // 記録メモをクリア
-        mStampMemos.clear();
+    /*
+     * 記録再開処理
+     * 　　pauseからの再開処理（画面遷移からの再開ではない）
+     */
+    private void resumeRecordFromPause() {
+
+        // 停止中に記録開始時間の再設定がある場合
+        if( mIsRenewRecordStartTime ){
+            // 指定開始時間でシステム時間を設定
+            String startRecordTime = mtv_recordTime.getText().toString();
+            setRecordStartSystemTimeFromText( startRecordTime );
+
+            return;
+        }
+
+        // 一時停止中の時間を記録開始時間に反映
+        reflectPauseTimeInRecordStartSystemTime();
+    }
+
+    /*
+     * 記録再開処理
+     * 　　画面復帰からの再開処理
+     */
+    private void resumeRecordFromInterruption() {
+        // 記録開始システム時間の初期設定
+        initRecordStartSystemTime(false);
+
+        // 時間周期コール開始
+        mTimeHandler.post(mTimeRunnable);
+
+        // レコードアニメーション
+        // ※どんな記録状態でも開始はさせておく（pauseからの再開時のresume()が働くようにするため）
+        ctrlRecordingAnimation( RECORDING_ANIM_START );
+
+        if( mRecordPlayState == RECORD_PAUSE ) {
+            // 中断前がPause状態なら、ここですぐにアニメーションを停止
+            ctrlRecordingAnimation( RECORDING_ANIM_PAUSE );
+        }
+    }
+
+    /*
+     * 記録開始システム時間の初期設定
+     *   @para1：記録開始の契機が記録開始アイコン押下かどうか
+     */
+    private void initRecordStartSystemTime(boolean isClickStartIcon) {
+
+        if( isClickStartIcon ){
+            // 記録開始アイコン押下の場合、記録開始テキストの開始時間から開始させるように設定
+            String startRecordTime = mtv_recordTime.getText().toString();
+            setRecordStartSystemTimeFromText( startRecordTime );
+
+        } else {
+            // 画面遷移から中断されていた記録が再開する場合、退避していた記録開始時間を設定
+            AppCommonData commonData = (AppCommonData) getActivity().getApplication();
+            mRecordStartSystemTime = commonData.getRecordStartSystemTime();
+        }
     }
 
     /*
@@ -160,7 +293,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
     private void showRecordNameEditDialog() {
 
         // 記録名
-        TextView tv_recordName = mtx_recordTime.getRootView().findViewById(R.id.tv_recordName);
+        TextView tv_recordName = mtv_recordTime.getRootView().findViewById(R.id.tv_recordName);
         String recordName = tv_recordName.getText().toString();
 
         // Dialogを開く
@@ -170,6 +303,8 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
                 public void onPositiveClick(String recordName) {
                     // 記録名に反映
                     tv_recordName.setText(recordName);
+                    // 記録に設定
+                    mRecord.setName( recordName );
                 }
             }
         );
@@ -190,33 +325,37 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
 
         // 記録時間を更新
         String hhssmm = formatHHMMSS(advancedTime);
-        mtx_recordTime.setText(hhssmm);
-
-/*        // 時間を加算
-        mCountUpMsec += TIME_INTERVAL;
-        // 1s進んでいれば
-        if ((mCountUpMsec % 1000) == 0) {
-            // 記録時間を更新
-            String hhssmm = formatHHMMSS(mCountUpMsec);
-            mtx_recordTime.setText(hhssmm);
-        }*/
-
-
+        mtv_recordTime.setText(hhssmm);
     }
 
     /*
-     * 停止時間分の記録経過時間調整処理
-     *    記録開始システム時間から、2つの時間の差分（経過時間）を減算する
+     * 停止時間分を記録開始時間に反映
+     *    記録開始システム時間に対してpause時間を反映し、カウント時間を調整する
      */
-    private void adjustRecordStartTime() {
-        // 記録開始時間から、停止分の時間を差し引く
-        mRecordStartSystemTime += ( System.currentTimeMillis() - mRecordPauseSystemTime );
+    private void reflectPauseTimeInRecordStartSystemTime() {
+        // 記録開始時間に対して、停止分の時間を加算
+        mRecordStartSystemTime += (System.currentTimeMillis() - mRecordPauseSystemTime);
+    }
+
+    /*
+     * 指定時間を記録開始時間にするための記録開始システム時間の設定
+     */
+    private void setRecordStartSystemTimeFromText(String hhmmssStr) {
+
+        // 開始時間文字列をmsecに変換
+        long startTimeMsec = getmsecFromHHMMSS( hhmmssStr );
+        // 現在時刻
+        long currentTimeMsec = System.currentTimeMillis();
+
+        // 指定時刻からカウントを開始するために、現在時刻から指定時間を減算した値を記録開始時間とする
+        // (記録開始時間と現在時間の差を、指定時間msecとする)
+        mRecordStartSystemTime = currentTimeMsec - startTimeMsec;
     }
 
     /*
      * 記録再生制御アイコンの設定
      */
-    private void setRecordControlIcon(View root) {
+    private void setRecordControlIconListerner(View root) {
 
         ImageView iv_play = root.findViewById(R.id.iv_play);
         ImageView iv_pause = root.findViewById(R.id.iv_pause);
@@ -233,23 +372,23 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
 
                 if (mRecordPlayState == RECORD_STOP) {
                     // 記録停止中の場合、記録開始
-                    startRecordInit();
+                    startRecord();
                     animationCtrl = RECORDING_ANIM_START;
 
-                } else if( mRecordPlayState == RECORD_PAUSE ) {
+                } else if (mRecordPlayState == RECORD_PAUSE) {
                     // 記録一時停止中の場合、再開処理
-                    adjustRecordStartTime();
+                    resumeRecordFromPause();
                 }
 
                 // 状態を記録中に更新
                 mRecordPlayState = RECORD_PLAY;
-
-                Log.i("記録", "開始ルート");
+                // 記録開始時間の再設定リセット
+                mIsRenewRecordStartTime = false;
 
                 // アイコン表示制御
-                showRecordControlIcon(root, View.GONE, View.VISIBLE, View.VISIBLE);
+                showRecordControlIcon(root);
                 // レコードアニメーションの制御
-                ctrlRecordingAnimation( animationCtrl );
+                ctrlRecordingAnimation(animationCtrl);
             }
         });
 
@@ -260,16 +399,14 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
             @Override
             public void onClick(View view) {
 
-                Log.i("記録", "一時停止ルート");
-
                 // 時間カウント一時停止
                 mRecordPlayState = RECORD_PAUSE;
                 // 一時停止時点のシステム時間を保持
                 mRecordPauseSystemTime = System.currentTimeMillis();
                 // アイコン表示制御
-                showRecordControlIcon(root, View.VISIBLE, View.GONE, View.VISIBLE);
+                showRecordControlIcon(root);
                 // レコードアニメーションの制御
-                ctrlRecordingAnimation( RECORDING_ANIM_PAUSE );
+                ctrlRecordingAnimation(RECORDING_ANIM_PAUSE);
             }
         });
 
@@ -291,7 +428,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
      *   @para2:記録一時停止アイコン表示値
      *   @para3:記録停止アイコン表示値
      */
-    private void showRecordControlIcon(View root, int playVisibility, int pauseVisibility, int stopVisibility) {
+    private void showRecordControlIcon(View root) {
 
         //-----------------------
         // アニメーション
@@ -300,7 +437,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         Animation disappearAnim = AnimationUtils.loadAnimation(root.getContext(), R.anim.disappear_icon);
 
         //-----------------------
-        // アイコン表示制御
+        // アイコン表示情報
         //-----------------------
         ImageView iv_play = root.findViewById(R.id.iv_play);
         ImageView iv_pause = root.findViewById(R.id.iv_pause);
@@ -311,36 +448,43 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         int currentPause = iv_pause.getVisibility();
         int currentStop = iv_stop.getVisibility();
 
-        // 現在の表示状態と指定表示が異なれば、変更
-        if (currentPlay != playVisibility) {
-            iv_play.setVisibility(playVisibility);
+        // 現在の記録状態に合わせた表示値
+        int[] changeVisibility = getRecordControlIconVisivility();
+
+        //-------------------------------------------
+        // アイコンの表示変更
+        //   現在の表示状態と指定表示が異なれば、変更
+        //-------------------------------------------
+        // 開始アイコン
+        if (currentPlay != changeVisibility[0]) {
+            iv_play.setVisibility(changeVisibility[0]);
 
             // アニメーション開始
-            if (playVisibility == View.VISIBLE) {
+            if (changeVisibility[0] == View.VISIBLE) {
                 iv_play.startAnimation(appearAnim);
             } else {
                 iv_play.startAnimation(disappearAnim);
             }
-
         }
 
-        if (currentPause != pauseVisibility) {
-            iv_pause.setVisibility(pauseVisibility);
+        // 一時停止アイコン
+        if (currentPause != changeVisibility[1]) {
+            iv_pause.setVisibility(changeVisibility[1]);
 
             // アニメーション開始
-            if (pauseVisibility == View.VISIBLE) {
+            if (changeVisibility[1] == View.VISIBLE) {
                 iv_pause.startAnimation(appearAnim);
             } else {
                 iv_pause.startAnimation(disappearAnim);
             }
-
         }
 
-        if (currentStop != stopVisibility) {
-            iv_stop.setVisibility(stopVisibility);
+        // 停止アイコン
+        if (currentStop != changeVisibility[2]) {
+            iv_stop.setVisibility(changeVisibility[2]);
 
             // アニメーション開始
-            if (stopVisibility == View.VISIBLE) {
+            if (changeVisibility[2] == View.VISIBLE) {
                 iv_stop.startAnimation(appearAnim);
             } else {
                 iv_stop.startAnimation(disappearAnim);
@@ -348,6 +492,39 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         }
     }
 
+    /*
+     * 現在の記録状態に応じた記録再生制御アイコンの表示・非表示 制御値の取得
+     *   [0]:記録開始アイコン表示値
+     *   [1]:記録一時停止アイコン表示値
+     *   [2]:記録停止アイコン表示値
+     */
+    private int[] getRecordControlIconVisivility() {
+
+        int[] visivility = new int[3];
+
+        // 記録状態に応じたアイコンの表示状態
+        switch ( mRecordPlayState ){
+            case RECORD_PLAY:
+                visivility[0] = View.GONE;
+                visivility[1] = View.VISIBLE;
+                visivility[2] = View.VISIBLE;
+                break;
+
+            case RECORD_PAUSE:
+                visivility[0] = View.VISIBLE;
+                visivility[1] = View.GONE;
+                visivility[2] = View.VISIBLE;
+                break;
+
+            case RECORD_STOP:
+                visivility[0] = View.VISIBLE;
+                visivility[1] = View.GONE;
+                visivility[2] = View.GONE;
+                break;
+        }
+
+        return visivility;
+    }
 
     /*
      * メモとカテゴリデータを取得
@@ -435,17 +612,14 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
     /*
      * 記録時間／遅延時間の設定
      */
-    private void setRecordStartTimeDelayTime(View root) {
-
-        mtx_recordTime = root.findViewById(R.id.tx_recordTime);
-        mtv_delayTime = root.findViewById(R.id.tv_delayTime);
+    private void setRecordStartTimeDelayTimeListerner() {
 
         // 記録時間
-        mtx_recordTime.setOnClickListener(new View.OnClickListener() {
+        mtv_recordTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 設定中の時分秒
-                String hhmmss = mtx_recordTime.getText().toString();
+                String hhmmss = mtv_recordTime.getText().toString();
                 // 時間設定Dialogを開く
                 TimePickerHHMMSSDialog dialog = TimePickerHHMMSSDialog.newInstance();
                 dialog.setTime(hhmmss);
@@ -453,7 +627,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
                     @Override
                     public void onPositiveClick(String hhmmssStr) {
                         // 記録時間変更処理
-                        changeRecordTime(hhmmssStr);
+                        changeRecordStartTime(hhmmssStr);
                     }
                 });
                 dialog.show(getParentFragmentManager(), "SHOW");
@@ -470,12 +644,12 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
                 TimePickerMMSSDialog dialog = TimePickerMMSSDialog.newInstance();
                 dialog.setTime(mmss);
                 dialog.setOnPositiveClickListener(new TimePickerMMSSDialog.PositiveClickListener() {
-                                                      @Override
-                                                      public void onPositiveClick(String mmssStr) {
-                                                          // 入力された時分秒をビューに反映
-                                                          mtv_delayTime.setText(mmssStr);
-                                                      }
-                                                  }
+                        @Override
+                        public void onPositiveClick(String mmssStr) {
+                            // 入力された時分秒をビューに反映
+                            mtv_delayTime.setText(mmssStr);
+                        }
+                    }
                 );
                 dialog.show(getParentFragmentManager(), "SHOW");
             }
@@ -485,7 +659,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
     /*
      * 記録名のレイアウト設定
      */
-    private void setRecordName(View root) {
+    private void setRecordNameListerner(View root) {
 
         // 記録名
         TextView tv_recordName = root.findViewById(R.id.tv_recordName);
@@ -499,27 +673,31 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
     }
 
     /*
-     * 記録時間の変更処理
+     * 記録開始時間の変更
      */
-    private void changeRecordTime(String newhhmmssStr) {
+    private void changeRecordStartTime(String newhhmmssStr) {
 
         //-----------------------
         // 一番進んでいる記録時間の保持
         //-----------------------
         // 変更直前の記録時間
-        String preRecordTime = mtx_recordTime.getText().toString();
+        String preRecordTime = mtv_recordTime.getText().toString();
         // 進んでいる方の時分秒を取得
         String mostTimeAdvanced = getAdvancedTime(preRecordTime, newhhmmssStr);
         // 現時点の記録時間として保持する
-        mRecord.setRecordingTime(mostTimeAdvanced);
+        mRecord.setRecordingTime( mostTimeAdvanced );
+
+        //-----------------------
+        // 記録開始システム時間を変更
+        //-----------------------
+        setRecordStartSystemTimeFromText( newhhmmssStr );
+        mIsRenewRecordStartTime = true;
 
         //-----------------------
         // 記録時間変更
         //-----------------------
         // 入力された時分秒をビューに反映
-        mtx_recordTime.setText(newhhmmssStr);
-        // 記録開始時間を変更
-        mCountUpMsec = getmsecFromHHMMSS(newhhmmssStr);
+        mtv_recordTime.setText(newhhmmssStr);
     }
 
     /*
@@ -567,24 +745,35 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
      */
     private void stopRecord() {
 
-        // 記録終了
+        //----------------------
+        // 保存／同期処理
+        //----------------------
+        // 記録を保存
+        String stoppedRecordTime = mtv_recordTime.getText().toString();
+        saveRecord( stoppedRecordTime );
+
+        // 共通データ側を記録停止にする
+        AppCommonData commonData = (AppCommonData) getActivity().getApplication();
+        commonData.setRecordPlayState( RECORD_STOP );
+
+        //----------------------
+        // 記録終了時のクリア処理
+        //----------------------
         mRecordPlayState = RECORD_STOP;
         mTimeHandler.removeCallbacks(mTimeRunnable);
-
-        // 記録アイコンの表示を記録開始用に変更
-        View root = mtx_recordTime.getRootView();
-        showRecordControlIcon(root, View.VISIBLE, View.GONE, View.GONE);
-
-        // 記録を保存
-        saveRecord(mtx_recordTime.getText().toString());
-
         // 記録時間を初期化
-        mCountUpMsec = 0;
         String hhssmm = formatHHMMSS(0);
-        mtx_recordTime.setText(hhssmm);
+        mtv_recordTime.setText(hhssmm);
 
-        // レコードアニメーションの制御
-        ctrlRecordingAnimation( RECORDING_ANIM_STOP );
+        //----------------------
+        // 制御系を初期状態に
+        //----------------------
+        // 記録アイコンの表示を記録開始用に変更
+        View root = mtv_recordTime.getRootView();
+        showRecordControlIcon(root);
+
+        // レコードアニメーションを停止
+        ctrlRecordingAnimation(RECORDING_ANIM_STOP);
     }
 
     /*
@@ -593,18 +782,20 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
      */
     private void saveRecord(String recordStopTime) {
 
+        View root = mtv_recordTime.getRootView();
+
         //------------------
         // 記録情報の設定
         //------------------
         // 記録名
-        TextView tv_recordName = mtx_recordTime.getRootView().findViewById(R.id.tv_recordName);
+        TextView tv_recordName = root.findViewById(R.id.tv_recordName);
         String recordName = tv_recordName.getText().toString();
         mRecord.setName(recordName);
 
         // 記録時間
         // 進んでいる方の時分秒を取得
-        String setRecordTime = mRecord.getRecordingTime();
-        String mostTimeAdvanced = getAdvancedTime(setRecordTime, recordStopTime);
+        String keepingRecordTime = mRecord.getRecordingTime();
+        String mostTimeAdvanced = getAdvancedTime(keepingRecordTime, recordStopTime);
         // 最終的な記録時間として設定
         mRecord.setRecordingTime(mostTimeAdvanced);
 
@@ -618,7 +809,10 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         AsyncCreateRecord db = new AsyncCreateRecord(getActivity(), mRecord, mStampMemos, new AsyncCreateRecord.OnFinishListener() {
             @Override
             public void onFinish() {
+                // 完了メッセージ
                 Toast.makeText(getActivity(), R.string.toast_complete_save_record, Toast.LENGTH_SHORT).show();
+                // 記録メモをクリア
+                mStampMemos.clear();
             }
         });
         // 非同期処理開始
@@ -632,7 +826,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
 
         // 単位を変換；msec → sec
 //        long second = msec / 1000;
-        long second = (long)Math.floor( msec / 1000f );
+        long second = (long) Math.floor(msec / 1000f);
         long minute = second / 60;
 
         // 時分秒変換
@@ -689,7 +883,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         //-------------------------
         // メモの記録時間の取得
         //-------------------------
-        String recordTimeStr = mtx_recordTime.getText().toString();
+        String recordTimeStr = mtv_recordTime.getText().toString();
         String delayTimeStr = mtv_delayTime.getText().toString();
 
         // 記録時間から遅延時間を差し引く
@@ -726,13 +920,13 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
     /*
      * レコードアニメーションの制御
      */
-    private void ctrlRecordingAnimation( int ctrl ) {
+    private void ctrlRecordingAnimation(int ctrl) {
 
         // 制御に応じたアニメーション
-        switch ( ctrl ){
+        switch (ctrl) {
             case RECORDING_ANIM_START:
                 // 開始タイミングでRepeatCountを設定
-                mRecordingAnimator.setDuration( 4000 );
+                mRecordingAnimator.setDuration(4000);
                 mRecordingAnimator.start();
                 break;
 
@@ -747,13 +941,13 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
             case RECORDING_ANIM_STOP:
 
                 // Durationを０にすることでアニメーションを停止しているため、pauseの状態にあるなら再開させる
-                if( mRecordingAnimator.isPaused() ){
+                if (mRecordingAnimator.isPaused()) {
                     mRecordingAnimator.resume();
                 }
 
                 // Durationを０にすることでアニメーションを停止
                 // ※cancel()ではレコードイメージがその時点で止まることになる
-                mRecordingAnimator.setDuration( 0 );
+                mRecordingAnimator.setDuration(0);
 
                 break;
         }
@@ -764,7 +958,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
      */
     public void startAddMemoAnimation(int memoColor) {
 
-        View root = mtv_delayTime.getRootView();
+/*        View root = mtv_delayTime.getRootView();
         View v_stampMemoImage = root.findViewById(R.id.v_stampMemoImage);
 
         Log.i("アニメーション", "開始");
@@ -790,12 +984,37 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
             @Override
             public void onAnimationRepeat(Animation animation) {
             }
-        });
+        });*/
     }
 
 
     /*
-     * 記録データを共通データとして保持する
+     * 共通データから記録中の記録情報を取得
+     *   true :取得あり
+     *   false:取得なし
+     */
+    public boolean getRecordingDataFromCommonData(){
+
+        AppCommonData commonData = (AppCommonData) getActivity().getApplication();
+
+        // 記録状態が停止中なら、取得なし
+        mRecordPlayState = commonData.getRecordPlayState();
+        if( mRecordPlayState == RECORD_STOP ){
+            return false;
+        }
+
+        // 記録中データの取得
+        mRecord = commonData.getRecord();
+        mStampMemos = commonData.getStampMemos();
+        mRecordStartSystemTime = commonData.getRecordStartSystemTime();
+        mRecordPauseSystemTime = commonData.getRecordPauseSystemTime();
+        mIsRenewRecordStartTime = commonData.isRenewRecordStartTime();
+
+        return true;
+    }
+
+    /*
+     * 記録データを共通データとして保持させる
      */
     public void setRecordingDataAsCommonData(){
         // 記録中でなければ何もしない
@@ -806,17 +1025,15 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         //------------------
         // 共通データに保存
         //------------------
-        // 記録情報
-        AppCommonData commonData = (AppCommonData) getActivity().getApplication();
-
-        commonData.setRecord( mRecord );
-        commonData.setRecordPlayState( mRecordPlayState );
-        commonData.setStampMemos( mStampMemos );
-
         // 記録時間
-        //★
-    }
+        String recordTime = mtv_recordTime.getText().toString();
 
+        // 遅延時間
+        String delayTime = mtv_delayTime.getText().toString();
+
+        AppCommonData commonData = (AppCommonData) getActivity().getApplication();
+        commonData.tmpSaveRecordData( mRecord, mRecordPlayState, mStampMemos, mRecordStartSystemTime, mRecordPauseSystemTime, recordTime, delayTime, mIsRenewRecordStartTime );
+    }
 
     @Override
     public void onDestroyView() {
