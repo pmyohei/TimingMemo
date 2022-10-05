@@ -10,7 +10,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -144,7 +143,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         //-----------------------------
         // 記録中メモ参照用ボトムシート設定
         //-----------------------------
-        setReferenceStampingMemo( root );
+        setReferenceStampingMemo(root);
 
         return root;
     }
@@ -380,7 +379,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
             public void onClick(View view) {
                 // ボトムシートオープン
                 ConstraintLayout cl_stampingMemoBottomSheet = root.findViewById(R.id.cl_stampingMemoBottomSheet);
-                BottomSheetBehavior<View> behavior = BottomSheetBehavior.from( cl_stampingMemoBottomSheet ) ;
+                BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(cl_stampingMemoBottomSheet);
                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         });
@@ -537,7 +536,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         int[] visivility = new int[3];
 
         // 記録状態に応じたアイコンの表示状態
-        switch ( mRecordPlayState ){
+        switch (mRecordPlayState) {
             case RECORD_PLAY:
                 visivility[0] = View.GONE;
                 visivility[1] = View.VISIBLE;
@@ -678,12 +677,12 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
                 TimePickerMMSSDialog dialog = TimePickerMMSSDialog.newInstance();
                 dialog.setTime(mmss);
                 dialog.setOnPositiveClickListener(new TimePickerMMSSDialog.PositiveClickListener() {
-                        @Override
-                        public void onPositiveClick(String mmssStr) {
-                            // 入力された時分秒をビューに反映
-                            mtv_delayTime.setText(mmssStr);
-                        }
-                    }
+                                                      @Override
+                                                      public void onPositiveClick(String mmssStr) {
+                                                          // 入力された時分秒をビューに反映
+                                                          mtv_delayTime.setText(mmssStr);
+                                                      }
+                                                  }
                 );
                 dialog.show(getParentFragmentManager(), "SHOW");
             }
@@ -715,8 +714,8 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         // 記録中メモをリスト表示設定
         //-----------------------------
         RecyclerView rv_stampingMemoList = root.findViewById(R.id.rv_stampingMemoList);
-        final StampMemoListAdapter adapter = new StampMemoListAdapter( mStampMemos );
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity() );
+        final StampMemoListAdapter adapter = new StampMemoListAdapter(mStampMemos);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
 
         rv_stampingMemoList.setAdapter(adapter);
         rv_stampingMemoList.setLayoutManager(linearLayoutManager);
@@ -741,31 +740,14 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
                 // スワイプされたメモを削除
                 //-------------------------
                 final int removePos = viewHolder.getAdapterPosition();
-                final StampMemoTable removedStampMemo = mStampMemos.get( removePos );
-                mStampMemos.remove( removePos );
-                adapter.notifyItemRemoved( removePos );
+                final StampMemoTable removedStampMemo = mStampMemos.get(removePos);
+                mStampMemos.remove(removePos);
+                adapter.notifyItemRemoved(removePos);
 
                 //-------------------------
                 // UNDO確認
                 //-------------------------
-                Resources resources = getResources();
-
-                // UNDO確認メッセージを表示
-                Snackbar.make(root, R.string.snackbar_removed, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.snackbar_undo, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                // UNDOアクション時は、削除したメモを元に戻す
-                                mStampMemos.add( removePos, removedStampMemo );
-                                adapter.notifyItemInserted( removePos );
-                            }
-                        })
-                        // レイアウト
-                        .setBackgroundTint( resources.getColor(R.color.subColor) )
-                        .setTextColor( resources.getColor(R.color.mainColor) )
-                        .setActionTextColor( resources.getColor(R.color.timeColor) )
-
-                        .show();
+                showSnackBarUndoRemoveStampMemo( adapter, removePos, removedStampMemo );
             }
 
             /*
@@ -797,12 +779,12 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         // 進んでいる方の時分秒を取得
         String mostTimeAdvanced = getAdvancedTime(preRecordTime, newhhmmssStr);
         // 現時点の記録時間として保持する
-        mRecord.setRecordingTime( mostTimeAdvanced );
+        mRecord.setRecordingTime(mostTimeAdvanced);
 
         //-----------------------
         // 記録開始システム時間を変更
         //-----------------------
-        setRecordStartSystemTimeFromText( newhhmmssStr );
+        setRecordStartSystemTimeFromText(newhhmmssStr);
         mIsRenewRecordStartTime = true;
 
         //-----------------------
@@ -862,11 +844,11 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         //----------------------
         // 記録を保存
         String stoppedRecordTime = mtv_recordTime.getText().toString();
-        saveRecord( stoppedRecordTime );
+        saveRecord(stoppedRecordTime);
 
         // 共通データ側を記録停止にする
         AppCommonData commonData = (AppCommonData) getActivity().getApplication();
-        commonData.setRecordPlayState( RECORD_STOP );
+        commonData.setRecordPlayState(RECORD_STOP);
 
         //----------------------
         // 記録終了時のクリア処理
@@ -1067,7 +1049,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
     /*
      * 記録メモ追加アニメーションの開始
      */
-    public void startAddMemoAnimation(int memoColor) {
+    private void startAddMemoAnimation(int memoColor) {
 
 /*        View root = mtv_delayTime.getRootView();
         View v_stampMemoImage = root.findViewById(R.id.v_stampMemoImage);
@@ -1104,13 +1086,13 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
      *   true :取得あり
      *   false:取得なし
      */
-    public boolean getRecordingDataFromCommonData(){
+    private boolean getRecordingDataFromCommonData() {
 
         AppCommonData commonData = (AppCommonData) getActivity().getApplication();
 
         // 記録状態が停止中なら、取得なし
         mRecordPlayState = commonData.getRecordPlayState();
-        if( mRecordPlayState == RECORD_STOP ){
+        if (mRecordPlayState == RECORD_STOP) {
             return false;
         }
 
@@ -1127,9 +1109,9 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
     /*
      * 記録データを共通データとして保持させる
      */
-    public void setRecordingDataAsCommonData(){
+    private void setRecordingDataAsCommonData() {
         // 記録中でなければ何もしない
-        if( mRecordPlayState == RECORD_STOP ){
+        if (mRecordPlayState == RECORD_STOP) {
             return;
         }
 
@@ -1143,7 +1125,63 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         String delayTime = mtv_delayTime.getText().toString();
 
         AppCommonData commonData = (AppCommonData) getActivity().getApplication();
-        commonData.tmpSaveRecordData( mRecord, mRecordPlayState, mStampMemos, mRecordStartSystemTime, mRecordPauseSystemTime, recordTime, delayTime, mIsRenewRecordStartTime );
+        commonData.tmpSaveRecordData(mRecord, mRecordPlayState, mStampMemos, mRecordStartSystemTime, mRecordPauseSystemTime, recordTime, delayTime, mIsRenewRecordStartTime);
+    }
+
+    /*
+     * スナックバーの表示
+     * 　記録メモ取り消し
+     */
+    private void showSnackBarUndoStampMemo( int addPos, String memoName, String playTime ) {
+
+        View root = mtv_delayTime.getRootView();
+        Resources resources = getResources();
+
+        // 記録時間とメモ名をメッセージとして表示
+        String message = playTime + "\n" + memoName;
+
+        // UNDO確認メッセージを表示
+        Snackbar.make(root, message, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_undo_stamp_memo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // UNDOアクション時は、追加されたメモを記録メモリストから削除する
+                        mStampMemos.remove( addPos );
+                    }
+                })
+                // レイアウト
+                .setBackgroundTint(resources.getColor(R.color.subColor))
+                .setTextColor(resources.getColor(R.color.mainColor))
+                .setActionTextColor(resources.getColor(R.color.timeColor))
+
+                .show();
+    }
+
+    /*
+     * スナックバーの表示
+     * 　記録メモの削除取り消し
+     */
+    private void showSnackBarUndoRemoveStampMemo( StampMemoListAdapter adapter, int removePos, StampMemoTable removedStampMemo ) {
+
+        View root = mtv_delayTime.getRootView();
+        Resources resources = getResources();
+
+        // UNDO確認メッセージを表示
+        Snackbar.make(root, R.string.snackbar_removed, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_undo_remove, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // UNDOアクション時は、削除したメモを元に戻す
+                        mStampMemos.add(removePos, removedStampMemo);
+                        adapter.notifyItemInserted(removePos);
+                    }
+                })
+                // レイアウト
+                .setBackgroundTint(resources.getColor(R.color.subColor))
+                .setTextColor(resources.getColor(R.color.mainColor))
+                .setActionTextColor(resources.getColor(R.color.timeColor))
+
+                .show();
     }
 
     /*
@@ -1220,13 +1258,6 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         int addIndex = getInsertPosition( mStampMemos, playTime );
         mStampMemos.add( addIndex, stampMemo );
 
-        //--------------------
-        // メモ追加アニメーション
-        //--------------------
-//        startAddMemoAnimation( memoColor );
-        String message = getString(R.string.toast_stamp_memo) + "\n" + memoName + "\n" + playTime;
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
         //------------------------
         // 記録中メモのアダプタを更新
         //------------------------
@@ -1237,5 +1268,13 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
 
         // スクロール位置を追加したアイテムに設定
         rv_stampingMemoList.scrollToPosition(addIndex);
+
+        //--------------------
+        // メモ追加アニメーション
+        //--------------------
+//        startAddMemoAnimation( memoColor );
+        /*String message = getString(R.string.toast_stamp_memo) + "\n" + memoName + "\n" + playTime;
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();*/
+        showSnackBarUndoStampMemo( addIndex, memoName, playTime );
     }
 }
