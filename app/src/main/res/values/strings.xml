@@ -50,6 +50,10 @@
     <string name="hint_record_name">Record Name</string>
     <string name="gragh_scale_10min_unit">10min</string>
     <string name="gragh_scale_1min_unit">1min</string>
+    <string name="stamping_memo_ref_title">Recorded Memo</string>
+    <string name="stamping_memo_contents">左スワイプで削除</string>
+    <string name="snackbar_removed">削除しました</string>
+    <string name="snackbar_undo">元に戻す</string>
 
     <!--  menu  -->
     <string name="menu_new">new</string>

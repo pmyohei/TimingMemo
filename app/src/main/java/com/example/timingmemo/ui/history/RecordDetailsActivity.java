@@ -32,6 +32,7 @@ import com.example.timingmemo.db.StampMemoTable;
 import com.example.timingmemo.db.async.AsyncReadStampMemoCategory;
 import com.example.timingmemo.db.async.AsyncRemoveRecord;
 import com.example.timingmemo.db.async.AsyncUpdateRecord;
+import com.example.timingmemo.ui.record.RecordFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -347,7 +348,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
         StampMemoTable stampMemo = getUpdatedStampMemoFromDist(intent);
 
         // 「打刻時の経過時間」から、ソート済みリストの適切な位置に挿入する
-        int insertPosition = getInsertPosition(stampMemo.getStampingPlayTime());
+        int insertPosition = RecordFragment.getInsertPosition( mStampMemos, stampMemo.getStampingPlayTime() );
         mStampMemos.add(insertPosition, stampMemo);
 
         // アダプタに通知
@@ -461,35 +462,6 @@ public class RecordDetailsActivity extends AppCompatActivity {
 
         return -1;
     }
-
-    /*
-     * 記録メモリストに対して、指定された「打刻時の経過時間」の挿入位置を取得
-     *   例）para：「00:20:00」
-     *   [0]：「00:10:00」
-     *   [1]：「00:30:00」
-     *   → この場合、「1」を返す
-     */
-    private int getInsertPosition(String targetPlayTime) {
-
-        //-------------------------
-        // リスト内挿入位置検索
-        //-------------------------
-        int position = 0;
-        for (StampMemoTable stampMemo : mStampMemos) {
-            // リスト内の時間が、対象の時間よりも後の場合
-            String searchPlayTime = stampMemo.getStampingPlayTime();
-            if (searchPlayTime.compareTo(targetPlayTime) > 0) {
-                return position;
-            }
-            position++;
-        }
-
-        //---------------------------
-        // 見つからなければ、終端位置を返す
-        //---------------------------
-        return position;
-    }
-
 
     /*
      * 削除確認ダイアログの表示
