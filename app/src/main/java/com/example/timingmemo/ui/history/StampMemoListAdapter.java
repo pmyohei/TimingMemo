@@ -64,21 +64,23 @@ public class StampMemoListAdapter extends RecyclerView.Adapter<StampMemoListAdap
             String playTimeStr = playTime + "(-" + delayTime + ")";
 
             //---------------------
-            // 記録メモ情報の設定
+            // 記録メモ情報のビュー設定
             //---------------------
             v_memoColor.setBackgroundColor( memoColor );
             tv_stampMemo.setText( memoName );
             tv_playTime.setText( playTimeStr );
             tv_systemTime.setText( systemTime );
 
-            // クリックリスナー
-            cl_stampMemo.setOnClickListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View view) {
-                         mItemClickListener.onItemClick( stampMemo );
+            // アイテムクリックリスナー
+            if( mItemClickListener != null ){
+                cl_stampMemo.setOnClickListener(new View.OnClickListener() {
+                         @Override
+                         public void onClick(View view) {
+                             mItemClickListener.onItemClick( stampMemo );
+                         }
                      }
-                 }
-            );
+                );
+            }
         }
     }
 

@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.timingmemo.db.async.AsyncTmpCreateDataMemo;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -51,6 +54,17 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
+
+        //---------------
+        // 疑似データ生成
+        //---------------
+        // AdMob初期化
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                //※本画面では何もしない
+            }
+        });
 
         //---------------
         // 疑似データ生成

@@ -12,6 +12,8 @@
 
     <!--  record画面の記録時間コントールボタンサイズ -->
     <dimen name="record_control_icon_size">40dp</dimen>
+    <dimen name="record_icon_weight">3</dimen>
+    <dimen name="record_control_icon_weight">1</dimen>
 
     <!--  記録１アイテムレイアウト -->
     <dimen name="record_item_margin_left">20dp</dimen>
@@ -19,6 +21,5 @@
 
     <!--  記録詳細画面 -->
     <dimen name="memo_color_size">32dp</dimen>
-
 
 </resources>

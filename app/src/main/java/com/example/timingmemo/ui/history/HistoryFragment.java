@@ -24,6 +24,8 @@ import com.example.timingmemo.db.async.AsyncReadRecordCategory;
 import com.example.timingmemo.ui.memo.CategoryListAdapter;
 import com.example.timingmemo.ui.memo.CategoryRegistrationActivity;
 import com.example.timingmemo.ui.memo.MemoRegistrationActivity;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 
@@ -47,13 +49,26 @@ public class HistoryFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_history, container, false);
 
+        // 広告表示設定
+        setAdvertisement(root);
+
         // 画面遷移ランチャーを生成
-        setRecordDetailsLancher( root );
+        setRecordDetailsLancher(root);
 
         // 記録をDBから取得
-        getRecordsOnDB( root );
+        getRecordsOnDB(root);
 
         return root;
+    }
+
+    /*
+     * 広告設定
+     */
+    private void setAdvertisement( View root ) {
+        // Admobロード
+        AdView adView = root.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
     }
 
     /*

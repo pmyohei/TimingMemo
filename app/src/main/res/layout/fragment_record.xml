@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainColor"
@@ -10,19 +11,20 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_timer"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/mainColor"
         tools:context=".ui.record.RecordFragment"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/cl_recordCtrl"
-        app:layout_constraintVertical_weight="1">
+        app:layout_constraintBottom_toTopOf="@+id/cl_recordCtrl">
 
         <TextView
             android:id="@+id/tx_recordTime"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:background="@color/timeColor"
             android:gravity="center"
             android:text="@string/init_record_time"
@@ -39,6 +41,8 @@
             android:id="@+id/ll_delayTime"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:gravity="center"
             android:orientation="horizontal"
             android:background="@color/movieColor4"
@@ -75,13 +79,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_recordCtrl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@color/movieColor3"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/cl_timer"
         app:layout_constraintBottom_toTopOf="@+id/v_border2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_weight="4">
 
         <TextView
             android:id="@+id/tv_recordName"
@@ -98,20 +103,23 @@
             android:singleLine="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/iv_recordCircle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!--    記録イメージ    -->
         <ImageView
             android:id="@+id/iv_recordCircle"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/record"
+            android:src="@drawable/record"
+            android:adjustViewBounds ="true"
+            android:scaleType="fitCenter"
             app:layout_constraintTop_toBottomOf="@+id/tv_recordName"
             app:layout_constraintBottom_toTopOf="@+id/v_border"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintVertical_weight="@dimen/record_icon_weight"/>
 
         <!--    記録メモ追加アニメーション用   -->
 <!--        <View
@@ -136,45 +144,60 @@
             android:layout_marginEnd="8dp"
             android:background="@color/delayColor"
             app:layout_constraintTop_toBottomOf="@+id/iv_recordCircle"
+            app:layout_constraintBottom_toTopOf="@+id/cl_recordCtrlIcons"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <!--    記録制御アイコン    -->
-        <ImageView
-            android:id="@+id/iv_play"
-            android:layout_width="@dimen/record_control_icon_size"
-            android:layout_height="@dimen/record_control_icon_size"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_recordCtrlIcons"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/baseline_time_play"
             app:layout_constraintTop_toBottomOf="@+id/v_border"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_weight="@dimen/record_control_icon_weight">
 
-        <ImageView
-            android:id="@+id/iv_pause"
-            android:layout_width="@dimen/record_control_icon_size"
-            android:layout_height="@dimen/record_control_icon_size"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="24dp"
-            android:background="@drawable/baseline_time_pause"
-            app:layout_constraintTop_toBottomOf="@+id/v_border"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            <ImageView
+                android:id="@+id/iv_play"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:src="@drawable/baseline_time_play"
+                android:adjustViewBounds ="true"
+                android:scaleType="fitCenter"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-        <ImageView
-            android:id="@+id/iv_stop"
-            android:layout_width="@dimen/record_control_icon_size"
-            android:layout_height="@dimen/record_control_icon_size"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/baseline_time_stop"
-            app:layout_constraintTop_toBottomOf="@+id/v_border"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <ImageView
+                android:id="@+id/iv_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="24dp"
+                android:src="@drawable/baseline_time_pause"
+                android:adjustViewBounds ="true"
+                android:scaleType="fitCenter"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <ImageView
+                android:id="@+id/iv_stop"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="24dp"
+                android:src="@drawable/baseline_time_stop"
+                android:adjustViewBounds ="true"
+                android:scaleType="fitCenter"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

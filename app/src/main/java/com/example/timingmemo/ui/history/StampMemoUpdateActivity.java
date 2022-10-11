@@ -332,7 +332,7 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
         String negative = getString(android.R.string.cancel);
 
         // 確認ダイアログを表示
-        AlertDialog dialog = new AlertDialog.Builder(this)
+        AlertDialog dialog = new AlertDialog.Builder(this, R.style.AlertDialogStyle)
                 .setTitle(title)
                 .setMessage(content)
                 .setPositiveButton(positive, new DialogInterface.OnClickListener() {
@@ -358,7 +358,7 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
         String negative = getString(android.R.string.cancel);
 
         // 確認ダイアログを表示
-        AlertDialog dialog = new AlertDialog.Builder(this)
+        AlertDialog dialog = new AlertDialog.Builder(this, R.style.AlertDialogStyle)
                 .setTitle(title)
                 .setMessage(content)
                 .setPositiveButton(positive, new DialogInterface.OnClickListener() {

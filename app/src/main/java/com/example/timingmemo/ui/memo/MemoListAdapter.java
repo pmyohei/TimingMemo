@@ -30,11 +30,13 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.MemoLi
      */
     class MemoListViewHolder extends RecyclerView.ViewHolder {
 
+        private View v_memoColor;
         private TextView tv_memoName;
 
         public MemoListViewHolder(View itemView, int position) {
             super(itemView);
 
+            v_memoColor = itemView.findViewById( R.id.v_memoColor );
             tv_memoName = itemView.findViewById( R.id.tv_memoName );
         }
 
@@ -45,9 +47,10 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.MemoLi
 
             UserMemoTable memo = mMemos.get( position );
 
-            // メモ名を設定
+            // メモ情報をレイアウトに反映
             String memoName = memo.getName();
             tv_memoName.setText( memoName );
+            v_memoColor.setBackgroundColor( memo.getColor() );
 
             // メモクリックリスナー
             tv_memoName.setOnClickListener(new View.OnClickListener() {

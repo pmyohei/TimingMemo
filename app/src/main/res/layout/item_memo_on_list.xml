@@ -4,21 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/mainColor">
+    android:layout_margin="12dp"
+    android:background="@drawable/basic_border">
+
+    <View
+        android:id="@+id/v_memoColor"
+        android:layout_width="@dimen/memo_color_size"
+        android:layout_height="@dimen/memo_color_size"
+        android:layout_marginStart="12dp"
+        android:background="@color/memoColor2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tv_memoName"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/basic_border"
         android:padding="12dp"
         android:layout_margin="12dp"
         android:gravity="center"
         android:text="@string/memo"
         android:textColor="@color/movieColor3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/v_memoColor"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
