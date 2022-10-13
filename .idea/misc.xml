@@ -23,6 +23,10 @@
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/drawable/record.xml" value="0.2335" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/drawable/record_sample2.xml" value="0.238" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/drawable/test_square.xml" value="0.2065" />
+        <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout-h600dp/fragment_record.xml" value="0.15476190476190477" />
+        <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout-h600dp/item_memo_on_list.xml" value="0.22708333333333333" />
+        <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout-h600dp/item_record_on_list.xml" value="0.22708333333333333" />
+        <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout-h600dp/item_stamp_memo_on_list.xml" value="0.22708333333333333" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/activity_category_list.xml" value="0.19895833333333332" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/activity_category_registration.xml" value="0.151268115942029" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/activity_main.xml" value="0.2" />
@@ -50,6 +54,8 @@
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/item_selection_color.xml" value="0.27708333333333335" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/item_stamp_memo_on_list.xml" value="0.264" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/memo_list_in_page.xml" value="0.31666666666666665" />
+        <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/spinner_category_item.xml" value="0.24427083333333333" />
+        <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/spinner_dropdown_category_item.xml" value="0.24427083333333333" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/spinner_dropdown_scale_unit_item.xml" value="0.315625" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/spinner_scale_unit_item.xml" value="0.315625" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/menu/bottom_nav_menu.xml" value="0.19895833333333332" />

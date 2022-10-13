@@ -24,15 +24,16 @@ public class RecordTimeGraphView extends View {
     //---------------------------
     // 定数
     //----------------------------
-    private final float STAMP_MEMO_SIZE = 40f;
-    private final int TIME_TEXT_SIZE = 40;
-    private final int TIME_TEXT_CHAR_HEIGHT = TIME_TEXT_SIZE;       // テキストの縦幅は、指定サイズ
-    private final int TIME_TEXT_CHAR_WIDTH = TIME_TEXT_SIZE / 2;    // テキストの横幅は、指定サイズの半分
-    private final float SCALE_UNIT_LENGTH;                          // 目盛り１単位辺りの長さ
-    private final float SCALE_START_POS_X;                          // 目盛り描画開始位置（X座標）
-    private final int TIME_TEXT_WIDTH;                              // 時間テキストの長さ
-    private final int TIME_TEXT_HALF_WIDTH;                         // 時間テキストの半分の長さ = (文字数 / 2) * １文字当たりの横幅　）
-    private final int TIME_TEXT_CHAR_NUM = 8;                       // 時間テキストフォーマット「hh:mm:ss」の文字数
+    private final int TIME_TEXT_CHAR_NUM = 8;       // 時間テキストフォーマット「hh:mm:ss」の文字数
+
+    private float STAMP_MEMO_RADIUS;                // 記録メモ円半径
+    private float TIME_TEXT_SIZE;                   // 時間テキストサイズ
+    private float TIME_TEXT_CHAR_HEIGHT;            // テキストの縦幅は、指定サイズ
+    private float TIME_TEXT_CHAR_WIDTH;             // テキストの横幅は、指定サイズの半分
+    private float SCALE_UNIT_LENGTH;                // 目盛り１単位辺りの長さ
+    private float SCALE_START_POS_X;                // 目盛り描画開始位置（X座標）
+    private float TIME_TEXT_WIDTH;                  // 時間テキストの長さ
+    private float TIME_TEXT_HALF_WIDTH;             // 時間テキストの半分の長さ = (文字数 / 2) * １文字当たりの横幅　）
 
     // 描画目盛りy位置 上／下 index
     final int POSY_UPPER = 0;
@@ -61,7 +62,6 @@ public class RecordTimeGraphView extends View {
     private Map<Integer, Paint> mStampMemoPaintMap;                 // 記録メモPaintMap
 
 
-
     public RecordTimeGraphView(Context context) {
         this(context, null);
     }
@@ -73,20 +73,47 @@ public class RecordTimeGraphView extends View {
     public RecordTimeGraphView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        // 目盛り１単位辺りの長さ
-        SCALE_UNIT_LENGTH = getResources().getDimension(R.dimen.scale_1min_length);
-        // 時間テキストの長さ
-        TIME_TEXT_WIDTH = TIME_TEXT_CHAR_NUM * TIME_TEXT_CHAR_WIDTH;
-        TIME_TEXT_HALF_WIDTH = TIME_TEXT_WIDTH / 2;
-        // 目盛り描画スタート位置
-        SCALE_START_POS_X = TIME_TEXT_HALF_WIDTH;
-
         // 時間テキストx位置リスト
         mGraghTextPosXList = new ArrayList<>();
         // Path（空）生成
         mGraghScalePath = new Path();
         mStampMemoPaintMap = new HashMap<>();
+    }
 
+    /*
+     * グラフ描画サイズデータの設定
+     */
+    public void initSizeData( int parentHeight ) {
+
+        //-----------------
+        // 記録メモの円
+        //-----------------
+        // 記録メモの円サイズ
+        STAMP_MEMO_RADIUS = parentHeight * 0.1f;
+
+        //-----------------
+        // 時間テキスト
+        //-----------------
+        // 目盛り上の時間テキストサイズ
+        TIME_TEXT_SIZE = parentHeight * 0.1f;
+        // 目盛り上の時間テキスト 1文字サイズ
+        TIME_TEXT_CHAR_HEIGHT = TIME_TEXT_SIZE;       // テキストの縦幅は、指定サイズ
+        TIME_TEXT_CHAR_WIDTH = TIME_TEXT_SIZE / 2f;    // テキストの横幅は、指定サイズの半分
+        // 時間テキストの長さ
+        TIME_TEXT_WIDTH = TIME_TEXT_CHAR_NUM * TIME_TEXT_CHAR_WIDTH;
+        TIME_TEXT_HALF_WIDTH = TIME_TEXT_WIDTH / 2;
+
+        //-----------------
+        // 目盛り
+        //-----------------
+        // 目盛り１単位辺りの長さ
+        SCALE_UNIT_LENGTH = parentHeight * 0.15f;
+        // 目盛り描画スタート位置
+        SCALE_START_POS_X = TIME_TEXT_HALF_WIDTH;
+
+        //-----------------
+        // Paint
+        //-----------------
         // Paint生成
         setGraghPaint();
     }
@@ -106,7 +133,7 @@ public class RecordTimeGraphView extends View {
         mGraghScalePaint = new Paint();
         mGraghScalePaint.setStyle(Paint.Style.STROKE);
         mGraghScalePaint.setColor(scaleColor);
-        mGraghScalePaint.setStrokeWidth(4);
+        mGraghScalePaint.setStrokeWidth(2);
 
         //-----------------------------
         // テキスト
@@ -591,7 +618,7 @@ public class RecordTimeGraphView extends View {
             float posX = getPosXFromTime( playTime );
 
             // 描画
-            canvas.drawCircle(posX, centerY, STAMP_MEMO_SIZE, memoPaint);
+            canvas.drawCircle(posX, centerY, STAMP_MEMO_RADIUS, memoPaint);
         }
     }
 

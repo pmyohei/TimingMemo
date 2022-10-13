@@ -187,6 +187,8 @@ public class RecordDetailsActivity extends AppCompatActivity {
         HorizontalScrollView hsv_graph = findViewById(R.id.hsv_graph);
         hsv_graph.post(() -> {
 
+            int parentHeight = hsv_graph.getHeight();
+
             //--------------------
             // グラフ初期設定
             //--------------------
@@ -196,6 +198,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
 
             // 記録時間／目盛り単位デフォルト値の設定
             RecordTimeGraphView tgmv_graph = findViewById(R.id.tgmv_graph);
+            tgmv_graph.initSizeData( parentHeight );
             tgmv_graph.setRecordTime( recordingTime );
             tgmv_graph.setDefaultScaleUnit();
             // グラフの最大横幅

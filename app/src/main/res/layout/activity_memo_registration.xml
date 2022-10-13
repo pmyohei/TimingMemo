@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginStart="4dp"
-        android:spinnerMode="dialog"
+        android:spinnerMode="dropdown"
         android:backgroundTint="@color/subColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

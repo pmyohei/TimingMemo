@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /* //device/apps/common/assets/res/any/layout/simple_spinner_item.xml
-** をベースに作成
+  をベースに作成
+  選択されたアイテム表示欄のレイアウト
 */
 -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"

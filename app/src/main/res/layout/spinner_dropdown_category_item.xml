@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /* //device/apps/common/assets/res/any/layout/simple_spinner_item.xml
-** をベースに作成
+   をベースに作成
+   プルダウンのアイテム選択レイアウト
 */
 -->
 <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/text1"
     style="?android:attr/spinnerDropDownItemStyle"
+    android:id="@android:id/text1"
     android:singleLine="false"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:textSize="20sp"
+    android:layout_height="40dp"
     android:textColor="@color/mainColor"
     android:background="@color/subColor"
     />

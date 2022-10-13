@@ -5,8 +5,8 @@
     android:id="@+id/cl_stampMemo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:padding="4dp"
+    android:layout_margin="12dp"
+    android:padding="8dp"
     android:background="@drawable/basic_border">
 
     <View
