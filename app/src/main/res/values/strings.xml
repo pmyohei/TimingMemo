@@ -1,7 +1,7 @@
 <resources>
 
     <!--  navigation  -->
-    <string name="app_name">TimingMemo</string>
+    <string name="app_name">TimeWatchMemo</string>
     <string name="title_memo">Memo</string>
     <string name="title_record">Record</string>
     <string name="title_history">History</string>
