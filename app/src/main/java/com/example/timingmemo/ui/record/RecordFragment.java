@@ -10,7 +10,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1163,9 +1162,9 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
                     }
                 })
                 // レイアウト
-                .setBackgroundTint(resources.getColor(R.color.subColor))
-                .setTextColor(resources.getColor(R.color.mainColor))
-                .setActionTextColor(resources.getColor(R.color.timeColor))
+                .setBackgroundTint(resources.getColor(R.color.sub))
+                .setTextColor(resources.getColor(R.color.main))
+                .setActionTextColor(resources.getColor(R.color.accent2))
 
                 .show();
     }
@@ -1190,9 +1189,9 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
                     }
                 })
                 // レイアウト
-                .setBackgroundTint(resources.getColor(R.color.subColor))
-                .setTextColor(resources.getColor(R.color.mainColor))
-                .setActionTextColor(resources.getColor(R.color.timeColor))
+                .setBackgroundTint(resources.getColor(R.color.sub))
+                .setTextColor(resources.getColor(R.color.main))
+                .setActionTextColor(resources.getColor(R.color.accent2))
 
                 .show();
     }

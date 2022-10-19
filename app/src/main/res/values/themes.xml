@@ -2,15 +2,15 @@
     <!-- Base application theme. -->
     <style name="Theme.TimingMemo" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/subColor</item>
-        <item name="colorPrimaryVariant">@color/subColor</item>
-        <item name="colorOnPrimary">@color/mainColor</item>
+        <item name="colorPrimary">@color/sub</item>
+        <item name="colorPrimaryVariant">@color/sub</item>
+        <item name="colorOnPrimary">@color/main</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/mainColor</item>
-        <item name="colorSecondaryVariant">@color/mainColor</item>
-        <item name="colorOnSecondary">@color/delayColor</item>
+        <item name="colorSecondary">@color/main</item>
+        <item name="colorSecondaryVariant">@color/main</item>
+        <item name="colorOnSecondary">@color/accent3</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/mainColor</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/main</item>
 
         <!-- Customize your theme here. -->
         <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
@@ -33,40 +33,40 @@
 
     <!--  EditText スタイル  -->
     <style name="EditTextSubColorStyle" parent="Widget.AppCompat.EditText">
-        <item name="colorControlNormal">@color/subColor</item>
-        <item name="colorControlActivated">@color/subColor</item>
-        <item name="android:textCursorDrawable">@color/subColor</item>
-        <item name="android:textColor">@color/subColor</item>
-        <item name="android:textColorHint">@color/subLittleColor</item>
-        <item name="android:textColorHighlight">@color/timeColor</item>
+        <item name="colorControlNormal">@color/sub</item>
+        <item name="colorControlActivated">@color/sub</item>
+        <item name="android:textCursorDrawable">@color/sub</item>
+        <item name="android:textColor">@color/sub</item>
+        <item name="android:textColorHint">@color/text_little_dark</item>
+        <item name="android:textColorHighlight">@color/accent2</item>
     </style>
 
     <style name="EditTextMainColorStyle" parent="Widget.AppCompat.EditText">
-        <item name="colorControlNormal">@color/mainColor</item>
-        <item name="colorControlActivated">@color/mainColor</item>
-        <item name="android:textCursorDrawable">@color/mainColor</item>
-        <item name="android:textColor">@color/mainColor</item>
-        <item name="android:textColorHint">@color/mainLittleColor</item>
-        <item name="android:textColorHighlight">@color/timeColor</item>
+        <item name="colorControlNormal">@color/main</item>
+        <item name="colorControlActivated">@color/main</item>
+        <item name="android:textCursorDrawable">@color/main</item>
+        <item name="android:textColor">@color/main</item>
+        <item name="android:textColorHint">@color/main_little</item>
+        <item name="android:textColorHighlight">@color/accent2</item>
     </style>
 
     <!--  ツールバー スタイル  -->
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <!--    戻るボタン（←）の色変更    -->
-        <item name="colorControlNormal">@color/subColor</item>
+        <item name="colorControlNormal">@color/sub</item>
         <!--    titleの色変更    -->
-        <item name="android:textColorPrimary">@color/subColor</item>
-        <item name="android:textColorSecondary">@color/subColor</item>
+        <item name="android:textColorPrimary">@color/sub</item>
+        <item name="android:textColorSecondary">@color/sub</item>
     </style>
 
     <!-- AlertDialog スタイル -->
     <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <!--    テキスト色    -->
-        <item name="android:textColorPrimary">@color/delayColor</item>
+        <item name="android:textColorPrimary">@color/accent3</item>
         <!--    ボタン色    -->
         <item name="colorAccent">@color/teal_700</item>
         <!--    背景色    -->
-        <item name="android:background">@color/subColor</item>
+        <item name="android:background">@color/sub</item>
     </style>
 
 </resources>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainColor"
+    android:background="@color/main"
     tools:context=".ui.memo.MemoListActivity">
 
     <!--  ツールバー  -->
@@ -30,10 +30,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        app:tabTextColor="@color/subLittleColor"
-        app:tabSelectedTextColor="@color/subColor"
+        app:tabTextColor="@color/text_little_dark"
+        app:tabSelectedTextColor="@color/sub"
         app:tabGravity="center"
-        app:tabIndicatorColor="@color/subColor"
+        app:tabIndicatorColor="@color/sub"
         app:tabIndicatorFullWidth="false"
         app:tabMode="scrollable"
         app:tabRippleColor="@null"

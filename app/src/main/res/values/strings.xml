@@ -27,35 +27,34 @@
     <!--  Dialog  -->
     <string name="waiting">processing</string>
     <string name="updating">Updating</string>
-    <string name="dialog_title_confirm_rewrire">書き変え確認</string>
-    <string name="dialog_title_confirm_remove">削除確認</string>
-    <string name="dialog_title_update_playtime">記録時間の変更</string>
-    <string name="dialog_title_update_delaytime">遅延時間の設定</string>
-    <string name="dialog_title_update_record_name">記録名の変更</string>
-    <string name="dialog_title_stop_record">記録の終了</string>
-    <string name="dialog_content_memo_confirm_rewrire">記録したメモを書き換えますか？</string>
-    <string name="dialog_content_memo_confirm_remove">メモを削除しますか？</string>
-    <string name="dialog_content_category_confirm_remove">カテゴリを削除しますか？\nこのカテゴリ内のメモは削除されず、「カテゴリなし」になります。</string>
-    <string name="dialog_content_record_confirm_remove">記録を削除しますか？</string>
-    <string name="dialog_content_stampmemo_confirm_remove">記録されたメモを削除しますか？</string>
-    <string name="dialog_content_stop_record">メモの記録を終了しますか？（メモは保存されます）</string>
-    <string name="dialog_content_delaytime">！設定時間分メモの記録時間から引かれます</string>
-    <string name="dialog_positive_confirm_remove">削除</string>
-    <string name="dialog_positive_confirm_stop_confirm">記録終了</string>
+    <string name="dialog_title_confirm_rewrire">Rewriting</string>
+    <string name="dialog_title_confirm_remove">Remove</string>
+    <string name="dialog_title_update_playtime">Recording start time</string>
+    <string name="dialog_title_update_delaytime">Delay time</string>
+    <string name="dialog_title_update_record_name">Record-name</string>
+    <string name="dialog_title_stop_record">Finish recording</string>
+    <string name="dialog_content_memo_confirm_rewrire">Do you want to rewrite the recorded memos?</string>
+    <string name="dialog_content_memo_confirm_remove">Remove memos?</string>
+    <string name="dialog_content_category_confirm_remove">Remove category?\nMotes in this category will be "No Category".</string>
+    <string name="dialog_content_record_confirm_remove">Remove record?</string>
+    <string name="dialog_content_stampmemo_confirm_remove">Delete recorded memos?</string>
+    <string name="dialog_content_stop_record">Do you wish to terminate the record?(Memos will be saved)</string>
+    <string name="dialog_content_delaytime">The set amount of time will be deducted from the memo recording time.</string>
+    <string name="dialog_positive_confirm_remove">Remove</string>
+    <string name="dialog_positive_confirm_stop_confirm">Finish</string>
 
     <!--  Record  -->
     <string name="init_record_time">00:00:00</string>
     <string name="clear_delay_time">00:00</string>
     <string name="init_record_name">No Title</string>
-    <string name="hint_record_name">Record Name</string>
     <string name="gragh_scale_10min_unit">10min</string>
     <string name="gragh_scale_1min_unit">1min</string>
     <string name="stamping_memo_ref_title">Recorded Memo</string>
-    <string name="stamping_memo_contents">左スワイプで削除</string>
-    <string name="snackbar_stamp_memo">メモを記録</string>
-    <string name="snackbar_removed">削除しました</string>
-    <string name="snackbar_undo_remove">元に戻す</string>
-    <string name="snackbar_undo_stamp_memo">取り消し</string>
+    <string name="stamping_memo_contents">Swipe left to delete</string>
+    <string name="snackbar_stamp_memo">Memoed.</string>
+    <string name="snackbar_removed">Removed.</string>
+    <string name="snackbar_undo_remove">cancel</string>
+    <string name="snackbar_undo_stamp_memo">cancel</string>
 
     <!--  menu  -->
     <string name="menu_new">new</string>
@@ -64,14 +63,12 @@
     <string name="menu_edit">edit</string>
 
     <!--  toast  -->
-    <string name="toast_error">エラーが発生しました。本画面を閉じてください。</string>
-    <string name="toast_memo_name_empty">メモ名未入力</string>
-    <string name="toast_category_name_empty">カテゴリ名未入力</string>
-    <string name="toast_complete_update">更新しました</string>
-    <string name="toast_complete_save_record">記録を保存しました</string>
-    <string name="toast_waring_stamp_memo">再生ボタンを押して、記録を開始して下さい</string>
-    <string name="toast_stamp_memo">＜メモを記録＞</string>
-
+    <string name="toast_error">An error has occurred. Please close this screen.</string>
+    <string name="toast_memo_name_empty">Memo name not entered.</string>
+    <string name="toast_category_name_empty">Category name not entered.</string>
+    <string name="toast_complete_update">Updated.</string>
+    <string name="toast_complete_save_record">Record saved.</string>
+    <string name="toast_waring_stamp_memo">Press the playback button to start recording.</string>
 
 
     <!-- Admod（アプリID） -->
@@ -83,6 +80,5 @@
     <!-- リリース用 -->
     <!--<string name="admob_unit_id">ca-app-pub-8046295810838892/4915194105</string>
     -->
-
 
 </resources>

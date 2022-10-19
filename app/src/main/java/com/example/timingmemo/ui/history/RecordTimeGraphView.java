@@ -127,7 +127,7 @@ public class RecordTimeGraphView extends View {
         // 目盛り
         //-----------------------------
         // 目盛り色
-        int scaleColor = getResources().getColor(R.color.mainColor);
+        int scaleColor = getResources().getColor(R.color.main);
 
         // Paint設定
         mGraghScalePaint = new Paint();
@@ -139,7 +139,7 @@ public class RecordTimeGraphView extends View {
         // テキスト
         //-----------------------------
         // テキスト色
-        int textColor = getResources().getColor(R.color.mainColor);
+        int textColor = getResources().getColor(R.color.main);
 
         // Paint設定
         mGraghTextPaint = new Paint();

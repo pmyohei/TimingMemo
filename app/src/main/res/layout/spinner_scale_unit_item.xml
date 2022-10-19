@@ -13,6 +13,6 @@
     android:ellipsize="marquee"
     android:layout_gravity="end"
     android:textAlignment="inherit"
-    android:textColor="@color/subColor"
+    android:textColor="@color/sub"
     android:background="@android:color/transparent"
-    android:backgroundTint="@color/subColor"/>
+    android:backgroundTint="@color/sub"/>

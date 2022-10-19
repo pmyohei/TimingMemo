@@ -25,7 +25,7 @@
         android:layout_margin="12dp"
         android:gravity="center"
         android:text="@string/memo"
-        android:textColor="@color/movieColor3"
+        android:textColor="@color/sub"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/v_memoColor"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainColor"
+    android:background="@color/main"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     tools:context=".ui.memo.MemoRegistrationActivity">
@@ -34,7 +34,7 @@
         android:layout_marginStart="12dp"
         android:gravity="start"
         android:text="@string/category"
-        android:textColor="@color/subColor"
+        android:textColor="@color/sub"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_memoRegister" />
@@ -46,7 +46,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginStart="4dp"
         android:spinnerMode="dropdown"
-        android:backgroundTint="@color/subColor"
+        android:backgroundTint="@color/sub"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_category"/>
@@ -82,7 +82,7 @@
         android:id="@+id/cl_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/subColor"
+        android:background="@color/sub"
         android:layout_marginTop="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -97,7 +97,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginStart="12dp"
             android:text="@string/title_color"
-            android:textColor="@color/mainColor"
+            android:textColor="@color/main"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -109,7 +109,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
-            android:background="@color/mainColor"
+            android:background="@color/main"
             app:layout_constraintTop_toBottomOf="@+id/tv_color"
             app:layout_constraintStart_toStartOf="parent" />
 

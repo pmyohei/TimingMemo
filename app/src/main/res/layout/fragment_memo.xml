@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainColor"
+    android:background="@color/main"
     tools:context=".ui.memo.MemoFragment">
 
     <TextView
@@ -15,7 +15,7 @@
         android:padding="12dp"
         android:gravity="center"
         android:text="@string/memo"
-        android:textColor="@color/subColor"
+        android:textColor="@color/sub"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_category"
@@ -32,7 +32,7 @@
         android:padding="12dp"
         android:gravity="center"
         android:text="@string/category"
-        android:textColor="@color/mainColor"
+        android:textColor="@color/main"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

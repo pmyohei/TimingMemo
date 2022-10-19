@@ -12,7 +12,7 @@
         android:id="@+id/cl_stampingMemoBottomSheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/mainColor"
+        android:background="@color/main"
         app:layout_behavior="@string/bottom_sheet_behavior"
         app:behavior_hideable="false"
         app:behavior_peekHeight="0dp">
@@ -24,9 +24,9 @@
             android:paddingTop="8dp"
             android:text="@string/stamping_memo_ref_title"
             android:textAlignment="center"
-            android:textColor="@color/subColor"
+            android:textColor="@color/sub"
             android:textSize="20sp"
-            android:background="@color/delayColor"
+            android:background="@color/accent3"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="parent" />
@@ -39,9 +39,9 @@
             android:paddingBottom="8dp"
             android:text="@string/stamping_memo_contents"
             android:textAlignment="center"
-            android:textColor="@color/subMiddleColor"
+            android:textColor="@color/text_middle_dark"
             android:textSize="16sp"
-            android:background="@color/delayColor"
+            android:background="@color/accent3"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="parent" />

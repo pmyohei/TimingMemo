@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/subColor">
+    android:background="@color/sub">
 
     <TextView
         android:id="@+id/tv_delayTimeContents"
@@ -13,7 +13,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginStart="24dp"
         android:text="@string/dialog_title_update_record_name"
-        android:textColor="@color/mainColor"
+        android:textColor="@color/main"
         android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/et_recordName"
@@ -45,7 +45,7 @@
         android:layout_marginBottom="12dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@color/mainColor"
+        android:background="@color/main"
         app:layout_constraintBottom_toTopOf="@+id/iv_save"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

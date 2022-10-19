@@ -11,6 +11,6 @@
     android:singleLine="false"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:textColor="@color/mainColor"
-    android:background="@color/subColor"
+    android:textColor="@color/main"
+    android:background="@color/sub"
     />

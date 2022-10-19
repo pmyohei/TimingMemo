@@ -17,7 +17,7 @@
         android:text="record"
         android:textAlignment="textStart"
         android:textSize="16sp"
-        android:textColor="@color/subColor"
+        android:textColor="@color/sub"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -29,7 +29,7 @@
         android:layout_marginLeft="@dimen/record_item_margin_left"
         android:text="20min"
         android:textSize="16sp"
-        android:textColor="@color/subColor"
+        android:textColor="@color/sub"
         app:layout_constraintTop_toBottomOf="@+id/tv_recordName"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -41,7 +41,7 @@
         android:layout_marginEnd="12dp"
         android:text="2022/08/15 12:20:40"
         android:textSize="12sp"
-        android:textColor="@color/subMiddleColor"
+        android:textColor="@color/text_middle_dark"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/tv_recordName"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -54,7 +54,7 @@
         android:layout_marginEnd="12dp"
         android:text="2022/08/15 12:50:12"
         android:textSize="12sp"
-        android:textColor="@color/subMiddleColor"
+        android:textColor="@color/text_middle_dark"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/tv_startTime"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -1,14 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    <color name="mainColor">#74b49b</color>-->
-    <color name="mainColor">#55ABA8</color>
-    <color name="mainLittleColor">#8055ABA8</color>
-<!--    <color name="subColor">#f4f9f4</color>-->
-    <color name="subColor">#F9FFD9</color>
-    <color name="subMiddleColor">#CCF9FFD9</color>
-    <color name="subLittleColor">#80F9FFD9</color>
-    <color name="timeColor">#FD5E53</color>
-    <color name="delayColor">#17223B</color>
+<!--    <color name="mainColor">#55ABA8</color>-->
+<!--    <color name="mainLittleColor">#8055ABA8</color>-->
+<!--    <color name="subColor">#F9FFD9</color>-->
+<!--    <color name="subMiddleColor">#CCF9FFD9</color>-->
+<!--    <color name="subLittleColor">#80F9FFD9</color>-->
+<!--    <color name="timeColor">#FD5E53</color>-->
+<!--    <color name="delayColor">#17223B</color>-->
+
+<!--    <color name="mainColor">#55ABA8</color>-->
+<!--    <color name="mainLittleColor">#8055ABA8</color>-->
+<!--    <color name="subColor">#FFD45C</color>-->
+<!--    <color name="subMiddleColor">#CCFFD45C</color>-->
+<!--    <color name="subLittleColor">#80FFD45C</color>-->
+<!--    <color name="accentColor">#F9FFD9</color>-->
+<!--    <color name="timeColor">#DE648D</color>-->
+<!--    <color name="delayColor">#240F16</color>-->
+<!--    <color name="tmpColor">#082C4F</color>-->
+
+    <color name="main">#EBEBE1</color>
+    <color name="main_little">#80EBEBE1</color>
+    <color name="sub">#6B6B67</color>
+    <color name="text_light">#EBEBE1</color>
+    <color name="text_dark">#6B6B67</color>
+    <color name="text_middle_dark">#CC6B6B67</color>
+    <color name="text_little_dark">#806B6B67</color>
+    <color name="accent1">#7ABCC8</color>
+    <color name="accent2">#7D3C5A</color>
+    <color name="accent3">#1D1F1C</color>
+
+<!--    <color name="tmpColor">#EEEE9D</color>
+    <color name="textColor_1">#6B6B67</color>
+    <color name="textColor_2">#EBEBE1</color>
+
+    <color name="mainColor">#7ABCC8</color>
+    <color name="mainLittleColor">#807ABCC8</color>
+    <color name="subColor">#EBEBE1</color>
+    <color name="subMiddleColor">#CCEBEBE1</color>
+    <color name="subLittleColor">#80EBEBE1</color>
+    <color name="accentColor">#F9FFD9</color>
+    <color name="timeColor">#7ABCC8</color>
+    <color name="delayColor">#7D3C5A</color>
+    <color name="tmpColor">#EEEE9D</color>
+    <color name="textColor_1">#EBEBE1</color>
+    <color name="textColor_2">#6B6B67</color>
+
+    <color name="mainColor">#EBEBE1</color>
+    <color name="mainColor">#7ABCC8</color>
+    <color name="mainColor">#7D3C5A</color>
+    <color name="mainColor">#344F40</color>
+    <color name="mainColor">#6B6B67</color>
+    <color name="mainColor">#EEEE9D</color>-->
+
+<!--    <color name="main">#EBEBE1</color>-->
+<!--    <color name="mainLittle">#80EBEBE1</color>-->
+<!--    <color name="sub">#6B6B67</color>-->
+<!--    <color name="textLight">#EBEBE1</color>-->
+<!--    <color name="textDark">#6B6B67</color>-->
+<!--    <color name="textMiddleDark">#CC6B6B67</color>-->
+<!--    <color name="textLittleDark">#806B6B67</color>-->
+<!--    <color name="accent1">#7ABCC8</color>-->
+<!--    <color name="accent2">#7D3C5A</color>-->
+<!--    <color name="accent3">#1D1F1C</color>-->
+
 
     <!--  映画色  -->
     <color name="movieColor1">#55ABA8</color>

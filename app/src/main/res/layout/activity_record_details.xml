@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainColor"
+    android:background="@color/main"
     tools:context=".ui.history.RecordDetailsActivity">
 
     <!--  ツールバー  -->
@@ -45,7 +45,7 @@
             android:paddingEnd="20dp"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
-            android:background="@color/subColor">
+            android:background="@color/sub">
 
             <com.example.timingmemo.ui.history.RecordTimeGraphView
                 android:id="@+id/tgmv_graph"
@@ -63,7 +63,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="4dp"
         android:spinnerMode="dropdown"
-        android:backgroundTint="@color/subColor"
+        android:backgroundTint="@color/sub"
         app:layout_constraintTop_toBottomOf="@+id/hsv_graph"
         app:layout_constraintBottom_toTopOf="@+id/v_border"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -74,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="12dp"
-        android:background="@color/subColor"
+        android:background="@color/sub"
         app:layout_constraintTop_toBottomOf="@+id/sp_scaleUnit"
         app:layout_constraintBottom_toTopOf="@+id/rv_stampMemo"
         app:layout_constraintStart_toStartOf="parent" />
