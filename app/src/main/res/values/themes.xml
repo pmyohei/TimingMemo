@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.TimingMemo" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/sub</item>
+        <item name="colorPrimary">@color/accent2</item>
         <item name="colorPrimaryVariant">@color/sub</item>
         <item name="colorOnPrimary">@color/main</item>
         <!-- Secondary brand color. -->
@@ -64,9 +64,17 @@
         <!--    テキスト色    -->
         <item name="android:textColorPrimary">@color/accent3</item>
         <!--    ボタン色    -->
-        <item name="colorAccent">@color/teal_700</item>
+        <item name="colorAccent">@color/accent2</item>
         <!--    背景色    -->
-        <item name="android:background">@color/sub</item>
+        <item name="android:background">@color/main</item>
+    </style>
+
+    <!-- NumberPicker スタイル -->
+    <style name="NumberPickerStyle" parent="Theme.AppCompat.Light.NoActionBar" >
+        <!--    テキスト色    -->
+        <item name="android:textColorPrimary">@color/main</item>
+        <!--    区切り線    -->
+        <item name="android:colorControlNormal">@color/main</item>
     </style>
 
 </resources>

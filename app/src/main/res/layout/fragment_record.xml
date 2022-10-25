@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="00:00"
+                android:text="@string/clear_delay_time"
                 android:textAlignment="center"
                 android:textColor="@color/text_light"
                 android:textSize="16sp" />
@@ -82,7 +82,7 @@
         android:background="@color/main"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/cl_timer"
-        app:layout_constraintBottom_toTopOf="@+id/tab_category"
+        app:layout_constraintBottom_toTopOf="@+id/v_border2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_weight="4">
@@ -119,27 +119,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <!--    記録メモ追加アニメーション用   -->
-<!--        <View
-            android:id="@+id/v_stampMemoImage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="12dp"
-            android:visibility="gone"
-            android:background="@drawable/image_add_stamp_memo"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/v_border"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>-->
-
         <!--    区切り線    -->
         <View
             android:id="@+id/v_border"
             android:layout_width="match_parent"
-            android:layout_height="0.4dp"
+            android:layout_height="@dimen/border_height"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:background="@color/accent3"
             app:layout_constraintTop_toBottomOf="@+id/iv_recordCircle"
             app:layout_constraintBottom_toTopOf="@+id/cl_recordCtrlIcons"
@@ -198,6 +185,18 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--    区切り線    -->
+    <View
+        android:id="@+id/v_border2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/border_bold_height"
+        android:layout_marginTop="4dp"
+        android:background="@color/sub"
+        app:layout_constraintTop_toBottomOf="@+id/cl_recordCtrl"
+        app:layout_constraintBottom_toTopOf="@+id/tab_category"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- インジケータ -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_category"
@@ -212,7 +211,7 @@
         app:tabMode="scrollable"
         app:tabRippleColor="@null"
         app:tabTextAppearance="@style/TabLayoutText"
-        app:layout_constraintTop_toBottomOf="@+id/cl_recordCtrl"
+        app:layout_constraintTop_toBottomOf="@+id/v_border2"
         app:layout_constraintBottom_toTopOf="@+id/vp2_memoList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

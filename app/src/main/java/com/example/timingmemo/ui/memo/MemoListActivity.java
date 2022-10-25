@@ -41,6 +41,8 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
     //--------------------------------
     // フィールド変数
     //--------------------------------
+    private final int TOP_PAGE_INDEX = 0;
+
     private ArrayList<UserMemoTable> mUserMemos;
     private ArrayList<UserCategoryTable> mUserCategories;
     private ActivityResultLauncher<Intent> mMemoRegistrationLancher;
@@ -57,10 +59,10 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
         boolean isGet = getUserData();
         if ( isGet ) {
             // メモを一覧表示
-            setMemoList();
+            setMemoList( TOP_PAGE_INDEX );
         } else {
             // なければ、DBから取得
-            getOnDB();
+            getOnDB( TOP_PAGE_INDEX );
         }
 
         // ツールバーの設定
@@ -79,7 +81,6 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
                     public void onActivityResult(ActivityResult result) {
 
                         // ResultCodeの取得
-                        Intent intent = result.getData();
                         int resultCode = result.getResultCode();
                         if( resultCode != MemoRegistrationActivity.RESULT_MEMO_REGISTRAION) {
                             // 該当外ならなにもせず終了
@@ -87,17 +88,9 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
                         }
 
                         // DBからデータを取得して画面情報を再度表示
-                        getOnDB();
-
-/*                        // 変更の発生したカテゴリページIndexを取得
-                        int[] pageIndex = intent.getIntArrayExtra( MemoRegistrationActivity.KEY_UPDATED_PAGE_INDEX );
-
-                        // 変更のあったページを更新
-                        ViewPager2 vp2_memoList = findViewById(R.id.vp2_memoList);
-                        MemoPageAdapter adapter = (MemoPageAdapter)vp2_memoList.getAdapter();
-                        for( int index: pageIndex ){
-                            adapter.notifyItemChanged( index );
-                        }*/
+                        Intent intent = result.getData();
+                        int selectedPage = intent.getIntExtra( MemoRegistrationActivity.KEY_UPDATED_PAGE_INDEX, TOP_PAGE_INDEX );
+                        getOnDB( selectedPage );
                     }
                 });
     }
@@ -125,7 +118,7 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
     /*
      * DBからメモとカテゴリデータを取得
      */
-    private void getOnDB() {
+    private void getOnDB( int selectedPage ) {
 
         // DB保存処理
         AsyncReadMemoCategory db = new AsyncReadMemoCategory(this, new AsyncReadMemoCategory.OnFinishListener() {
@@ -142,7 +135,7 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
                 commonData.setUserCategories(mUserCategories);
 
                 // メモを一覧表示
-                setMemoList();
+                setMemoList( selectedPage );
             }
         });
         //非同期処理開始
@@ -152,7 +145,7 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
     /*
      * メモの一覧表示設定
      */
-    private void setMemoList() {
+    private void setMemoList( int selectedPage ) {
 
         //--------------------------
         // ViewPager2の設定
@@ -164,6 +157,9 @@ public class MemoListActivity extends AppCompatActivity implements MemoListAdapt
         MemoPageAdapter memoPageAdapter = new MemoPageAdapter(memosByCategory);
         ViewPager2 vp2_memoList = findViewById(R.id.vp2_memoList);
         vp2_memoList.setAdapter(memoPageAdapter);
+
+        // 指定されたページを選択中にする
+        vp2_memoList.setCurrentItem( selectedPage );
 
         // メモクリックリスナーの設定
         memoPageAdapter.setOnMemoClickListener( this );

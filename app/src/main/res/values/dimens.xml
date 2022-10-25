@@ -3,15 +3,22 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <!--  共通 -->
+    <dimen name="border_height">0.4dp</dimen>
+    <dimen name="border_bold_height">0.8dp</dimen>
+
     <!--  メモ登録画面 -->
-    <dimen name="user_select_color_size">40dp</dimen>
-    <dimen name="user_selectable_color_size">40dp</dimen>
+    <dimen name="user_select_color_size">32dp</dimen>
+    <dimen name="user_select_color_size_over_600">40dp</dimen>
+    <dimen name="user_selectable_color_size">32dp</dimen>
+    <dimen name="user_selectable_color_size_over_600">40dp</dimen>
 
     <!--  記録時間グラフ1メモリ（1min）当たりの横幅 -->
     <dimen name="scale_1min_length">20dp</dimen>
 
     <!--  record画面の記録時間コントールボタンサイズ -->
-    <dimen name="record_control_icon_size">28dp</dimen>
+    <dimen name="record_control_icon_size">32dp</dimen>
+    <dimen name="record_control_icon_size_over_600">32dp</dimen>
     <dimen name="record_icon_weight">3</dimen>
     <dimen name="record_control_icon_weight">1</dimen>
 
@@ -22,5 +29,7 @@
     <!--  記録詳細画面 -->
     <dimen name="memo_color_size">24dp</dimen>
     <dimen name="memo_color_size_h600dp">32dp</dimen>
+
+
 
 </resources>

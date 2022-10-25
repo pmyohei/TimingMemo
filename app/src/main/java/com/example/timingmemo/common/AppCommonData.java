@@ -102,20 +102,6 @@ public class AppCommonData extends Application {
     }
 
     /*
-     * 記録情報のクリア
-     */
-    public void clearRecordData(){
-        // 記録
-        String startDate = getNowDate();
-        mRecord = new RecordTable();
-        mRecord.setStartRecordingTime( startDate );
-        // 記録メモをクリア
-        mStampMemos.clear();
-        // 記録状態
-        mRecordPlayState = RecordFragment.RECORD_PLAY;
-    }
-
-    /*
      * 現在日時をyyyy/MM/dd HH:mm:ss形式で取得する
      */
     public static String getNowDate(){

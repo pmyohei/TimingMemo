@@ -44,7 +44,6 @@ public class MemoRegistrationActivity extends AppCompatActivity {
     //--------------------------------
     // フィールド変数
     //--------------------------------
-    private int mInitUserSelectedPageIndex;                 // 初めにユーザーが選択していたカテゴリのページindex
     private boolean mIsNewMemoRegistration;                 // 新規メモ登録の場合、true
 
     @Override
@@ -104,9 +103,6 @@ public class MemoRegistrationActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int selectedCategoryPage = intent.getIntExtra(MemoListActivity.KEY_SELECTED_PAGE_INDEX, 0);
         sp_category.setSelection(selectedCategoryPage);
-
-        // 選択中だったカテゴリページを保持
-        mInitUserSelectedPageIndex = selectedCategoryPage;
     }
 
 
@@ -336,17 +332,9 @@ public class MemoRegistrationActivity extends AppCompatActivity {
         Spinner sp_category = findViewById(R.id.sp_category);
         int selectedIndex = sp_category.getSelectedItemPosition();
 
-        // 更新対象のページが、初期ユーザー選択カテゴリと異なっていれば、2ページ分の更新が必要
-        int[] pageIndex;
-        if( selectedIndex == mInitUserSelectedPageIndex ){
-            pageIndex = new int[1];
-        } else {
-            pageIndex = new int[2];
-        }
-
         // resultコード設定
         Intent intent = getIntent();
-        intent.putExtra(KEY_UPDATED_PAGE_INDEX, pageIndex);
+        intent.putExtra(KEY_UPDATED_PAGE_INDEX, selectedIndex);
         setResult(RESULT_MEMO_REGISTRAION, intent);
     }
 

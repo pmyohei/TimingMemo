@@ -13,6 +13,10 @@ public interface RecordTableDao {
     @Query("SELECT * FROM recordTable")
     List<RecordTable> getAll();
 
+    // 記録が新しい順で全ての記録を取得
+    @Query("SELECT * FROM recordTable ORDER BY startRecordingTime DESC")
+    List<RecordTable> getAllNewOrder();
+
     @Query("SELECT * FROM recordTable WHERE pid=(:pid) ")
     RecordTable get( int pid );
 

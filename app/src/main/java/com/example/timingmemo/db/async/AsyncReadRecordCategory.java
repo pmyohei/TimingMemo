@@ -66,7 +66,7 @@ public class AsyncReadRecordCategory extends AsyncShowProgress {
         private void readDB(){
             // 記録を全て取得
             RecordTableDao dao = mDB.daoRecordTable();
-            List<RecordTable> records = dao.getAll();
+            List<RecordTable> records = dao.getAllNewOrder();
             mRecords = new ArrayList<>( records );
         }
     }

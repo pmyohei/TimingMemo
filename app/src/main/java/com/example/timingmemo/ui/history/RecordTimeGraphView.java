@@ -206,7 +206,7 @@ public class RecordTimeGraphView extends View {
             // 時間テキストx位置
             //---------------------------------------
             // 時間テキストを表示するx位置をリストに追加
-            addTextPosXList(xPos, drawTime);
+            addTextPosXList(xPos, drawTime, false);
 
             //---------------------------------------
             // 目盛り
@@ -241,7 +241,7 @@ public class RecordTimeGraphView extends View {
         //----------------------------------------------------------------------
         // 終端の目盛り位置をリストに追加（両端のY位置を取得するために、指定時間として０を指定）
         //----------------------------------------------------------------------
-        addTextPosXList(posX, FOR_EDGE);
+        addTextPosXList(posX, FOR_EDGE, true);
 
         //------------------
         // 終端目盛りを設定
@@ -427,7 +427,7 @@ public class RecordTimeGraphView extends View {
     /*
      * 時間テキスト描画X位置リストへのX位置追加
      */
-    private void addTextPosXList(float xPos, int time) {
+    private void addTextPosXList(float xPos, int time, boolean isEnd) {
 
         // 時間テキストの表示時間間隔
         int timeTextJustTime;
@@ -443,6 +443,23 @@ public class RecordTimeGraphView extends View {
         if ((time % timeTextJustTime) == 0) {
             // リストに位置を追加
             mGraghTextPosXList.add(xPos);
+        }
+
+        //------------------------------------------------------------
+        // 記録時間の直前の時間テキストが、記録時間と重複するならリストから削除
+        //------------------------------------------------------------
+        // 終端の時間テキストでなければ削除処理なし
+        if( !isEnd ){
+            return;
+        }
+
+        // 表示の重複チェック
+        int last = mGraghTextPosXList.size() - 1;
+        int preLast = last - 1;
+        boolean isCovered = isCoveredTimeText(preLast, last);
+        if (isCovered) {
+            // 表示がかぶる場合、リストから削除（表示しない）
+            mGraghTextPosXList.remove(preLast);
         }
     }
 
@@ -539,17 +556,6 @@ public class RecordTimeGraphView extends View {
      */
     private void drawTimeText(Canvas canvas) {
 
-        //------------------------------------------------------------
-        // 記録時間の直前の時間テキストが、記録時間と重複するならリストから削除
-        //------------------------------------------------------------
-        int last = mGraghTextPosXList.size() - 1;
-        int preLast = last - 1;
-        boolean isCovered = isCoveredTimeText(preLast, last);
-        if (isCovered) {
-            // 表示がかぶる場合、リストから削除（表示しない）
-            mGraghTextPosXList.remove(preLast);
-        }
-
         //----------------------------
         // 時間テキストを大目盛り単位毎に描画
         //----------------------------
@@ -557,7 +563,7 @@ public class RecordTimeGraphView extends View {
         int timeAdvance = get10ScaleTimeAdvance();
 
         // リスト最後の直前までの情報を描画
-        last = mGraghTextPosXList.size() - 1;
+        int last = mGraghTextPosXList.size() - 1;
         for (int i = 0, minute = 0; i < last; i++, minute += timeAdvance) {
             // 分を「hh:mm:ss」に変換
             String timeText = formatHHMMSS(minute);
@@ -683,8 +689,6 @@ public class RecordTimeGraphView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        Log.i("通過", "drawPath()");
-
         // Path情報があれば描画
         if ( !mGraghScalePath.isEmpty() ) {
             // 目盛り描画
@@ -694,21 +698,18 @@ public class RecordTimeGraphView extends View {
             // 記録メモを描画
             drawStampMemos( canvas );
         }
-
-        Log.i("通過", "getWidth()" + getWidth());
-        Log.i("通過", "getHeight()" + getHeight());
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Log.i("目盛り", "onMeasure()");
+//        Log.i("目盛り", "onMeasure()");
     }
 
     @Override
     protected void onLayout( boolean changed, int left, int top, int right, int bottom ){
         super.onLayout( changed, left, top, right, bottom);
-        Log.i("目盛り", "onLayout() w=" + (right - left));
+//        Log.i("目盛り", "onLayout() w=" + (right - left));
 
         // 目盛りPathの設定
         setGraghScalePath();

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.timingmemo.R;
 import com.example.timingmemo.common.AppCommonData;
 import com.example.timingmemo.db.UserCategoryTable;
+import com.example.timingmemo.db.UserMemoTable;
 import com.example.timingmemo.db.async.AsyncCreateCategory;
 import com.example.timingmemo.db.async.AsyncRemoveCategory;
 import com.example.timingmemo.db.async.AsyncUpdateCategory;
@@ -238,21 +239,35 @@ public class CategoryRegistrationActivity extends AppCompatActivity {
      * 共通データのカテゴリリストのカテゴリを削除
      */
     private int removeCategoryCommonList( int removedPid ) {
-        // 共通データのリスト
+        // 共通データ
         AppCommonData commonData = (AppCommonData) getApplication();
-        ArrayList<UserCategoryTable> categories = commonData.getUserCategories();
 
-        Log.i("削除アニメ", "removedPid=" + removedPid);
+        //---------------------
+        // カテゴリリストから削除
+        //---------------------
+        // 共通データのカテゴリリスト
+        ArrayList<UserCategoryTable> categories = commonData.getUserCategories();
 
         // 更新対象カテゴリのリスト内の位置を取得し、リストから削除
         int position = getCategoryIndexInList( categories, removedPid );
         categories.remove( position );
 
+        //---------------------
+        // メモリストを更新
+        //---------------------
+        // 共通データのメモリスト
+        ArrayList<UserMemoTable> userMemos = commonData.getUserMemos();
+
+        // 「削除対象カテゴリが設定されたメモ」のカテゴリを「カテゴリなし」に更新
+        for( UserMemoTable memo: userMemos ){
+            memo.setCategoryPid( UserMemoTable.NO_CATEGORY );
+        }
+
         return position;
     }
 
     /*
-     * 共通データのカテゴリリストのカテゴリを削除
+     * カテゴリリストから指定カテゴリPidのリスト位置を取得
      */
     private int getCategoryIndexInList( ArrayList<UserCategoryTable> categories, int pid ) {
 

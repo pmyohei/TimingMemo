@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -91,8 +92,9 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         //-----------------------------
         // 初期処理
         //-----------------------------
+        getActivity().setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
         init(root);
-
+        
         //-----------------------------
         // リスナー設定
         //-----------------------------
@@ -839,12 +841,18 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
      */
     private void stopRecord() {
 
+        View root = mtv_recordTime.getRootView();
+
         //----------------------
         // 保存／同期処理
         //----------------------
-        // 記録を保存
+        // 記録名
+        TextView tv_recordName = root.findViewById(R.id.tv_recordName);
+        String recordName = tv_recordName.getText().toString();
+        // 記録時間
         String stoppedRecordTime = mtv_recordTime.getText().toString();
-        saveRecord(stoppedRecordTime);
+        // 記録を保存
+        saveRecord(recordName, stoppedRecordTime);
 
         // 共通データ側を記録停止にする
         AppCommonData commonData = (AppCommonData) getActivity().getApplication();
@@ -868,11 +876,13 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         StampMemoListAdapter adapter = (StampMemoListAdapter)rv_stampingMemoList.getAdapter();
         adapter.notifyItemRangeRemoved( 0, stampedMemoNum );
 
+        // 記録名を初期化
+        tv_recordName.setText( R.string.init_record_name );
+
         //----------------------
         // 制御系を初期状態に
         //----------------------
         // 記録アイコンの表示を記録開始用に変更
-        View root = mtv_recordTime.getRootView();
         showRecordControlIcon(root);
 
         // レコードアニメーションを停止
@@ -883,16 +893,12 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
      * 記録保存
      *   @para1：記録終了時点の記録時間（hh:mm:ss）
      */
-    private void saveRecord(String recordStopTime) {
-
-        View root = mtv_recordTime.getRootView();
+    private void saveRecord(String recordName, String recordStopTime) {
 
         //------------------
         // 記録情報の設定
         //------------------
         // 記録名
-        TextView tv_recordName = root.findViewById(R.id.tv_recordName);
-        String recordName = tv_recordName.getText().toString();
         mRecord.setName(recordName);
 
         // 記録時間
@@ -909,7 +915,9 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         //------------------
         // DB保存
         //------------------
-        AsyncCreateRecord db = new AsyncCreateRecord(getActivity(), mRecord, mStampMemos, new AsyncCreateRecord.OnFinishListener() {
+        // 記録メモリストがクリアされるため、全コピーしたリストを用意
+        ArrayList<StampMemoTable> tmpStampMemos = new ArrayList<>(mStampMemos);
+        AsyncCreateRecord db = new AsyncCreateRecord(getActivity(), mRecord, tmpStampMemos, new AsyncCreateRecord.OnFinishListener() {
             @Override
             public void onFinish() {
                 // 完了メッセージ
@@ -1148,7 +1156,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         String message = playTime + "\n" + memoName;
 
         // UNDO確認メッセージを表示
-        Snackbar.make(cl_root, message, Snackbar.LENGTH_LONG)
+        Snackbar.make(cl_root, message, Snackbar.LENGTH_SHORT)
                 .setAction(R.string.snackbar_undo_stamp_memo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -1164,7 +1172,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
                 // レイアウト
                 .setBackgroundTint(resources.getColor(R.color.sub))
                 .setTextColor(resources.getColor(R.color.main))
-                .setActionTextColor(resources.getColor(R.color.accent2))
+                .setActionTextColor(resources.getColor(R.color.main))
 
                 .show();
     }
@@ -1191,7 +1199,7 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
                 // レイアウト
                 .setBackgroundTint(resources.getColor(R.color.sub))
                 .setTextColor(resources.getColor(R.color.main))
-                .setActionTextColor(resources.getColor(R.color.accent2))
+                .setActionTextColor(resources.getColor(R.color.main))
 
                 .show();
     }

@@ -64,6 +64,7 @@ public class AsyncUpdateMemo extends AsyncShowProgress {
             // 更新対象と更新後情報
             int pid = mUserMemo.getPid();
             String memoName = mUserMemo.getName();
+            int memoColor = mUserMemo.getColor();
             int categoryPid = mUserMemo.getCategoryPid();
 
             // メモの更新
@@ -73,6 +74,7 @@ public class AsyncUpdateMemo extends AsyncShowProgress {
             UserMemoTable targetMemo = memoDao.getUserMemo( pid );
             targetMemo.setCategoryPid( categoryPid );
             targetMemo.setName( memoName );
+            targetMemo.setColor( memoColor );
 
             // 更新
             memoDao.update( targetMemo );

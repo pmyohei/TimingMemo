@@ -20,12 +20,12 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <NumberPicker
+        android:theme="@style/NumberPickerStyle"
         android:id="@+id/np_hh1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginStart="32dp"
-        android:textColor="@color/main"
         app:layout_constraintTop_toBottomOf="@+id/tv_delayTimeContents"
         app:layout_constraintBottom_toTopOf="@+id/v_border"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,11 +44,11 @@
         app:layout_constraintEnd_toStartOf="@id/np_m"/>
 
     <NumberPicker
+        android:theme="@style/NumberPickerStyle"
         android:id="@+id/np_m"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:textColor="@color/main"
         app:layout_constraintTop_toBottomOf="@+id/tv_delayTimeContents"
         app:layout_constraintBottom_toTopOf="@+id/v_border"
         app:layout_constraintStart_toEndOf="@id/tv_h"
@@ -67,12 +67,12 @@
         app:layout_constraintEnd_toStartOf="@id/np_s"/>
 
     <NumberPicker
+        android:theme="@style/NumberPickerStyle"
         android:id="@+id/np_s"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="32dp"
-        android:textColor="@color/main"
         app:layout_constraintTop_toBottomOf="@+id/tv_delayTimeContents"
         app:layout_constraintBottom_toTopOf="@+id/v_border"
         app:layout_constraintStart_toEndOf="@id/tv_m"
@@ -82,7 +82,7 @@
     <View
         android:id="@+id/v_border"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/border_height"
         android:layout_marginBottom="12dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
