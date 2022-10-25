@@ -33,6 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:hint="@string/hint_category_name"
+        android:inputType="text"
+        android:scrollbars="horizontal"
         app:theme="@style/EditTextSubColorStyle"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_categoryList"
         app:layout_constraintEnd_toEndOf="parent"

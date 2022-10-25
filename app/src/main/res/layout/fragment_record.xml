@@ -79,7 +79,7 @@
         android:id="@+id/cl_recordCtrl"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/main"
+        android:background="@color/tmp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/cl_timer"
         app:layout_constraintBottom_toTopOf="@+id/v_border2"

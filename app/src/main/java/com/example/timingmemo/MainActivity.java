@@ -49,15 +49,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //---------------------------
+        // 初期諸設定
+        //---------------------------
         // アクションバーを非表示
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
         }
 
-        //---------------
-        // 疑似データ生成
-        //---------------
         // AdMob初期化
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -69,13 +69,13 @@ public class MainActivity extends AppCompatActivity {
         //---------------
         // 疑似データ生成
         //---------------
-        AsyncTmpCreateDataMemo db = new AsyncTmpCreateDataMemo(this, new AsyncTmpCreateDataMemo.OnFinishListener() {
+/*        AsyncTmpCreateDataMemo db = new AsyncTmpCreateDataMemo(this, new AsyncTmpCreateDataMemo.OnFinishListener() {
             @Override
             public void onFinish(int pid) {
             }
         });
         //非同期処理開始
-        db.execute();
+        db.execute();*/
     }
 
 }

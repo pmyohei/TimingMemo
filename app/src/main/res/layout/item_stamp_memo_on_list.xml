@@ -51,7 +51,7 @@
         android:layout_marginEnd="4dp"
         android:text="2020/08/01 13:23:02"
         android:textSize="12sp"
-        android:textColor="@color/sub"
+        android:textColor="@color/text_middle_dark"
         app:layout_constraintTop_toBottomOf="@+id/tv_playTime"
         app:layout_constraintEnd_toEndOf="parent" />
 

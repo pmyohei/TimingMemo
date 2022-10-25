@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--  基本色  -->
-    <color name="main">#EBEBE1</color>
-    <color name="main_little">#80EBEBE1</color>
+<!--    <color name="main">#EBEBE1</color>-->
+    <color name="main">#F7F7ED</color>
+    <color name="main_little">#80F7F7ED</color>
     <color name="sub">#6B6B67</color>
-    <color name="text_light">#EBEBE1</color>
+<!--    <color name="text_light">#EBEBE1</color>-->
+    <color name="text_light">#F7F7ED</color>
     <color name="text_dark">#6B6B67</color>
     <color name="text_middle_dark">#CC6B6B67</color>
     <color name="text_little_dark">#806B6B67</color>
@@ -32,6 +34,7 @@
     <color name="movieColor3">#F9FFD9</color>
     <color name="movieColor4">#FCE45C</color>
     <color name="movieColor5">#000000</color>
+    <color name="tmp">#FCF7E2</color>
 
     <!--  映画色  -->
     <color name="monotoneColor1">#494544</color>

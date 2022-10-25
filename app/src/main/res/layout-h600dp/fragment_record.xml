@@ -195,7 +195,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/border_bold_height"
         android:layout_marginTop="0dp"
-        android:background="@color/text_dark"
+        android:background="@color/sub"
         app:layout_constraintTop_toBottomOf="@+id/cl_recordCtrl"
         app:layout_constraintBottom_toTopOf="@+id/tab_category"
         app:layout_constraintStart_toStartOf="parent"
