@@ -47,7 +47,7 @@
             android:paddingBottom="12dp"
             android:background="@color/sub">
 
-            <com.example.timingmemo.ui.history.RecordTimeGraphView
+            <com.memotool.timewatchmemo.ui.history.RecordTimeGraphView
                 android:id="@+id/tgmv_graph"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />

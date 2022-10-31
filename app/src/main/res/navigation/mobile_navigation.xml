@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_memo"
-        android:name="com.example.timingmemo.ui.memo.MemoFragment"
+        android:name="com.memotool.timewatchmemo.ui.memo.MemoFragment"
         android:label="@string/title_memo"
         tools:layout="@layout/fragment_memo" />
 
     <fragment
         android:id="@+id/navigation_record"
-        android:name="com.example.timingmemo.ui.record.RecordFragment"
+        android:name="com.memotool.timewatchmemo.ui.record.RecordFragment"
         android:label="@string/title_record"
         tools:layout="@layout/fragment_record" />
 
     <fragment
         android:id="@+id/navigation_history"
-        android:name="com.example.timingmemo.ui.history.HistoryFragment"
+        android:name="com.memotool.timewatchmemo.ui.history.HistoryFragment"
         android:label="@string/title_history"
         tools:layout="@layout/fragment_history" />
 </navigation>
