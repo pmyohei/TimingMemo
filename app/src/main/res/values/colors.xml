@@ -17,6 +17,7 @@
     <color name="main_little">#8055ABA8</color>
     <color name="sub">#F9FFD9</color>
     <color name="text_light">#55ABA8</color>
+    <color name="text_middle_light">#CC55ABA8</color>
     <color name="text_dark">#F9FFD9</color>
     <color name="text_middle_dark">#CCF9FFD9</color>
     <color name="text_little_dark">#80F9FFD9</color>

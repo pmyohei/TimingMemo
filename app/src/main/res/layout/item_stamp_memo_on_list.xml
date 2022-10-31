@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:padding="4dp"
-    android:background="@drawable/basic_border">
+    android:background="@drawable/basic_border_fill">
 
     <View
         android:id="@+id/v_memoColor"
@@ -27,7 +27,7 @@
         android:layout_marginStart="24dp"
         android:text="memo1"
         android:textSize="16sp"
-        android:textColor="@color/sub"
+        android:textColor="@color/text_light"
         android:textAlignment="textStart"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/v_memoColor" />
@@ -39,7 +39,7 @@
         android:layout_marginStart="24dp"
         android:text="00:21:12 ( -00:05 )"
         android:textSize="16sp"
-        android:textColor="@color/sub"
+        android:textColor="@color/text_light"
         app:layout_constraintTop_toBottomOf="@+id/tv_stampMemo"
         app:layout_constraintStart_toEndOf="@id/v_memoColor" />
 
@@ -51,7 +51,7 @@
         android:layout_marginEnd="4dp"
         android:text="2020/08/01 13:23:02"
         android:textSize="12sp"
-        android:textColor="@color/text_middle_dark"
+        android:textColor="@color/text_middle_light"
         app:layout_constraintTop_toBottomOf="@+id/tv_playTime"
         app:layout_constraintEnd_toEndOf="parent" />
 

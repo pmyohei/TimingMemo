@@ -76,7 +76,7 @@
         android:id="@+id/cl_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/basic_border"
+        android:background="@drawable/basic_border_fill"
         android:layout_marginTop="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -94,7 +94,7 @@
             android:layout_marginStart="12dp"
             android:textSize="12sp"
             android:text="@string/title_color"
-            android:textColor="@color/sub"
+            android:textColor="@color/text_light"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

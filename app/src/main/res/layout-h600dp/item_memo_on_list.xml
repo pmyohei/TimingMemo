@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="12dp"
-    android:background="@drawable/basic_border">
+    android:background="@drawable/basic_border_fill">
 
     <View
         android:id="@+id/v_memoColor"
@@ -25,7 +25,7 @@
         android:layout_margin="12dp"
         android:gravity="center"
         android:text="@string/memo"
-        android:textColor="@color/sub"
+        android:textColor="@color/text_light"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/v_memoColor"

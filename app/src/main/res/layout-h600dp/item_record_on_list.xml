@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="12dp"
     android:padding="4dp"
-    android:background="@drawable/basic_border">
+    android:background="@drawable/basic_border_fill">
 
     <TextView
         android:id="@+id/tv_recordName"
@@ -18,7 +18,7 @@
         android:layout_marginEnd="4dp"
         android:text="record"
         android:textAlignment="textStart"
-        android:textColor="@color/sub"
+        android:textColor="@color/text_light"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,7 @@
         android:layout_marginStart="12dp"
         android:text="00:32:12"
         android:textSize="20sp"
-        android:textColor="@color/text_middle_dark"
+        android:textColor="@color/accent1"
         app:layout_constraintTop_toBottomOf="@+id/tv_recordName"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -44,7 +44,7 @@
         android:layout_marginEnd="8dp"
         android:text="2022/08/15 12:20:40"
         android:textSize="16sp"
-        android:textColor="@color/text_middle_dark"
+        android:textColor="@color/text_middle_light"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/tv_recordingTime"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -57,7 +57,7 @@
         android:layout_marginEnd="8dp"
         android:text="2022/08/15 12:50:12"
         android:textSize="16sp"
-        android:textColor="@color/text_middle_dark"
+        android:textColor="@color/text_middle_light"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/tv_startTime"
         app:layout_constraintEnd_toEndOf="parent" />
