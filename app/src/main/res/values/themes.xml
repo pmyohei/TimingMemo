@@ -25,7 +25,6 @@
         <item name="android:activityCloseExitAnimation">@anim/activity_transition_out</item>
     </style>
 
-
     <!--  TabLayout スタイル  -->
     <style name="TabLayoutText" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
@@ -62,11 +61,11 @@
     <!-- AlertDialog スタイル -->
     <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <!--    テキスト色    -->
-        <item name="android:textColorPrimary">@color/accent3</item>
+        <item name="android:textColorPrimary">@color/main</item>
         <!--    ボタン色    -->
-        <item name="colorAccent">@color/accent2</item>
+        <item name="colorAccent">@color/accent1</item>
         <!--    背景色    -->
-        <item name="android:background">@color/main</item>
+        <item name="android:background">@color/sub</item>
     </style>
 
     <!-- NumberPicker スタイル -->

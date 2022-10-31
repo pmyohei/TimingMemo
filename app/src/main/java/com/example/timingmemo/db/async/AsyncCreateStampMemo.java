@@ -8,6 +8,8 @@ import android.os.Looper;
 import com.example.timingmemo.R;
 import com.example.timingmemo.db.AppDatabase;
 import com.example.timingmemo.db.AppDatabaseManager;
+import com.example.timingmemo.db.RecordTable;
+import com.example.timingmemo.db.RecordTableDao;
 import com.example.timingmemo.db.StampMemoTable;
 import com.example.timingmemo.db.StampMemoTableDao;
 
@@ -65,28 +67,28 @@ public class AsyncCreateStampMemo extends AsyncShowProgress {
          * DBへ追加
          */
         @SuppressLint("ResourceType")
-        private void insertDB(){
+        private void insertDB() {
 
             //--------------------------
             // 新規記録メモ情報に情報追加
             //--------------------------
             // 遅延時間 → クリア
-            String clearDelayTime = mContext.getString( R.string.clear_delay_time );
+            String clearDelayTime = mContext.getString(R.string.clear_delay_time);
 
             // 記録時間（システム） → 現在時刻
             @SuppressLint("SimpleDateFormat") final DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            final Date currentDate = new Date( System.currentTimeMillis());
+            final Date currentDate = new Date(System.currentTimeMillis());
             String currentTime = df.format(currentDate);
 
-            mStampMemo.setDelayTime( clearDelayTime );
-            mStampMemo.setStampingSystemTime( currentTime );
+            mStampMemo.setDelayTime(clearDelayTime);
+            mStampMemo.setStampingSystemTime(currentTime);
 
             // テーブルに追加
             StampMemoTableDao dao = mDB.daoStampMemoTable();
-            int pid = (int)dao.insert( mStampMemo );
+            int pid = (int) dao.insert(mStampMemo);
 
             // 終了リスナー用にPidを設定
-            mStampMemo.setPid( pid );
+            mStampMemo.setPid(pid);
         }
     }
 
@@ -124,5 +126,4 @@ public class AsyncCreateStampMemo extends AsyncShowProgress {
     public interface OnFinishListener {
         void onFinish( StampMemoTable stampMemo );
     }
-
 }

@@ -12,6 +12,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="40dp"
-    android:textColor="@color/sub"
-    android:background="@color/main"
+    android:textColor="@color/main"
+    android:background="@color/sub"
     />

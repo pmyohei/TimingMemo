@@ -19,6 +19,7 @@
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.2065" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.104" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2335" />
+        <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.2655" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/drawable/image_add_stamp_memo.xml" value="0.2335" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/drawable/record.xml" value="0.2335" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/drawable/record_sample2.xml" value="0.238" />
@@ -41,6 +42,7 @@
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/activity_stamp_memo_update.xml" value="0.26145833333333335" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/activity_stamp_memo_updatep.xml" value="0.2989583333333333" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/bottom_sheet_stamping_memo.xml" value="0.21145833333333333" />
+        <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/dialog_record_edit.xml" value="0.3145833333333333" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/dialog_record_name_edit.xml" value="0.315625" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/dialog_time_picker.xml" value="0.19322916666666667" />
         <entry key="..\:/Users/t.yohei/AndroidStudioProjects/TimingMemo/app/src/main/res/layout/dialog_time_picker_2.xml" value="0.19322916666666667" />

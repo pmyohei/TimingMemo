@@ -42,6 +42,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/*
+ * 記録メモ新規登録／書き換え画面
+ */
 public class StampMemoUpdateActivity extends AppCompatActivity implements MemoListAdapter.MemoClickListener {
 
     //--------------------------------
@@ -377,12 +380,24 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
      */
     private void saveAddStampMemo() {
 
-        //--------------------------
-        // 保存データ設定
-        //--------------------------
         // 入力された記録メモ情報を取得
         StampMemoTable stampMemo = getInputStampMemoInfo();
 
+        //------------------------------------
+        // 記録メモ時間が記録時間を超過しているか判定
+        //------------------------------------
+        // 超過判定
+        String playTime = stampMemo.getStampingPlayTime();
+        boolean isOverRecordTime = isOverRecordTime( playTime );
+        if( isOverRecordTime ){
+            // 超過しているなら、メモとして不可
+            Toast.makeText(this, R.string.toast_stamp_time_add_error, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //--------------------------
+        // 保存データ設定
+        //--------------------------
         // 紐づいている記録のPidを設定
         Intent intent = getIntent();
         int recordPid = intent.getIntExtra(RecordDetailsActivity.KEY_TARGET_RECORD_PID, -1);
@@ -408,12 +423,24 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
      */
     private void saveUpdateStampMemo() {
 
-        //--------------------------
-        // 保存データ設定
-        //--------------------------
         // 入力された記録メモ情報を取得する
         StampMemoTable stampMemo = getInputStampMemoInfo();
 
+        //------------------------------------
+        // 記録メモ時間が記録時間を超過しているか判定
+        //------------------------------------
+        // 超過判定
+        String playTime = stampMemo.getStampingPlayTime();
+        boolean isOverRecordTime = isOverRecordTime( playTime );
+        if( isOverRecordTime ){
+            // 超過しているなら、メモとして不可
+            Toast.makeText(this, R.string.toast_stamp_time_add_error, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //--------------------------
+        // 保存データ設定
+        //--------------------------
         // 更新対象の記録メモのPidも設定
         Intent intent = getIntent();
         int pid = intent.getIntExtra(RecordDetailsActivity.KEY_TARGET_MEMO_PID, -1);
@@ -505,6 +532,25 @@ public class StampMemoUpdateActivity extends AppCompatActivity implements MemoLi
         String memoName = et_memoName.getText().toString();
         return memoName.isEmpty();
     }
+
+    /*
+     * 記録メモ時間が記録時間を超過しているか判定
+     *    @return：true：超過
+     */
+    private boolean isOverRecordTime( String playTime ) {
+
+        // 記録時間
+        Intent intent = getIntent();
+        String recordTime = intent.getStringExtra(RecordDetailsActivity.KEY_TARGET_RECORD_TIME);
+
+        // 「記録メモ時間」が「記録時間」を超過している場合
+        if( playTime.compareTo( recordTime ) > 0 ){
+            return true;
+        }
+
+        return false;
+    }
+
 
     /*
      * 画面終了のindentデータを設定

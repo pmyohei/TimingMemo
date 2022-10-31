@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.timingmemo.R;
-import com.example.timingmemo.RecordNameEditDialog;
 import com.example.timingmemo.TimePickerHHMMSSDialog;
 import com.example.timingmemo.common.AppCommonData;
 import com.example.timingmemo.db.RecordTable;
@@ -317,14 +316,14 @@ public class RecordFragment extends Fragment implements MemoListAdapter.MemoClic
         // Dialogを開く
         RecordNameEditDialog dialog = RecordNameEditDialog.newInstance();
         dialog.setOnPositiveClickListener(new RecordNameEditDialog.PositiveClickListener() {
-                                              @Override
-                                              public void onPositiveClick(String recordName) {
-                                                  // 記録名に反映
-                                                  tv_recordName.setText(recordName);
-                                                  // 記録に設定
-                                                  mRecord.setName(recordName);
-                                              }
-                                          }
+                @Override
+                public void onPositiveClick(String recordName) {
+                    // 記録名に反映
+                    tv_recordName.setText(recordName);
+                    // 記録に設定
+                    mRecord.setName(recordName);
+                }
+            }
         );
         dialog.setRecordName(recordName);
         dialog.show(getParentFragmentManager(), "SHOW");

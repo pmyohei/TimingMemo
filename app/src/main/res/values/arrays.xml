@@ -12,7 +12,6 @@
         <item>@color/memoColor8</item>
         <item>@color/memoColor9</item>
         <item>@color/memoColor10</item>
-        <item>@color/memoColor11</item>
     </array>
 
     <!--  記録時間グラフ目盛り間隔  -->

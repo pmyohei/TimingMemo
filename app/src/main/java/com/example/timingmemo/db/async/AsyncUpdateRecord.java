@@ -7,7 +7,6 @@ import android.os.Looper;
 
 import com.example.timingmemo.db.AppDatabase;
 import com.example.timingmemo.db.AppDatabaseManager;
-import com.example.timingmemo.db.RecordTable;
 import com.example.timingmemo.db.RecordTableDao;
 
 import java.util.concurrent.ExecutorService;
@@ -18,17 +17,19 @@ public class AsyncUpdateRecord extends AsyncShowProgress {
     private final AppDatabase mDB;
     private final int mRecordPid;
     private final String mRecordName;
+    private final String mRecordTime;
     private final OnFinishListener mOnFinishListener;
 
     /*
      * コンストラクタ
      */
-    public AsyncUpdateRecord(Context context, int recordPid, String recordName, OnFinishListener listener) {
+    public AsyncUpdateRecord(Context context, int recordPid, String recordName, String recordTime, OnFinishListener listener) {
         super(context);
 
         mDB = AppDatabaseManager.getInstance(context);
         mRecordPid = recordPid;
         mRecordName = recordName;
+        mRecordTime = recordTime;
         mOnFinishListener = listener;
     }
 
@@ -64,7 +65,7 @@ public class AsyncUpdateRecord extends AsyncShowProgress {
         private void updateDB(){
             // 記録更新
             RecordTableDao dao = mDB.daoRecordTable();
-            dao.updateRecordName( mRecordPid, mRecordName);
+            dao.updateRecordNameTime( mRecordPid, mRecordName, mRecordTime);
         }
     }
 
@@ -93,14 +94,14 @@ public class AsyncUpdateRecord extends AsyncShowProgress {
     void onPostExecute() {
         super.onPostExecute();
 
-        mOnFinishListener.onFinish( mRecordPid, mRecordName );
+        mOnFinishListener.onFinish( mRecordPid, mRecordName, mRecordTime );
     }
 
     /*
      * 完了リスナー
      */
     public interface OnFinishListener {
-        void onFinish( int pid, String updatedRecordName );
+        void onFinish( int pid, String updatedRecordName, String updatedRecordTime );
     }
 
 

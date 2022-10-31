@@ -32,6 +32,7 @@
     <string name="dialog_title_update_playtime">Recording start time</string>
     <string name="dialog_title_update_delaytime">Delay time</string>
     <string name="dialog_title_update_record_name">Record-name</string>
+    <string name="dialog_title_extension_record_name">Extension:Recorded Time</string>
     <string name="dialog_title_stop_record">Finish recording</string>
     <string name="dialog_content_memo_confirm_rewrire">Do you want to rewrite the recorded memos?</string>
     <string name="dialog_content_memo_confirm_remove">Remove memos?</string>
@@ -39,7 +40,8 @@
     <string name="dialog_content_record_confirm_remove">Remove record?</string>
     <string name="dialog_content_stampmemo_confirm_remove">Delete recorded memos?</string>
     <string name="dialog_content_stop_record">Do you wish to terminate the record?(Memos will be saved)</string>
-    <string name="dialog_content_delaytime">The set amount of time will be deducted from the memo recording time.</string>
+<!--    <string name="dialog_content_delaytime">The set amount of time will be deducted from the memo recording time.</string>-->
+    <string name="dialog_content_delaytime">The s.</string>
     <string name="dialog_positive_confirm_remove">Remove</string>
     <string name="dialog_positive_confirm_stop_confirm">Finish</string>
 
@@ -55,6 +57,7 @@
     <string name="snackbar_removed">Removed.</string>
     <string name="snackbar_undo_remove">cancel</string>
     <string name="snackbar_undo_stamp_memo">cancel</string>
+    <string name="hint_record_name">Record Name</string>
 
     <!--  menu  -->
     <string name="menu_new">new</string>
@@ -65,6 +68,9 @@
     <!--  toast  -->
     <string name="toast_error">An error has occurred. Please close this screen.</string>
     <string name="toast_memo_name_empty">Memo name not entered.</string>
+    <string name="toast_record_name_empty">Record name not entered.</string>
+    <string name="toast_record_time_lower">Cannot be less than recorded memo time.</string>
+    <string name="toast_stamp_time_add_error">Specified time exceeds recording time.</string>
     <string name="toast_category_name_empty">Category name not entered.</string>
     <string name="toast_complete_update">Updated.</string>
     <string name="toast_complete_save_record">Record saved.</string>

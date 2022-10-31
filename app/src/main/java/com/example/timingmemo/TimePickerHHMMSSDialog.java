@@ -147,7 +147,7 @@ public class TimePickerHHMMSSDialog extends DialogFragment {
     /*
      * NumberPicker Formatter
      */
-    private class PickerFormatter implements NumberPicker.Formatter {
+    public static class PickerFormatter implements NumberPicker.Formatter {
 
         public PickerFormatter() {}
 

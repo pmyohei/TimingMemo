@@ -27,7 +27,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.timingmemo.R;
-import com.example.timingmemo.RecordNameEditDialog;
 import com.example.timingmemo.db.StampMemoTable;
 import com.example.timingmemo.db.async.AsyncReadStampMemoCategory;
 import com.example.timingmemo.db.async.AsyncRemoveRecord;
@@ -50,6 +49,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
     public static final String KEY_ID_ADD = "is_add";
     public static final String KEY_TARGET_MEMO_PID = "target_memo_pid";
     public static final String KEY_TARGET_RECORD_PID = "target_record_pid";
+    public static final String KEY_TARGET_RECORD_TIME = "target_record_time";
     public static final String KEY_TARGET_MEMO_NAME = "target_memo_name";
     public static final String KEY_TARGET_MEMO_COLOR = "target_memo_color";
     public static final String KEY_TARGET_MEMO_PLAYTIME = "target_memo_playtime";
@@ -59,6 +59,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
     public static final int RESULT_RECORD_REMOVE = 202;
     public static final String KEY_RECORD_PID = "record_pid";
     public static final String KEY_RECORD_NAME = "record_name";
+    public static final String KEY_RECORD_TIME = "record_time";
 
     //--------------------------------
     // フィールド変数
@@ -66,6 +67,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
     private ArrayList<StampMemoTable> mStampMemos;
     private ActivityResultLauncher<Intent> mStampMemoUpdateLancher;
     private boolean misInitScaleUnitSelected;
+    private String mRecordTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,12 +196,12 @@ public class RecordDetailsActivity extends AppCompatActivity {
             //--------------------
             // 記録時間
             Intent intent = getIntent();
-            String recordingTime = intent.getStringExtra(HistoryFragment.KEY_TARGET_RECORD_RECORDING_TIME);
+            mRecordTime = intent.getStringExtra(HistoryFragment.KEY_TARGET_RECORD_RECORDING_TIME);
 
             // 記録時間／目盛り単位デフォルト値の設定
             RecordTimeGraphView tgmv_graph = findViewById(R.id.tgmv_graph);
-            tgmv_graph.initSizeData( parentHeight );
-            tgmv_graph.setRecordTime( recordingTime );
+            tgmv_graph.initSizeData(parentHeight);
+            tgmv_graph.setRecordTime(mRecordTime);
             tgmv_graph.setDefaultScaleUnit();
             // グラフの最大横幅
             setGraphLayoutWidth(tgmv_graph, hsv_graph);
@@ -211,16 +213,14 @@ public class RecordDetailsActivity extends AppCompatActivity {
             //-----------------------
             // グラフ目盛り間隔UIの設定
             //-----------------------
-            setGraghScaleUnitUI();
+            setGraghScaleUnitUI(tgmv_graph);
         });
     }
 
     /*
      * グラフ目盛り単位UIの設定
      */
-    private void setGraghScaleUnitUI() {
-
-        RecordTimeGraphView tgmv_graph = findViewById(R.id.tgmv_graph);
+    private void setGraghScaleUnitUI(RecordTimeGraphView tgmv_graph) {
 
         //-----------------------
         // グラフ目盛り間隔UIの設定
@@ -234,7 +234,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
 
         // 目盛りデフォルト単位を初期設定値とする
         int scaleUnit = tgmv_graph.getScaleUnit();
-        sp_scaleUnit.setSelection( scaleUnit );
+        sp_scaleUnit.setSelection(scaleUnit);
 
         // 選択リスナー
         sp_scaleUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -242,7 +242,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 // 初回コールは何もしない
-                if( !misInitScaleUnitSelected ){
+                if (!misInitScaleUnitSelected) {
                     misInitScaleUnitSelected = true;
                     return;
                 }
@@ -284,6 +284,30 @@ public class RecordDetailsActivity extends AppCompatActivity {
     }
 
     /*
+     * タイムグラフの横サイズを延長
+     */
+    private void extensionGraghScale(String preRecordTime, String recordTime) {
+
+        // 時間に変化がなければ処理なし
+        if (preRecordTime.compareTo(recordTime) == 0) {
+            return;
+        }
+
+        //---------------------
+        // グラフを延長
+        //---------------------
+        RecordTimeGraphView tgmv_graph = findViewById(R.id.tgmv_graph);
+        HorizontalScrollView hsv_graph = findViewById(R.id.hsv_graph);
+
+        // 記録時間を更新
+        tgmv_graph.setRecordTime(recordTime);
+        // 横幅を再計算
+        setGraphLayoutWidth(tgmv_graph, hsv_graph);
+        // グラフ再描画
+        tgmv_graph.invalidate();
+    }
+
+    /*
      * 記録メモをリストで表示
      */
     private void setStampMemoList(ArrayList<StampMemoTable> stampMemos) {
@@ -315,6 +339,9 @@ public class RecordDetailsActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, StampMemoUpdateActivity.class);
         boolean isAdd = true;
+
+        // 記録時間
+        intent.putExtra(KEY_TARGET_RECORD_TIME, mRecordTime);
 
         // 記録メモの更新の場合の設定
         if (stampMemo != null) {
@@ -351,7 +378,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
         StampMemoTable stampMemo = getUpdatedStampMemoFromDist(intent);
 
         // 「打刻時の経過時間」から、ソート済みリストの適切な位置に挿入する
-        int insertPosition = RecordFragment.getInsertPosition( mStampMemos, stampMemo.getStampingPlayTime() );
+        int insertPosition = RecordFragment.getInsertPosition(mStampMemos, stampMemo.getStampingPlayTime());
         mStampMemos.add(insertPosition, stampMemo);
 
         // アダプタに通知
@@ -510,7 +537,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
             @Override
             public void onFinish(int pid) {
                 // 画面遷移元へのデータを設定し、終了
-                setFinishIntent( RESULT_RECORD_REMOVE, pid, null );
+                setFinishIntent(RESULT_RECORD_REMOVE, pid, null, null);
                 finish();
             }
         });
@@ -519,36 +546,62 @@ public class RecordDetailsActivity extends AppCompatActivity {
     }
 
     /*
+     * 記録メモの中で最も記録時間の長いメモの記録時間を取得
+     */
+    private String getLongestStampMemoTime() {
+
+        int lastIndex = mStampMemos.size() - 1;
+        if( lastIndex < 0 ){
+            // 記録メモなしなら、記録時間初期値を返す
+            String initTime = getString( R.string.init_record_time );
+            return initTime;
+        }
+
+        // リスト最後の記録時間を返す
+        return mStampMemos.get( lastIndex ).getStampingPlayTime();
+    }
+
+    /*
      * 記録名編集ダイアログの表示
      */
     private void showRecordEditDialog() {
 
-        // 記録名
+        // 記録情報
         Intent intent = getIntent();
-        String recordName = intent.getStringExtra(HistoryFragment.KEY_TARGET_RECORD_NAME);
+        String preRecordName = intent.getStringExtra(HistoryFragment.KEY_TARGET_RECORD_NAME);
+        String preRecordingTime = mRecordTime;
+
+        // 記録された時間が最も長いメモの記録時間
+        String longestStampMemoTime = getLongestStampMemoTime();
 
         // 時間設定Dialogを開く
-        RecordNameEditDialog dialog = RecordNameEditDialog.newInstance();
-        dialog.setOnPositiveClickListener(new RecordNameEditDialog.PositiveClickListener() {
+        RecordEditDialog dialog = RecordEditDialog.newInstance();
+        dialog.setOnPositiveClickListener(new RecordEditDialog.PositiveClickListener() {
                 @Override
-                public void onPositiveClick(String recordName) {
+                public void onPositiveClick(String recordName, String recordTime) {
                     // 記録名に反映
                     Toolbar toolbar = findViewById(R.id.toolbar_recordDetails);
                     toolbar.setTitle(recordName);
 
+                    // 記録グラフの目盛りに反映
+                    extensionGraghScale( preRecordingTime, recordTime );
+                    mRecordTime = recordTime;
+
                     // 保存処理
-                    saveUpdateRecord( recordName );
+                    saveUpdateRecord( recordName, recordTime );
                 }
             }
         );
-        dialog.setRecordName( recordName );
+        dialog.setRecordName( preRecordName );
+        dialog.setRecordedTime( preRecordingTime );
+        dialog.setLongestStampMemoTime( longestStampMemoTime );
         dialog.show( getSupportFragmentManager(), "SHOW" );
     }
 
     /*
      * ＤＢ保存処理 - 記録更新
      */
-    private void saveUpdateRecord(String recordName) {
+    private void saveUpdateRecord( String recordName, String recordTime ) {
 
         Intent intent = getIntent();
         int recordPid = intent.getIntExtra(HistoryFragment.KEY_TARGET_RECORD_PID, -1);
@@ -559,11 +612,11 @@ public class RecordDetailsActivity extends AppCompatActivity {
         }
 
         // DB更新処理
-        AsyncUpdateRecord db = new AsyncUpdateRecord(this, recordPid, recordName, new AsyncUpdateRecord.OnFinishListener() {
+        AsyncUpdateRecord db = new AsyncUpdateRecord(this, recordPid, recordName, recordTime, new AsyncUpdateRecord.OnFinishListener() {
             @Override
-            public void onFinish(int pid, String updatedRecordName) {
+            public void onFinish(int pid, String updatedRecordName, String updatedRecordTime) {
                 // 画面遷移元へのデータを設定し、終了
-                setFinishIntent( RESULT_RECORD_UPDATE, pid, updatedRecordName);
+                setFinishIntent( RESULT_RECORD_UPDATE, pid, updatedRecordName, updatedRecordTime);
             }
         });
         // 非同期処理開始
@@ -574,7 +627,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
     /*
      * 画面終了のindentデータを設定
      */
-    private void setFinishIntent( int resultCode, int pid, String recordName ) {
+    private void setFinishIntent( int resultCode, int pid, String recordName, String recordTime ) {
 
         Intent intent = getIntent();
         intent.putExtra(KEY_RECORD_PID, pid);
@@ -582,6 +635,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
         // 更新の場合
         if( resultCode == RESULT_RECORD_UPDATE ){
             intent.putExtra(KEY_RECORD_NAME, recordName);
+            intent.putExtra(KEY_RECORD_TIME, recordTime);
         }
 
         // resultコード設定

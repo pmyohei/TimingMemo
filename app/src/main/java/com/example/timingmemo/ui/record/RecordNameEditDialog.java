@@ -1,4 +1,4 @@
-package com.example.timingmemo;
+package com.example.timingmemo.ui.record;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.fragment.app.DialogFragment;
+
+import com.example.timingmemo.R;
 
 public class RecordNameEditDialog extends DialogFragment {
 

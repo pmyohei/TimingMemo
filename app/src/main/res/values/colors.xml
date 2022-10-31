@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--  基本色  -->
-<!--    <color name="main">#EBEBE1</color>-->
-    <color name="main">#F7F7ED</color>
+<!--    <color name="main">#F7F7ED</color>
     <color name="main_little">#80F7F7ED</color>
     <color name="sub">#6B6B67</color>
-<!--    <color name="text_light">#EBEBE1</color>-->
     <color name="text_light">#F7F7ED</color>
     <color name="text_dark">#6B6B67</color>
     <color name="text_middle_dark">#CC6B6B67</color>
@@ -13,20 +11,31 @@
     <color name="accent1">#7ABCC8</color>
     <color name="accent2">#7D3C5A</color>
     <color name="accent3">#1D1F1C</color>
-    <color name="accent4">#344F40</color>
+    <color name="accent4">#344F40</color>-->
+
+    <color name="main">#55ABA8</color>
+    <color name="main_little">#8055ABA8</color>
+    <color name="sub">#F9FFD9</color>
+    <color name="text_light">#55ABA8</color>
+    <color name="text_dark">#F9FFD9</color>
+    <color name="text_middle_dark">#CCF9FFD9</color>
+    <color name="text_little_dark">#80F9FFD9</color>
+    <color name="accent1">#FD5E53</color>
+    <color name="accent2">#FCE45C</color>
+    <color name="accent3">#1D1F1C</color>
+    <color name="accent4">#072645</color>
 
     <!--  メモ色  -->
     <color name="memoColor1">#FD5E53</color>
-    <color name="memoColor2">#FFFDC0</color>
+    <color name="memoColor2">#072445</color>
     <color name="memoColor3">#2E94B9</color>
-    <color name="memoColor4">#F0B775</color>
+    <color name="memoColor4">#FCE45C</color>
     <color name="memoColor5">#8B789E</color>
     <color name="memoColor6">#FFAC84</color>
-    <color name="memoColor7">#416925</color>
-    <color name="memoColor8">#FCE45C</color>
+    <color name="memoColor7">#4DAB76</color>
+    <color name="memoColor8">#AB6A44</color>
     <color name="memoColor9">#bac8c6</color>
-    <color name="memoColor10">#7ABCC8</color>
-    <color name="memoColor11">#c41a30</color>
+    <color name="memoColor10">#c41a30</color>
 
     <!--  映画色  -->
     <color name="movieColor1">#55ABA8</color>
@@ -34,8 +43,7 @@
     <color name="movieColor3">#F9FFD9</color>
     <color name="movieColor4">#FCE45C</color>
     <color name="movieColor5">#000000</color>
-    <color name="tmp">#FCF7E2</color>
-
+    a
     <!--  映画色  -->
     <color name="monotoneColor1">#494544</color>
     <color name="monotoneColor2">#c41a30</color>

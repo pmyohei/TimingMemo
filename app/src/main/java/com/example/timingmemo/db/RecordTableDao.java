@@ -20,8 +20,11 @@ public interface RecordTableDao {
     @Query("SELECT * FROM recordTable WHERE pid=(:pid) ")
     RecordTable get( int pid );
 
-    @Query("UPDATE recordTable SET name=(:recordName) WHERE pid=(:pid) ")
-    void updateRecordName( int pid, String recordName );
+    @Query("UPDATE recordTable SET name=(:recordName), recordingTime=(:recordTime) WHERE pid=(:pid) ")
+    void updateRecordNameTime(int pid, String recordName, String recordTime );
+
+    @Query("UPDATE recordTable SET recordingTime=(:recordingTime) WHERE pid=(:pid) ")
+    void updateRecordTime( int pid, String recordingTime );
 
     @Insert
     long insert(RecordTable recordTable);

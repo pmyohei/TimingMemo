@@ -8,6 +8,8 @@ import android.os.Looper;
 import com.example.timingmemo.R;
 import com.example.timingmemo.db.AppDatabase;
 import com.example.timingmemo.db.AppDatabaseManager;
+import com.example.timingmemo.db.RecordTable;
+import com.example.timingmemo.db.RecordTableDao;
 import com.example.timingmemo.db.StampMemoTable;
 import com.example.timingmemo.db.StampMemoTableDao;
 import com.example.timingmemo.db.UserMemoTable;

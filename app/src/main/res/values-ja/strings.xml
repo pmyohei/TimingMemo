@@ -32,6 +32,7 @@
     <string name="dialog_title_update_playtime">記録時間の変更</string>
     <string name="dialog_title_update_delaytime">遅延時間の設定</string>
     <string name="dialog_title_update_record_name">記録名の変更</string>
+    <string name="dialog_title_extension_record_name">記録時間の延長</string>
     <string name="dialog_title_stop_record">記録の終了</string>
     <string name="dialog_content_memo_confirm_rewrire">記録したメモを書き換えますか？</string>
     <string name="dialog_content_memo_confirm_remove">メモを削除しますか？</string>
@@ -55,6 +56,7 @@
     <string name="snackbar_removed">削除しました</string>
     <string name="snackbar_undo_remove">元に戻す</string>
     <string name="snackbar_undo_stamp_memo">取り消し</string>
+    <string name="hint_record_name">記録名</string>
 
     <!--  menu  -->
     <string name="menu_new">新規</string>
@@ -65,6 +67,9 @@
     <!--  toast  -->
     <string name="toast_error">エラーが発生しました。本画面を閉じてください。</string>
     <string name="toast_memo_name_empty">メモ名未入力</string>
+    <string name="toast_record_name_empty">記録名未入力</string>
+    <string name="toast_record_time_lower">記録されたメモ時間未満にはできません</string>
+    <string name="toast_stamp_time_add_error">指定した時間は記録時間を超過しています</string>
     <string name="toast_category_name_empty">カテゴリ名未入力</string>
     <string name="toast_complete_update">更新しました</string>
     <string name="toast_complete_save_record">記録を保存しました</string>

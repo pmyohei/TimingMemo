@@ -133,9 +133,14 @@ public class HistoryFragment extends Fragment {
                         // 操作に応じた通知処理
                         switch (resultCode) {
                             case RecordDetailsActivity.RESULT_RECORD_UPDATE:
-                                // リストを更新して通知
+                                // 更新情報を取得
                                 String recordName = intent.getStringExtra(RecordDetailsActivity.KEY_RECORD_NAME);
-                                mRecords.get( position ).setName( recordName );
+                                String recordTime = intent.getStringExtra(RecordDetailsActivity.KEY_RECORD_TIME);
+
+                                // リストを更新して通知
+                                RecordTable record = mRecords.get( position );
+                                record.setName( recordName );
+                                record.setRecordingTime( recordTime );
 
                                 adapter.notifyItemChanged(position);
                                 break;
