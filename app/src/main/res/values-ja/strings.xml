@@ -75,17 +75,4 @@
     <string name="toast_complete_save_record">記録を保存しました</string>
     <string name="toast_waring_stamp_memo">再生ボタンを押して、記録を開始して下さい</string>
 
-
-
-    <!-- Admod（アプリID） -->
-    <string name="admob_app_id">ca-app-pub-8046295810838892~7969319582</string>
-
-    <!-- リリース時とテスト時で切り替える -->
-    <!--  テストID（バナー広告）  -->
-    <string name="admob_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-    <!-- リリース用 -->
-    <!--<string name="admob_unit_id">ca-app-pub-8046295810838892/4915194105</string>
-    -->
-
-
 </resources>
