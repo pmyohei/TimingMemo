@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.memotool.timewatchmemo.R;
 
 public class MemoFragment extends Fragment {
@@ -35,11 +36,27 @@ public class MemoFragment extends Fragment {
             }
         });
 
+        // ライセンス画面へ遷移
+        setOnLicensesClicked(root);
+
         return root;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    /*
+     * licenses押下時処理
+     */
+    public void setOnLicensesClicked(View root) {
+        root.findViewById( R.id.tv_licenses).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), OssLicensesMenuActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -14,6 +14,9 @@
     <string name="toolbar_title_stamp_memo_new">Add Memo</string>
     <string name="toolbar_title_stamp_memo_update">Rewriting Memo</string>
 
+    <!--  other  -->
+    <string name="licenses" translatable="false">Licenses</string>
+
     <!--  memo  -->
     <string name="memo">Memo</string>
     <string name="hint_memo_name">Memo Name</string>
