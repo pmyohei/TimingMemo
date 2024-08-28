@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.memotool.timewatchmemo"
         minSdk 21
-        targetSdk 33
-        versionCode 3           // !2023/11/27 ライセンス表記
-        versionName "2.1"
+        targetSdk 34
+        versionCode 4           // !2024/08/28 API34対応
+        versionName "2.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
